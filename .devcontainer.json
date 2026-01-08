@@ -1,5 +1,5 @@
 {
-	"name": "mrdarrengriffin/eleventy-starter",
+	"name": "openhomefoundation/sotoh.openhomefoundation.org",
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 	"forwardPorts": [
 		8080
@@ -20,6 +20,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"astro-build.astro-vscode",
 				"esbenp.prettier-vscode",
 				"yzhang.markdown-all-in-one",
 				"davidanson.vscode-markdownlint",

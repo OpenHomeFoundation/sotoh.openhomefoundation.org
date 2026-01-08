@@ -1,28 +1,14 @@
 {
-	"name": "eleventy-starter",
-	"version": "2.0.0",
-	"description": "The website for the Home Assistant Partner website",
-	"type": "module",
-	"scripts": {
-		"build": "npx @11ty/eleventy && npm run build:scss",
-		"build-nocolor": "cross-env NODE_DISABLE_COLORS=1 npx @11ty/eleventy",
-		"start": "concurrently \"npx @11ty/eleventy --serve --quiet\" \"npm run watch:scss\"",
-		"debug": "cross-env DEBUG=Eleventy* npx @11ty/eleventy",
-		"debugstart": "cross-env DEBUG=Eleventy* npx @11ty/eleventy --serve --quiet",
-		"benchmark": "cross-env DEBUG=Eleventy:Benchmark* npx @11ty/eleventy",
-		"build:scss": "sass src/scss/_index.scss:_site/css/index.css",
-		"watch": "concurrently \"npm run watch:eleventy\" \"npm run watch:scss\"",
-		"watch:eleventy": "npx @11ty/eleventy --watch --serve",
-		"watch:scss": "sass --watch src/scss/_index.scss:_site/css/index.css"
-	},
-	"devDependencies": {
-		"@11ty/eleventy": "3.1.0",
-		"@11ty/eleventy-img": "6.0.4",
-		"@11ty/eleventy-plugin-syntaxhighlight": "5.0.1",
-		"cross-env": "7.0.3"
-	},
-	"dependencies": {
-		"concurrently": "^9.1.2",
-		"sass": "^1.85.1"
-	}
+  "name": "sotoh",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.16.7"
+  }
 }
