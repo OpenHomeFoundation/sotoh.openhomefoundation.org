@@ -33,9 +33,6 @@ export default defineConfig({
 
     /* Capture screenshot after each test for the report */
     screenshot: "on",
-
-    /* Capture video for failed tests */
-    video: "retain-on-failure",
   },
 
   /* Configure projects for major browsers */
