@@ -4,8 +4,20 @@ const { cta = "Button", class: className = "", href = "/error" } = Astro.props;
 
 <a class={className} href={href}>{cta}</a>
 
-<style>
-  a {
-    color: var(--color-btn-text);
+<style lang="scss">
+  .button {
+    color: black;
+    padding: 12px 24px;
+    border-radius: 40px;
+    flex-shrink: 0;
+
+    &--hollow {
+      border: 2px solid red;
+    }
+
+    &--primary {
+      background-color: red;
+      color: white;
+    }
   }
 </style>

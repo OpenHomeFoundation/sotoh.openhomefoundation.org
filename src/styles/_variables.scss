@@ -1,4 +1,11 @@
 :root {
+    --burger-bar-height: 2px;
+    --burger-bar-width: calc(var(--burger-bar-height) * 8);
+    --burger-border-radius: 0px;
+    --burger-bar-spacing: calc(var(--burger-bar-height) * 3);
+    --burger-bar-color: #ffffff;
+    --burger-transition-speed: 0.1s;
+
     --color-background: #0f111a;
     --color-text: red;
     --color-btn-text: green;
