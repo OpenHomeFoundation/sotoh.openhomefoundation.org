@@ -19,9 +19,60 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
+      - name: Build Astro site
+        run: npm run build
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+      - name: Deploy Playwright Report to GitHub Pages
+        if: always()
+        id: deploy-report
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: pr-${{ github.event.pull_request.number || github.run_number }}
+          keep_files: false
+      - name: Comment PR with Report Link
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const reportUrl = `https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${prNumber}/`;
+            const comment = `## 🎭 Playwright Test Report
+
+            View the full test report here: ${reportUrl}
+
+            <sub>Report generated for commit ${{ github.sha }}</sub>`;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('🎭 Playwright Test Report')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: comment
+              });
+            }
