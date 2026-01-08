@@ -1,3 +1,7 @@
+---
+import Button from "../components/Button.astro";
+---
+
 <header class="site-header">
   <a href="/" rel="home" class="logo">
     <svg
@@ -73,7 +77,19 @@
   </nav>
 
   <div class="site-header__ctas">
-    <a class="button button--hollow" href="/">CTA 1</a>
-    <a class="button button--primary" href="/">CTA 2</a>
+    <Button href="" class="button button--hollow" cta="CTA 1" />
+    <Button href="/" class="button button--primary" cta="CTA 2" />
   </div>
 </header>
+
+<style lang="scss">
+  @use "../styles/variables.scss";
+
+  header {
+    background-color: var(--color-background);
+
+    a {
+      color: var(--color-text);
+    }
+  }
+</style>

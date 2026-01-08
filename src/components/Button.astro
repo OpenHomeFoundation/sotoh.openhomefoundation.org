@@ -1,0 +1,11 @@
+---
+const { cta = "Button", class: className = "", href = "/error" } = Astro.props;
+---
+
+<a class={className} href={href}>{cta}</a>
+
+<style>
+  a {
+    color: var(--color-btn-text);
+  }
+</style>
