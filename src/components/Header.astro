@@ -88,9 +88,25 @@ import Button from "../components/Button.astro";
 
     <div class="site-header-burger">
       <input type="checkbox" id="site-header-burger-toggle" />
-      <label class="site-header-burger-label"></label>
+      <label class="site-header-burger-label" for="site-header-burger-toggle"
+      ></label>
       <div class="site-header-burger-icon"></div>
     </div>
+  </div>
+
+  <div class="mobile-nav">
+    <ul>
+      <li><a href="/">Link 1</a></li>
+      <li>
+        <a href="/">Link 1</a>
+        <ul>
+          <li><a href="/">Sub Link 1</a></li>
+          <li><a href="/">Sub Link 2</a></li>
+          <li><a href="/">Sub Link 3</a></li>
+        </ul>
+      </li>
+      <li><a href="/">Link 1</a></li>
+    </ul>
   </div>
 </header>
 
@@ -141,6 +157,22 @@ import Button from "../components/Button.astro";
       gap: 36px;
 
       li {
+        position: relative;
+
+        &:has(ul) {
+          &:after {
+            content: "+";
+            color: white;
+          }
+        }
+
+        &:hover {
+          ul {
+            opacity: 1;
+            pointer-events: all;
+          }
+        }
+
         a {
           text-transform: uppercase;
           color: white;
@@ -150,7 +182,19 @@ import Button from "../components/Button.astro";
       }
 
       ul {
-        display: none;
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+
+        position: absolute;
+        top: 100%;
+        left: 0;
+
+        padding-top: 1rem;
+        opacity: 0;
+        pointer-events: none;
       }
     }
 
@@ -177,7 +221,7 @@ import Button from "../components/Button.astro";
       input[type="checkbox"] {
         display: none;
 
-        &:checked ~ .header-burger-icon {
+        &:checked ~ .site-header-burger-icon {
           background-color: transparent;
 
           &:before,
@@ -200,6 +244,8 @@ import Button from "../components/Button.astro";
       label {
         inset: 0;
         position: absolute;
+
+        cursor: pointer;
       }
 
       &-icon {
@@ -236,5 +282,30 @@ import Button from "../components/Button.astro";
         }
       }
     }
+
+    &:has(.site-header-burger input:checked) {
+      .mobile-nav {
+        display: block;
+        opacity: 1;
+        pointer-events: all;
+
+        @include bp(tablet) {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .mobile-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 0;
+    transition: padding-top 0.3s ease-out;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>
