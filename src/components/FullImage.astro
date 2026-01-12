@@ -6,3 +6,11 @@ const { image } = Astro.props;
 
 <Image src={image} alt="" />
 <slot />
+
+<style>
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
