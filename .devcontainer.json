@@ -1,6 +1,8 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/typescript-node
 {
 	"name": "openhomefoundation/sotoh.openhomefoundation.org",
-	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
 	"forwardPorts": [
 		4321
 	],
@@ -9,14 +11,7 @@
 			"label": "Preview"
 		}
 	},
-	"postCreateCommand": {
-		"node": ". ${NVM_DIR}/nvm.sh && nvm install && nvm alias default $(cat .nvmrc) && npm install"
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/node:1": {
-			"version": "default"
-		}
-	},
+	// Add the IDs of extensions you want installed when the container is created.
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -24,20 +19,33 @@
 				"esbenp.prettier-vscode",
 				"yzhang.markdown-all-in-one",
 				"davidanson.vscode-markdownlint",
-				"jock.svg"
+				"jock.svg",
+				"Gruntfuggly.todo-tree"
 			],
 			"settings": {
+				"files.eol": "\n",
+				"editor.tabSize": 2,
 				"editor.formatOnPaste": false,
 				"editor.formatOnSave": true,
 				"editor.formatOnType": true,
-				"[html]": {
+				"[typescript]": {
 					"editor.defaultFormatter": "esbenp.prettier-vscode"
 				},
-				"[typescript]": {
+				"[javascript]": {
 					"editor.defaultFormatter": "esbenp.prettier-vscode"
 				},
 				"files.trimTrailingWhitespace": true
 			}
 		}
-	}
+	},
+	"mounts": [
+		"source=claude-config,target=/home/node/.claude,type=volume"
+	],
+	"remoteEnv": {
+		"CLAUDE_CONFIG_DIR": "/home/node/.claude"
+	},
+	"postCreateCommand": "npm install && npm install -g @anthropic-ai/claude-code && sudo chown -R node:node /home/node/.claude",
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node"
+	// moved settings under customizations.vscode.settings
 }
