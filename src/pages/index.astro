@@ -1,9 +1,44 @@
 ---
-// Import components and layouts
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Countdown from "../components/Countdown.astro";
+import Content from "../components/Content.astro";
+import TickertapeGroup from "../components/TickertapeGroup.astro";
+import Carousel from "../components/Carousel.astro";
+import Tickertape from "../components/Tickertape.astro";
 ---
 
 <Layout>
   <Header />
+  <Hero />
+  <Countdown />
+  <Content>
+    <ul>
+      <li>tag</li>
+      <li>title</li>
+      <li>content</li>
+      <li>buttons</li>
+    </ul>
+  </Content>
+  <TickertapeGroup />
+  <Content>
+    <ul>
+      <li>title</li>
+      <li>content</li>
+      <li>buttons</li>
+    </ul>
+  </Content>
+  <Carousel />
+  <Content>
+    <ul>
+      <li>title</li>
+      <li>content</li>
+      <li>Partners</li>
+    </ul>
+  </Content>
+  <ul>
+    <li>IMAGE (exists - drop in here)</li>
+  </ul>
+  <Tickertape />
 </Layout>
