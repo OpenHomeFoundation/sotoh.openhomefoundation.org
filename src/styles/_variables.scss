@@ -5,4 +5,10 @@
     --burger-bar-spacing: calc(var(--burger-bar-height) * 3);
     --burger-bar-color: #ffffff;
     --burger-transition-speed: 0.1s;
+
+    // Typography
+    --typography-heading-font-family: "Special Gothic Expanded One", sans-serif;
+    --typography-heading-font-weight: 400;
+
+    --typography-body-font-family: "Space Grotesk", sans-serif;
 }
