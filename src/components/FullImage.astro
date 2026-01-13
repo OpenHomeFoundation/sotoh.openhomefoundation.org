@@ -15,6 +15,8 @@ const { image } = Astro.props;
 </div>
 
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .full-image {
     display: grid;
     color: var(--text-on-dark);
@@ -27,9 +29,17 @@ const { image } = Astro.props;
     &-content {
       align-items: flex-end;
       display: flex;
+      padding-bottom: 1rem;
+
+      @include bp(tablet) {
+        padding-bottom: 3rem;
+      }
+
+      @include bp(desktop) {
+        padding-bottom: 5rem;
+      }
     }
   }
-
   img {
     width: 100%;
     height: auto;

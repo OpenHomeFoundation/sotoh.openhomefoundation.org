@@ -11,6 +11,11 @@
     gap: 40px;
 
     display: flex;
+    flex-direction: column;
+
+    @include bp(tablet) {
+      flex-direction: row;
+    }
 
     @include bp(large-desktop) {
       padding: 0;
