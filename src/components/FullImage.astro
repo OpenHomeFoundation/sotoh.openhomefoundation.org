@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import Container from "./Container.astro";
 
 const { image } = Astro.props;
 ---
@@ -7,7 +8,9 @@ const { image } = Astro.props;
 <div class="full-image">
   <Image src={image} alt="" />
   <div class="full-image-content">
-    <slot />
+    <Container>
+      <slot />
+    </Container>
   </div>
 </div>
 

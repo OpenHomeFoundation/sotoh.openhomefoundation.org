@@ -16,3 +16,7 @@ body {
 strong {
     font-weight: 600;
 }
+
+p:not(:last-child) {
+    margin-bottom: 1rem;
+}
