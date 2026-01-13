@@ -4,7 +4,7 @@ import { ICONS, type ICON } from "../lib/icons";
 interface Props {
   class?: string;
   href?: string;
-  icon: ICON;
+  icon?: ICON;
 }
 const { class: className = "", href = "/error", icon } = Astro.props;
 ---
@@ -21,9 +21,11 @@ const { class: className = "", href = "/error", icon } = Astro.props;
 </a>
 
 <style lang="scss" is:global>
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .button {
     color: var(--text-on-dark);
-    padding: 12px 24px;
+    padding: 8px 12px;
     border-radius: 40px;
     flex-shrink: 0;
     display: flex;
@@ -34,6 +36,10 @@ const { class: className = "", href = "/error", icon } = Astro.props;
     font-weight: var(--typography-heading-font-weight);
     font-size: 0.75rem;
     gap: 12px;
+
+    @include bp(large-mobile) {
+      padding: 12px 24px;
+    }
 
     &:has(.button-icon) {
       padding: 0.5rem 1.5rem 0.5rem 0.5rem;

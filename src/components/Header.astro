@@ -1,5 +1,7 @@
 ---
 import Button from "../components/Button.astro";
+
+import { ICONS } from "../lib/icons";
 ---
 
 <header class="site-header">
@@ -64,16 +66,20 @@ import Button from "../components/Button.astro";
     </a>
     <nav>
       <ul>
-        <li><a href="/">Link 1</a></li>
         <li>
-          <a href="/">Link 1</a>
+          <a href="/">Home <Fragment set:html={ICONS["chevronDown"]} /></a>
           <ul>
-            <li><a href="/">Sub Link 1</a></li>
-            <li><a href="/">Sub Link 2</a></li>
-            <li><a href="/">Sub Link 3</a></li>
+            <li><a href="/">What is State of the Open Home?</a></li>
+            <li><a href="/">Why we’re building in the open</a></li>
+            <li><a href="/">Be part of the conversation</a></li>
           </ul>
         </li>
-        <li><a href="/">Link 1</a></li>
+        <li class="disabled">
+          <a href="#">Speakers &amp; Agenda <span>Coming Soon</span></a>
+        </li>
+        <li class="disabled">
+          <a href="#">The Venue <span>Coming Soon</span></a>
+        </li>
       </ul>
     </nav>
 
@@ -93,16 +99,20 @@ import Button from "../components/Button.astro";
 
   <div class="mobile-nav">
     <ul>
-      <li><a href="/">Link 1</a></li>
       <li>
-        <a href="/">Link 1</a>
+        <a href="/">Home <Fragment set:html={ICONS["chevronDown"]} /></a>
         <ul>
-          <li><a href="/">Sub Link 1</a></li>
-          <li><a href="/">Sub Link 2</a></li>
-          <li><a href="/">Sub Link 3</a></li>
+          <li><a href="/">What is State of the Open Home?</a></li>
+          <li><a href="/">Why we’re building in the open</a></li>
+          <li><a href="/">Be part of the conversation</a></li>
         </ul>
       </li>
-      <li><a href="/">Link 1</a></li>
+      <li class="disabled">
+        <a href="#">Speakers &amp; Agenda <span>Coming Soon</span></a>
+      </li>
+      <li class="disabled">
+        <a href="#">The Venue <span>Coming Soon</span></a>
+      </li>
     </ul>
   </div>
 </header>
@@ -111,12 +121,30 @@ import Button from "../components/Button.astro";
   @use "../styles/mixins/breakpoint.scss" as *;
 
   .site-header {
+    --header-bgc: var(--sotoh-light-blue);
+    --link-color: var(--text-on-dark);
+    --link-hover-color: var(--ohf-dark-blue);
+
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 
-    padding: 40px 0;
+    position: sticky;
+    top: 0;
+
+    padding: 20px 0;
+    transition: 0.3s background-color ease-in-out;
+
+    overflow-x: clip;
+
+    &:hover {
+      background-color: var(--header-bgc);
+    }
+
+    @include bp(tablet) {
+      padding: 40px 0;
+    }
 
     &__row {
       width: 100%;
@@ -125,9 +153,41 @@ import Button from "../components/Button.astro";
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 24px;
+      gap: 1rem;
 
-      padding: 0 20px;
+      padding: 0 1rem;
+
+      @include bp(tablet) {
+        gap: 1.5rem;
+      }
+
+      @include bp(desktop) {
+        gap: 2rem;
+      }
+
+      @include bp(large-desktop) {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      width: 120px;
+
+      display: flex;
+      flex-direction: column;
+
+      @include bp(large-mobile) {
+        width: 150px;
+      }
+
+      @include bp(desktop) {
+        width: 183px;
+      }
+
+      svg {
+        width: 100%;
+        height: auto;
+      }
     }
 
     nav {
@@ -148,22 +208,44 @@ import Button from "../components/Button.astro";
     }
 
     ul {
+      width: 100%;
+      max-width: 600px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 36px;
+      justify-content: space-evenly;
 
       li {
         position: relative;
+        flex-shrink: 0;
+
+        &.disabled {
+          pointer-events: none;
+        }
 
         &:has(ul) {
-          &:after {
-            content: "+";
-            color: white;
+          a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+
+            :global(svg) {
+              transition: transform 0.3s ease-in-out;
+            }
           }
         }
 
-        &:hover {
+        &:hover() {
+          > a {
+            --link-color: var(--ohf-dark-blue);
+
+            :global(svg) {
+              transform: rotate(180deg);
+            }
+          }
+
           ul {
             opacity: 1;
             pointer-events: all;
@@ -172,14 +254,36 @@ import Button from "../components/Button.astro";
 
         a {
           text-transform: uppercase;
-          color: white;
+          color: var(--link-color);
           text-decoration: none;
           flex-shrink: 0;
+          font-family: var(--typography-heading-font-family);
+          font-size: 0.75rem;
+          transition: 0.3s color ease-in-out;
+
+          &:has(> span) {
+            text-decoration: line-through;
+
+            @include bp(desktop) {
+              text-decoration: none;
+            }
+          }
+
+          > span {
+            display: none;
+            font-family: var(--typography-body-font-family);
+            text-transform: none;
+            margin-left: 0.625rem;
+
+            @include bp(desktop) {
+              display: inline-block;
+            }
+          }
         }
       }
 
       ul {
-        width: 200px;
+        width: 300px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -187,11 +291,26 @@ import Button from "../components/Button.astro";
 
         position: absolute;
         top: 100%;
-        left: 0;
-
-        padding-top: 1rem;
+        left: -1.25rem;
+        padding: 1.5rem 1.25rem 1rem;
         opacity: 0;
         pointer-events: none;
+
+        border-radius: 1.5rem;
+        background-color: var(--header-bgc);
+
+        transition: 0.3s opacity ease-in-out;
+
+        li {
+          a {
+            font-family: var(--typography-body-font-family);
+            text-transform: none;
+
+            &:hover {
+              color: var(--link-hover-color);
+            }
+          }
+        }
       }
     }
 
@@ -281,9 +400,10 @@ import Button from "../components/Button.astro";
     }
 
     &:has(.site-header-burger input:checked) {
+      background-color: var(--header-bgc);
+
       .mobile-nav {
-        display: block;
-        opacity: 1;
+        transform: translate3d(0, 0, 0);
         pointer-events: all;
 
         @include bp(tablet) {
@@ -295,14 +415,51 @@ import Button from "../components/Button.astro";
   }
 
   .mobile-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    padding-top: 0;
-    transition: padding-top 0.3s ease-out;
+    position: absolute;
+    top: 70px; // header-height
+    right: 0;
+    padding: 1rem 1rem 2rem;
     z-index: 1;
-    opacity: 0;
     pointer-events: none;
+
+    transform: translate3d(100%, 0, 0);
+    transition: 0.3s transform ease-in-out;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: var(--header-bgc);
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      ul {
+        position: relative;
+        padding-top: 1rem;
+        inset: 0;
+        opacity: 1;
+        align-items: center;
+      }
+    }
   }
 </style>
+
+<script>
+  const header = document.querySelector(".site-header");
+  if (header) {
+    const onScroll = () => {
+      if (window.scrollY > 40) {
+        header.classList.add("is-scrolled");
+      } else if (window.scrollY === 0) {
+        header.classList.remove("is-scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+</script>
