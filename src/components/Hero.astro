@@ -1,4 +1,5 @@
 ---
+import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
 
 import { Image } from "astro:assets";
@@ -6,7 +7,7 @@ import { Image } from "astro:assets";
 import logoPlaceholder from "../images/logo-placeholder.png";
 ---
 
-<div class="container">
+<Container containerClass="container--hero">
   <Image src={logoPlaceholder} alt="Placeholder Image" />
 
   <Content>
@@ -14,24 +15,11 @@ import logoPlaceholder from "../images/logo-placeholder.png";
       <li>Save the date</li>
       <li>Wednesday, April 8 2026</li>
       <li>Utrecht, The Netherlands</li>
-
-      <h1 class="h1">STATE OF THE OPEN HOME</h1>
     </ul>
+    <h1 class="h1">STATE OF THE OPEN HOME</h1>
   </Content>
+</Container>
 
-  <style lang="scss">
-    @use "../styles/mixins/breakpoint.scss" as *;
-
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      padding: 2rem 1.25rem;
-      margin: 0 auto;
-      text-align: center;
-
-      @include bp(large-desktop) {
-        padding: 4.5rem 5rem;
-      }
-    }
-  </style>
-</div>
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+</style>

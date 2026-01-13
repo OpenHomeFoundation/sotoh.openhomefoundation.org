@@ -16,6 +16,10 @@ body {
   margin-bottom: 2rem;
   text-transform: uppercase;
   line-height: 1;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 h1,
@@ -47,4 +51,8 @@ p,
 
 strong {
   font-weight: 600;
+}
+
+.text-center {
+  text-align: center;
 }

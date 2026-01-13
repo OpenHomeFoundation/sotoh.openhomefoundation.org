@@ -1,4 +1,12 @@
-<div class="container"><slot /></div>
+---
+interface Props {
+  containerClass?: string;
+}
+
+const { containerClass = "" } = Astro.props;
+---
+
+<div class={`container ${containerClass}`}><slot /></div>
 
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
@@ -19,6 +27,24 @@
 
     @include bp(large-desktop) {
       padding: 0;
+    }
+
+    &--hero {
+      padding: 2rem 1.25rem;
+      text-align: center;
+
+      flex-direction: column;
+      align-items: center;
+
+      @include bp(large-desktop) {
+        padding: 4.5rem 5rem;
+      }
+    }
+
+    &--column {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
     }
   }
 </style>
