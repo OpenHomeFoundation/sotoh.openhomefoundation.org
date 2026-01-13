@@ -1,4 +1,6 @@
 ---
+import Content from "../components/Content.astro";
+
 import { Image } from "astro:assets";
 
 import logoPlaceholder from "../images/logo-placeholder.png";
@@ -7,27 +9,29 @@ import logoPlaceholder from "../images/logo-placeholder.png";
 <div class="container">
   <Image src={logoPlaceholder} alt="Placeholder Image" />
 
-  <ul>
-    <li>Save the date</li>
-    <li>Wednesday, April 8 2026</li>
-    <li>Utrecht, The Netherlands</li>
-  </ul>
+  <Content>
+    <ul>
+      <li>Save the date</li>
+      <li>Wednesday, April 8 2026</li>
+      <li>Utrecht, The Netherlands</li>
 
-  <h1 class="h1">STATE OF THE OPEN HOME</h1>
-</div>
+      <h1 class="h1">STATE OF THE OPEN HOME</h1>
+    </ul>
+  </Content>
 
-<style lang="scss">
-  @use "../styles/mixins/breakpoint.scss" as *;
+  <style lang="scss">
+    @use "../styles/mixins/breakpoint.scss" as *;
 
-  .container {
-    width: 100%;
-    max-width: 1200px;
-    padding: 2rem 1.25rem;
-    margin: 0 auto;
-    text-align: center;
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      padding: 2rem 1.25rem;
+      margin: 0 auto;
+      text-align: center;
 
-    @include bp(large-desktop) {
-      padding: 4.5rem 5rem;
+      @include bp(large-desktop) {
+        padding: 4.5rem 5rem;
+      }
     }
-  }
-</style>
+  </style>
+</div>
