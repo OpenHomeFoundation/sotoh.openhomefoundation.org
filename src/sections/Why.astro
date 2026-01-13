@@ -1,6 +1,7 @@
 ---
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
+import { logos } from "../lib/logos";
 ---
 
 <Container containerClass="container--column">
@@ -15,5 +16,36 @@ import Content from "../components/Content.astro";
         passion behind our work, it spreads – passion is contagious.
       </p>
     </div>
+    <div class="logo-cards">
+      <div class="logo-card">
+        <Fragment set:html={logos.openHomeFoundation} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.homeAssistant} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.esphome} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.musicAssistant} />
+      </div>
+    </div>
   </Content>
 </Container>
+
+<style lang="scss">
+  .logo-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+
+    .logo-card {
+      background-color: rgba(247, 246, 242, 0.1);
+      border-radius: 12px;
+      display: grid;
+      padding: 20px 32px;
+      place-items: center;
+    }
+  }
+</style>
