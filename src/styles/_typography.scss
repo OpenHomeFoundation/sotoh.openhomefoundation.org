@@ -37,7 +37,8 @@ p,
   color: var(--text-on-dark);
   font-size: 1rem;
   text-wrap: balance;
-  line-height: 1.18;
+  line-height: 1.2;
+  font-weight: var(--typography-body-font-weight);
 
   &--large {
     font-size: clamp(1.125rem, 0.9886rem + 0.6818vw, 1.5rem);
