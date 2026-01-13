@@ -1,4 +1,5 @@
 :root {
+    // Burger menu
     --burger-bar-height: 2px;
     --burger-bar-width: calc(var(--burger-bar-height) * 8);
     --burger-border-radius: 0px;
@@ -12,6 +13,13 @@
 
     --typography-body-font-family: "Space Grotesk", sans-serif;
 
+    // Colors
     --text-on-light: #1a1a1a;
     --text-on-dark: #ffffff;
+
+    --ohf-dark-blue: #09202E;
+
+    --sotoh-yellow: #FFD351;
+    --sotoh-blue: #0457FF;
+    --sotoh-purple: #8B26FF;
 }

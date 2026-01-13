@@ -6,7 +6,7 @@ const { class: className = "", href = "/error" } = Astro.props;
 
 <style lang="scss" is:global>
   .button {
-    color: black;
+    color: var(--text-on-dark);
     padding: 12px 24px;
     border-radius: 40px;
     flex-shrink: 0;
@@ -14,14 +14,22 @@ const { class: className = "", href = "/error" } = Astro.props;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    font-family: var(--typography-heading-font-family);
+    font-weight: var(--typography-heading-font-weight);
+    font-size: 0.75rem;
 
     &--hollow {
-      border: 2px solid red;
+      border: 2px solid var(--sotoh-yellow);
     }
 
     &--primary {
-      background-color: red;
-      color: white;
+      background-color: var(--sotoh-yellow);
+      color: var(--ohf-dark-blue);
+
+      &:hover {
+        color: var(--sotoh-yellow);
+        background-color: var(--ohf-dark-blue);
+      }
     }
   }
 </style>
