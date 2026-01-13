@@ -1,1 +1,27 @@
-<slot />
+---
+import Container from "./Container.astro";
+---
+
+<Container>
+  <slot />
+</Container>
+
+<style lang="scss" is:global>
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .content-container {
+    max-width: 800px;
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .buttons-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+</style>

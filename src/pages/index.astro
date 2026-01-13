@@ -3,9 +3,11 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Countdown from "../components/Countdown.astro";
-import Content from "../components/Content.astro";
+import Building from "../sections/Building.astro";
 import TickertapeGroup from "../components/TickertapeGroup.astro";
+import WhatIs from "../sections/WhatIs.astro";
 import Carousel from "../components/Carousel.astro";
+import Why from "../sections/Why.astro";
 import Tickertape from "../components/Tickertape.astro";
 import BePart from "../sections/BePart.astro";
 ---
@@ -14,30 +16,11 @@ import BePart from "../sections/BePart.astro";
   <Header />
   <Hero />
   <Countdown />
-  <Content>
-    <ul>
-      <li>tag</li>
-      <li>title</li>
-      <li>content</li>
-      <li>buttons</li>
-    </ul>
-  </Content>
+  <Building />
   <TickertapeGroup />
-  <Content>
-    <ul>
-      <li>title</li>
-      <li>content</li>
-      <li>buttons</li>
-    </ul>
-  </Content>
+  <WhatIs />
   <Carousel />
-  <Content>
-    <ul>
-      <li>title</li>
-      <li>content</li>
-      <li>Partners</li>
-    </ul>
-  </Content>
+  <Why />
   <BePart />
   <Tickertape />
 </Layout>

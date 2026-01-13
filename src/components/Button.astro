@@ -1,15 +1,19 @@
 ---
-const { cta = "Button", class: className = "", href = "/error" } = Astro.props;
+const { class: className = "", href = "/error" } = Astro.props;
 ---
 
-<a class={className} href={href}>{cta}</a>
+<a class={className} href={href}><slot /></a>
 
-<style lang="scss">
+<style lang="scss" is:global>
   .button {
     color: black;
     padding: 12px 24px;
     border-radius: 40px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 
     &--hollow {
       border: 2px solid red;

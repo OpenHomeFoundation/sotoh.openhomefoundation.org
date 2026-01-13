@@ -1,0 +1,22 @@
+<div class="container"><slot /></div>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include bp(large-desktop) {
+      padding: 0;
+    }
+  }
+</style>
