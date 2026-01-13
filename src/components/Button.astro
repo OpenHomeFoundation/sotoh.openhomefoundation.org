@@ -17,7 +17,10 @@ const { class: className = "", href = "/error", icon } = Astro.props;
       </div>
     ) : null
   }
-  <slot />
+  <span class="button-text">
+    <span class="button-text__default"><slot /></span>
+    <span class="button-text__hover" aria-hidden="true"><slot /></span>
+  </span>
 </a>
 
 <style lang="scss" is:global>
@@ -58,13 +61,73 @@ const { class: className = "", href = "/error", icon } = Astro.props;
       border: 2px solid var(--sotoh-yellow);
     }
 
+    &-text {
+      display: block;
+      position: relative;
+      overflow: hidden;
+
+      &__default,
+      &__hover {
+        display: block;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      &__default {
+        transition: color 0.3s ease-in-out;
+      }
+
+      &__hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(100%);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        &__hover {
+          display: none;
+        }
+
+        &__default,
+        &__hover {
+          transition: none;
+        }
+      }
+    }
+
+    &:hover &-text {
+      &__default {
+        transform: translateY(-100%);
+      }
+
+      &__hover {
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        &__default {
+          transform: none;
+        }
+      }
+    }
+
     &--primary {
       background-color: var(--sotoh-yellow);
       color: var(--ohf-dark-blue);
+      transition: background-color 0.3s ease-in-out;
+
+      .button-text__hover {
+        color: var(--sotoh-yellow);
+      }
 
       &:hover {
-        color: var(--sotoh-yellow);
         background-color: var(--ohf-dark-blue);
+
+        @media (prefers-reduced-motion: reduce) {
+          .button-text__default {
+            color: var(--sotoh-yellow);
+          }
+        }
       }
     }
   }
