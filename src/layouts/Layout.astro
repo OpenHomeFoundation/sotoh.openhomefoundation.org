@@ -49,8 +49,26 @@ import "../styles/_typography.scss";
 
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-  ScrollSmoother.create({
-    smooth: 1, // seconds it takes to "catch up" to native scroll
-    effects: true, // enable data-speed and data-lag attributes
-  });
+  const mm = gsap.matchMedia();
+
+  mm.add(
+    {
+      reduceMotion: "(prefers-reduced-motion: reduce)",
+      normal: "(prefers-reduced-motion: no-preference)",
+    },
+    (context) => {
+      const { reduceMotion } = context.conditions!;
+
+      if (!reduceMotion) {
+        ScrollSmoother.create({
+          smooth: 1,
+          effects: true,
+        });
+      }
+
+      if (reduceMotion) {
+        gsap.defaults({ duration: 0 });
+      }
+    }
+  );
 </script>
