@@ -1,8 +1,24 @@
 ---
-const { class: className = "", href = "/error" } = Astro.props;
+import { ICONS, type ICON } from "../lib/icons";
+
+interface Props {
+  class?: string;
+  href?: string;
+  icon: ICON;
+}
+const { class: className = "", href = "/error", icon } = Astro.props;
 ---
 
-<a class={className} href={href}><slot /></a>
+<a class={className} href={href}>
+  {
+    icon ? (
+      <div class="button-icon">
+        <Fragment set:html={ICONS[icon]} />
+      </div>
+    ) : null
+  }
+  <slot />
+</a>
 
 <style lang="scss" is:global>
   .button {
@@ -17,6 +33,16 @@ const { class: className = "", href = "/error" } = Astro.props;
     font-family: var(--typography-heading-font-family);
     font-weight: var(--typography-heading-font-weight);
     font-size: 0.75rem;
+    gap: 8px;
+
+    &-icon {
+      display: grid;
+      place-items: center;
+      background-color: white;
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+    }
 
     &--hollow {
       border: 2px solid var(--sotoh-yellow);
