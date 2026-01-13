@@ -16,6 +16,7 @@
 		"vscode": {
 			"extensions": [
 				"astro-build.astro-vscode",
+				"vunguyentuan.vscode-css-variables",
 				"esbenp.prettier-vscode",
 				"yzhang.markdown-all-in-one",
 				"davidanson.vscode-markdownlint",
