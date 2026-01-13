@@ -39,4 +39,12 @@ p,
     font-size: clamp(1.125rem, 0.9886rem + 0.6818vw, 1.5rem);
     line-height: 1.16;
   }
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+strong {
+  font-weight: 600;
 }
