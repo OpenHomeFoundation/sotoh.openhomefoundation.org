@@ -1,5 +1,40 @@
 <slot />
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { SplitText } from "gsap/SplitText";
+
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
+  const paragraphs = document.querySelectorAll(".content-container p");
+
+  paragraphs.forEach((p) => {
+    const split = new SplitText(p, { type: "lines", linesClass: "line" });
+
+    // Wrap each line in a clip container for overflow hidden
+    split.lines.forEach((line) => {
+      const wrapper = document.createElement("div");
+      wrapper.style.overflow = "hidden";
+      line.parentNode?.insertBefore(wrapper, line);
+      wrapper.appendChild(line);
+    });
+
+    gsap.from(split.lines, {
+      yPercent: 100,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      stagger: 0.1,
+      scrollTrigger: {
+        trigger: p,
+        start: "top 85%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>
+
 <style lang="scss" is:global>
   @use "../styles/mixins/breakpoint.scss" as *;
 
@@ -9,6 +44,10 @@
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    p .line {
+      display: block;
     }
   }
 

@@ -22,7 +22,12 @@ import "../styles/_typography.scss";
     />
   </head>
   <body>
-    <slot />
+    <slot name="header" />
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <slot />
+      </div>
+    </div>
   </body>
 </html>
 
@@ -31,4 +36,21 @@ import "../styles/_typography.scss";
   body {
     margin: 0;
   }
+
+  #smooth-content {
+    padding-top: var(--header-height);
+  }
 </style>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { ScrollSmoother } from "gsap/ScrollSmoother";
+
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+  ScrollSmoother.create({
+    smooth: 1, // seconds it takes to "catch up" to native scroll
+    effects: true, // enable data-speed and data-lag attributes
+  });
+</script>
