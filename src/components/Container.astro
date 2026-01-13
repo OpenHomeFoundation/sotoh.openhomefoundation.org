@@ -45,6 +45,10 @@ const { containerClass = "" } = Astro.props;
       flex-direction: column;
       align-items: center;
       gap: 0;
+
+      @include bp(tablet) {
+        flex-direction: column;
+      }
     }
   }
 </style>
