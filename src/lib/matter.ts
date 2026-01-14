@@ -214,8 +214,10 @@ function initMatter() {
     Composite.add(engine.world, ceiling);
   }, 1500);
 
-  // Debug UI
-  createDebugUI(render, engine);
+  // Debug UI (only show when ?debug is in URL)
+  if (new URLSearchParams(window.location.search).has("debug")) {
+    createDebugUI(render, engine);
+  }
 }
 
 function createDebugUI(render: Matter.Render, engine: Matter.Engine) {
