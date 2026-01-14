@@ -15,14 +15,50 @@ import Footer from "../sections/Footer.astro";
 
 <Layout>
   <Header slot="header" />
-  <Hero />
-  <Countdown />
-  <Building />
-  <TickertapeGroup />
-  <WhatIs />
-  <Carousel />
-  <Why />
-  <BePart />
-  <Tickertape theme="yellow" />
+  <section class="block block-hero">
+    <Hero />
+  </section>
+  <section class="block block-countdown">
+    <Countdown />
+  </section>
+  <section class="block block-building">
+    <Building />
+  </section>
+  <section class="block block-tickertape-group">
+    <TickertapeGroup />
+  </section>
+  <section class="block block-what-is" id="what-is-state-of-the-open-home">
+    <WhatIs />
+  </section>
+  <section class="block block-image-carousel">
+    <Carousel />
+  </section>
+  <section class="block block-why" id="why-we-are-building-in-the-open">
+    <Why />
+  </section>
+  <section class="block block-be-part" id="be-part-of-the-conversation">
+    <BePart />
+  </section>
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" />
+  </section>
   <Footer />
 </Layout>
+
+<style lang="scss">
+  .block {
+    &-hero {
+      margin-bottom: 2rem;
+    }
+
+    &-countdown {
+      margin-bottom: 6rem;
+    }
+
+    &-what-is,
+    &-image-carousel,
+    &-why {
+      margin-bottom: 5rem;
+    }
+  }
+</style>
