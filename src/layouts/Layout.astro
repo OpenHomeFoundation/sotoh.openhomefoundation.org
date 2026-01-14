@@ -59,7 +59,10 @@ import "../styles/_typography.scss";
     (context) => {
       const { reduceMotion } = context.conditions!;
 
-      if (!reduceMotion) {
+      // Skip ScrollSmoother in Playwright tests (breaks trace playback)
+      const isPlaywrightTest = (window as any).__PLAYWRIGHT_TEST__;
+
+      if (!reduceMotion && !isPlaywrightTest) {
         ScrollSmoother.create({
           smooth: 1,
           effects: true,

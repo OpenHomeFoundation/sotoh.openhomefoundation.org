@@ -212,7 +212,7 @@ export class MatterScene {
     this.render.mouse = mouse;
 
     // Allow page scrolling over the canvas
-    mouse.element.removeEventListener("wheel", mouse.mousewheel);
+    mouse.element.removeEventListener("wheel", (mouse as any).mousewheel);
 
     // run the renderer
     Render.run(this.render);
