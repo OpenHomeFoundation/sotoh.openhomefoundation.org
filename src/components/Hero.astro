@@ -106,6 +106,14 @@ import BrandIcon from "./BrandIcon.astro";
   }
 
   .brand-icons {
-    display: flex;
+    // 2x2 on mobile, 4x1 on desktop
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+
+    @include bp(desktop) {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto;
+    }
   }
 </style>
