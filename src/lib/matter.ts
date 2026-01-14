@@ -42,7 +42,6 @@ function getSvgVertices(svgString: string, sampleLength: number = 15) {
   return Svg.pathToVertices(path, sampleLength);
 }
 
-
 function initMatter() {
   const container = document.getElementById("matter-container");
   if (!container) return;
@@ -52,7 +51,7 @@ function initMatter() {
 
   // create an engine
   const engine = Engine.create({
-    gravity: { x: 0, y: 2 },
+    gravity: { x: 0, y: 1 },
   });
 
   // create a renderer with transparent background
@@ -289,7 +288,7 @@ function createDebugUI(render: Matter.Render, engine: Matter.Engine) {
         <span>Gravity</span>
         <span id="gravity-value">2</span>
       </div>
-      <input type="range" id="debug-gravity" min="0" max="5" step="0.1" value="2">
+      <input type="range" id="debug-gravity" min="0" max="5" step="0.1" value="1">
     </div>
     <button id="debug-reset">Reset Scene</button>
   `;
