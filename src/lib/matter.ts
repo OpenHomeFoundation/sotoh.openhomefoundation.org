@@ -189,6 +189,9 @@ function initMatter() {
   // Keep mouse in sync with rendering
   render.mouse = mouse;
 
+  // Allow page scrolling over the canvas
+  mouse.element.removeEventListener("wheel", mouse.mousewheel);
+
   // run the renderer
   Render.run(render);
 
