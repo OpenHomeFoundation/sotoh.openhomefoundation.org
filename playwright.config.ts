@@ -31,15 +31,31 @@ export default defineConfig({
     /* Only trace on failure to save resources */
     trace: "on-first-retry",
 
-    /* Record video for visual comparison */
-    video: "on",
+    /* No video - using full-page screenshots instead */
+    video: "off",
   },
 
-  /* Minimal browser set for visual testing */
+  /* Test across major browsers and mobile */
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "mobile-chrome",
+      use: { ...devices["Pixel 5"] },
+    },
+    {
+      name: "mobile-safari",
+      use: { ...devices["iPhone 12"] },
     },
   ],
 
