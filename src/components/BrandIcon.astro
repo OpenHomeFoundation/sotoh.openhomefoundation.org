@@ -26,6 +26,11 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
       width: 100%;
       height: 100%;
     }
+
+    // Delay initial animation
+    [id] {
+      animation-delay: 1s;
+    }
   }
 
   // ============================================
