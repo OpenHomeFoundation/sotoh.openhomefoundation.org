@@ -1,10 +1,26 @@
 ---
 import { ICONS } from "../lib/icons";
 
-const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
+interface Props {
+  theme?: "blue" | "yellow" | "purple";
+  class?: string;
+  speed?: number;
+  offset?: number;
+}
+
+const {
+  theme = "blue",
+  class: className = "",
+  speed = 1,
+  offset = 0,
+} = Astro.props;
 ---
 
-<div class={`tickertape tickertape--${theme} ${className}`} data-speed={speed}>
+<div
+  class={`tickertape tickertape--${theme} ${className}`}
+  data-speed={speed}
+  style={offset ? `--animation-offset: ${offset}` : undefined}
+>
   <div class="tickertape-track">
     <div class="tickertape-item">
       <Fragment set:html={ICONS["tickerTape"]} />
@@ -26,7 +42,13 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
     --text-color: var(--text-on-dark);
     --background-color: var(--sotoh-blue);
     --animation-duration: 15s;
-    --overhang: 50px;
+    --animation-offset: 0;
+    --overhang: 3.75rem;
+    --max-width: 1600px;
+
+    &--blue {
+      transform: scale(0.8);
+    }
 
     &--yellow {
       --background-color: var(--sotoh-yellow);
@@ -37,11 +59,17 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
       --background-color: var(--sotoh-purple);
     }
 
+    width: calc(100% + var(--overhang) * 2);
+    max-width: var(--max-width);
+    margin-inline: auto;
     background-color: var(--background-color);
     overflow: hidden;
+    position: relative;
 
-    width: calc(100% + var(--overhang) * 2);
-    margin-inline: calc(var(--overhang) * -1);
+    @media (max-width: 1700px) {
+      margin-inline: calc(var(--overhang) * -1);
+      border-radius: 0;
+    }
 
     :global(svg) {
       color: var(--text-color);
@@ -53,6 +81,9 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
     flex-direction: row;
     width: fit-content;
     animation: marquee var(--animation-duration) linear infinite;
+    animation-delay: calc(
+      var(--animation-offset) * var(--animation-duration) * -1
+    );
 
     @media (prefers-reduced-motion: reduce) {
       animation: none;
