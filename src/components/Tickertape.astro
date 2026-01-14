@@ -15,6 +15,9 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
     <div class="tickertape-item" aria-hidden="true">
       <Fragment set:html={ICONS["tickerTape"]} />
     </div>
+    <div class="tickertape-item" aria-hidden="true">
+      <Fragment set:html={ICONS["tickerTape"]} />
+    </div>
   </div>
 </div>
 
@@ -69,7 +72,7 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
       transform: translateX(0);
     }
     100% {
-      transform: translateX(calc(-100% / 3));
+      transform: translateX(calc(-100% / 4));
     }
   }
 </style>
