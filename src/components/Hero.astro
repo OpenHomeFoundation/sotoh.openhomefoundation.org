@@ -4,19 +4,25 @@ import Content from "../components/Content.astro";
 
 import { Image } from "astro:assets";
 
+import { ICONS } from "../lib/icons";
+
 import logoPlaceholder from "../images/logo-placeholder.png";
 ---
 
 <Container containerClass="container--hero">
+  <p class="event-host p--large">
+    An event organized by the <Fragment set:html={ICONS["OHFWordmark"]} />
+  </p>
+
   <Image src={logoPlaceholder} alt="Placeholder Image" />
 
   <Content>
-    <ul>
+    <h1 class="h1">STATE OF THE OPEN HOME</h1>
+    <ul class="event-details">
       <li>Save the date</li>
       <li>Wednesday, April 8 2026</li>
       <li>Utrecht, The Netherlands</li>
     </ul>
-    <h1 class="h1">STATE OF THE OPEN HOME</h1>
   </Content>
 </Container>
 
@@ -26,5 +32,70 @@ import logoPlaceholder from "../images/logo-placeholder.png";
   img {
     width: 100%;
     height: auto;
+  }
+
+  h1 {
+    margin-bottom: 0;
+  }
+
+  p.event-host {
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+
+  .event-details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: clamp(1rem, 0.9886rem + 0.6818vw, 1.5rem);
+
+    @include bp(tablet) {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    @include bp(desktop) {
+      gap: 1.5rem;
+    }
+
+    li {
+      flex-shrink: 0;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.625rem;
+
+      @include bp(tablet) {
+        gap: 1rem;
+      }
+
+      @include bp(desktop) {
+        gap: 1.5rem;
+      }
+
+      &:last-child {
+        &:after {
+          content: none;
+        }
+      }
+
+      &:after {
+        width: 0.25rem;
+        height: 0.25rem;
+        content: "";
+        display: inline-block;
+        background-color: currentColor;
+        border-radius: 50%;
+
+        @include bp(tablet) {
+          width: 0.5rem;
+          height: 0.5rem;
+        }
+      }
+    }
   }
 </style>
