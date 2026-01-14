@@ -23,7 +23,7 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
     --text-color: var(--text-on-dark);
     --background-color: var(--sotoh-blue);
     --animation-duration: 15s;
-    --overhang: 50px; // Extra width to cover rotation gaps
+    --overhang: 50px;
 
     &--yellow {
       --background-color: var(--sotoh-yellow);
@@ -37,7 +37,6 @@ const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
     background-color: var(--background-color);
     overflow: hidden;
 
-    // Extend beyond viewport to cover rotated corners
     width: calc(100% + var(--overhang) * 2);
     margin-inline: calc(var(--overhang) * -1);
 
