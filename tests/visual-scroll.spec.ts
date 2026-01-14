@@ -46,28 +46,27 @@ test.describe("Visual Scroll Test", () => {
   });
 
   test("scroll through entire page", async ({ page }) => {
-    // Wait for initial render
-    await page.waitForTimeout(1000);
+    // Brief wait for initial render
+    await page.waitForTimeout(500);
 
-    // Get page dimensions
-    const scrollHeight = await page.evaluate(
-      () => document.documentElement.scrollHeight - window.innerHeight
+    // Smooth scroll to bottom using CSS scroll-behavior
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "smooth";
+      window.scrollTo(0, document.documentElement.scrollHeight);
+    });
+
+    // Wait for scroll to complete (check every 100ms)
+    await page.waitForFunction(
+      () => {
+        const atBottom =
+          window.scrollY + window.innerHeight >=
+          document.documentElement.scrollHeight - 10;
+        return atBottom;
+      },
+      { timeout: 30000, polling: 100 }
     );
 
-    // Scroll at fixed rate: 300px per second
-    const pixelsPerSecond = 300;
-    const stepSize = 5; // pixels per step
-    const stepDelay = (stepSize / pixelsPerSecond) * 1000; // ms between steps
-
-    let currentPosition = 0;
-
-    while (currentPosition < scrollHeight) {
-      currentPosition = Math.min(currentPosition + stepSize, scrollHeight);
-      await page.evaluate((y) => window.scrollTo(0, y), currentPosition);
-      await page.waitForTimeout(stepDelay);
-    }
-
-    // Hold at bottom for 2 seconds before video ends
-    await page.waitForTimeout(2000);
+    // Brief hold at bottom
+    await page.waitForTimeout(500);
   });
 });
