@@ -8,8 +8,29 @@ test.describe("Visual Screenshot Test", () => {
   test.setTimeout(60_000);
 
   test("full page screenshot", async ({ page }, testInfo) => {
+    // Disable GSAP ScrollSmoother which intercepts scroll events
+    await page.addInitScript(() => {
+      // @ts-ignore
+      window.__PLAYWRIGHT_TEST__ = true;
+    });
+
     await page.goto("http://localhost:4321/");
     await page.waitForLoadState("networkidle");
+
+    // Kill ScrollSmoother if present
+    await page.evaluate(() => {
+      // @ts-ignore
+      if (window.ScrollSmoother) {
+        // @ts-ignore
+        const smoother = window.ScrollSmoother.get();
+        if (smoother) smoother.kill();
+      }
+      // @ts-ignore
+      if (window.ScrollTrigger) {
+        // @ts-ignore
+        window.ScrollTrigger.normalizeScroll(false);
+      }
+    });
 
     // Scroll through page slowly to trigger lazy-loaded components
     const viewportHeight = await page.evaluate(() => window.innerHeight);
