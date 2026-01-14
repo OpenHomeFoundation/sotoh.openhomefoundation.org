@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import { ICONS } from "../lib/icons";
 
 import logoPlaceholder from "../images/logo-placeholder.png";
+import BrandIcon from "./BrandIcon.astro";
 ---
 
 <Container containerClass="container--hero">
@@ -14,7 +15,12 @@ import logoPlaceholder from "../images/logo-placeholder.png";
     An event organized by the <Fragment set:html={ICONS["OHFWordmark"]} />
   </p>
 
-  <Image src={logoPlaceholder} alt="Placeholder Image" />
+  <div class="brand-icons">
+    <BrandIcon icon="building" />
+    <BrandIcon icon="privacy" />
+    <BrandIcon icon="choice" />
+    <BrandIcon icon="sustainability" />
+  </div>
 
   <Content>
     <h1 class="h1">STATE OF THE OPEN HOME</h1>
@@ -97,5 +103,18 @@ import logoPlaceholder from "../images/logo-placeholder.png";
         }
       }
     }
+  }
+
+  .brand-icons {
+    // 2x2 on mobile, 4x1 on desktop
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+
+    @include bp(desktop) {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto;
+    }
+
   }
 </style>
