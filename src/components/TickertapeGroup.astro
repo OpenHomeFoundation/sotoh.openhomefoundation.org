@@ -3,9 +3,9 @@ import Tickertape from "./Tickertape.astro";
 ---
 
 <div class="tickertape-group-container">
-  <Tickertape class="top" speed="0.9" />
-  <Tickertape class="middle" theme="yellow" speed="1.1" />
-  <Tickertape class="bottom" theme="purple" speed="1.2" />
+  <Tickertape class="top" speed={0.95} offset={0} />
+  <Tickertape class="middle" theme="yellow" speed={1.1} offset={0.33} />
+  <Tickertape class="bottom" theme="purple" speed={1.2} offset={0.66} />
 </div>
 
 <style lang="scss">
