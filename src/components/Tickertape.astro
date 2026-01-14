@@ -1,3 +1,76 @@
-<ul>
-  <li>1x tickertape</li>
-</ul>
+---
+import { ICONS } from "../lib/icons";
+
+const { theme = "blue", class: className = "", speed = 1 } = Astro.props;
+---
+
+<div class={`tickertape tickertape--${theme} ${className}`} data-speed={speed}>
+  <div class="tickertape-track">
+    <div class="tickertape-item">
+      <Fragment set:html={ICONS["tickerTape"]} />
+    </div>
+    <div class="tickertape-item" aria-hidden="true">
+      <Fragment set:html={ICONS["tickerTape"]} />
+    </div>
+    <div class="tickertape-item" aria-hidden="true">
+      <Fragment set:html={ICONS["tickerTape"]} />
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .tickertape {
+    --text-color: var(--text-on-dark);
+    --background-color: var(--sotoh-blue);
+    --animation-duration: 15s;
+    --overhang: 50px; // Extra width to cover rotation gaps
+
+    &--yellow {
+      --background-color: var(--sotoh-yellow);
+      --text-color: var(--text-on-light);
+    }
+
+    &--purple {
+      --background-color: var(--sotoh-purple);
+    }
+
+    background-color: var(--background-color);
+    overflow: hidden;
+
+    // Extend beyond viewport to cover rotated corners
+    width: calc(100% + var(--overhang) * 2);
+    margin-inline: calc(var(--overhang) * -1);
+
+    :global(svg) {
+      color: var(--text-color);
+    }
+  }
+
+  .tickertape-track {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    animation: marquee var(--animation-duration) linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  .tickertape-item {
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% / 3));
+    }
+  }
+</style>
