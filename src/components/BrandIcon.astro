@@ -1,0 +1,472 @@
+---
+import { BRAND_ICONS, type BRAND_ICON } from "../lib/brand-icons";
+
+interface Props {
+  icon: BRAND_ICON;
+  class?: string;
+}
+
+const { icon, class: className = "" } = Astro.props;
+const iconData = BRAND_ICONS[icon];
+---
+
+<div class:list={["brand-icon", `brand-icon--${icon}`, className]}>
+  <Fragment set:html={iconData.svg} />
+</div>
+
+<style lang="scss" is:global>
+  .brand-icon {
+    display: block;
+    pointer-events: all;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // ============================================
+  // Building icon animations (auto-play)
+  // ============================================
+  .brand-icon--building {
+    $duration: 1183ms;
+    $timing: linear;
+
+    @keyframes building-corner-move {
+      0% {
+        transform: translate(225px, 225px);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      42.265% {
+        transform: translate(112.5px, 112.5px);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      84.53% {
+        transform: translate(0px, 0px);
+      }
+      100% {
+        transform: translate(0px, 0px);
+      }
+    }
+
+    @keyframes building-side-move {
+      0% {
+        transform: translate(113px, 113px);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      42.265% {
+        transform: translate(0.32px, 113px);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      84.53% {
+        transform: translate(-112.36px, 113px);
+      }
+      100% {
+        transform: translate(-112.36px, 113px);
+      }
+    }
+
+    @keyframes building-fade-corner {
+      0% {
+        opacity: 0;
+      }
+      39.98% {
+        opacity: 0;
+        animation-timing-function: step-end;
+      }
+      40.83% {
+        opacity: 1;
+        animation-timing-function: step-end;
+      }
+      100% {
+        opacity: 0.86;
+      }
+    }
+
+    @keyframes building-fade-side {
+      0% {
+        opacity: 0;
+      }
+      41.42% {
+        opacity: 0;
+        animation-timing-function: step-end;
+      }
+      42.265% {
+        opacity: 1;
+        animation-timing-function: step-end;
+      }
+      100% {
+        opacity: 0.8634;
+      }
+    }
+
+    @keyframes building-center-scale {
+      0% {
+        transform: translate(225px, 225px) scale(0.25, 0.25);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      42.265% {
+        transform: translate(225px, 225px) scale(0.5, 0.5);
+        animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
+      }
+      84.53% {
+        transform: translate(225px, 225px) scale(0.25, 0.25);
+      }
+      100% {
+        transform: translate(225px, 225px) scale(0.25, 0.25);
+      }
+    }
+
+    #building-anim-1,
+    #building-anim-2,
+    #building-anim-3,
+    #building-anim-4,
+    #building-anim-5,
+    #building-anim-6,
+    #building-anim-7,
+    #building-anim-8 {
+      animation: building-corner-move $duration $timing infinite normal forwards;
+    }
+
+    #building-anim-9,
+    #building-anim-10,
+    #building-anim-11,
+    #building-anim-12,
+    #building-anim-13,
+    #building-anim-14,
+    #building-anim-15,
+    #building-anim-16 {
+      animation: building-side-move $duration $timing infinite normal forwards;
+    }
+
+    #building-fade-1,
+    #building-fade-2,
+    #building-fade-3,
+    #building-fade-4 {
+      animation: building-fade-corner $duration $timing infinite normal forwards;
+    }
+
+    #building-fade-5,
+    #building-fade-6,
+    #building-fade-7,
+    #building-fade-8 {
+      animation: building-fade-side $duration $timing infinite normal forwards;
+    }
+
+    #building-anim-center {
+      animation: building-center-scale $duration $timing infinite normal forwards;
+    }
+  }
+
+  // ============================================
+  // Choice icon animations (auto-play)
+  // ============================================
+  .brand-icon--choice {
+    $duration: 4900ms;
+    $timing: linear;
+    $easing: cubic-bezier(0.9, 0, 0.1, 0.995);
+
+    @keyframes choice-center-scale {
+      0% {
+        transform: translate(225px, 225px) scale(1, 1);
+        animation-timing-function: $easing;
+      }
+      12.24% {
+        transform: translate(225px, 225px) scale(2, 2);
+        animation-timing-function: $easing;
+      }
+      24.49% {
+        transform: translate(225px, 225px) scale(2, 2);
+        animation-timing-function: $easing;
+      }
+      36.73% {
+        transform: translate(225px, 225px) scale(6.9, 6.9);
+      }
+      100% {
+        transform: translate(225px, 225px) scale(6.9, 6.9);
+      }
+    }
+
+    @keyframes choice-corner-1 {
+      0%,
+      36.73%,
+      48.98% {
+        transform: translate(392.65px, 167.65px) scale(0, 0);
+      }
+      48.98% {
+        animation-timing-function: $easing;
+      }
+      61.22%,
+      100% {
+        transform: translate(392.65px, 167.65px) scale(1, 1);
+      }
+    }
+
+    @keyframes choice-corner-2 {
+      0%,
+      36.73% {
+        transform: translate(167.65px, 167.65px) scale(0, 0);
+      }
+      36.73% {
+        animation-timing-function: $easing;
+      }
+      48.98%,
+      100% {
+        transform: translate(167.65px, 167.65px) scale(1, 1);
+      }
+    }
+
+    @keyframes choice-corner-3 {
+      0%,
+      36.73%,
+      75.51% {
+        transform: translate(167.65px, 392.65px) scale(0, 0);
+      }
+      75.51% {
+        animation-timing-function: $easing;
+      }
+      87.76%,
+      100% {
+        transform: translate(167.65px, 392.65px) scale(1, 1);
+      }
+    }
+
+    @keyframes choice-corner-4 {
+      0%,
+      36.73%,
+      61.22% {
+        transform: translate(392.65px, 392.65px) scale(0, 0);
+      }
+      61.22% {
+        animation-timing-function: $easing;
+      }
+      73.47%,
+      100% {
+        transform: translate(392.65px, 392.65px) scale(1, 1);
+      }
+    }
+
+    #choice-center {
+      animation: choice-center-scale $duration $timing infinite normal forwards;
+    }
+
+    #choice-corner-1 {
+      animation: choice-corner-1 $duration $timing infinite normal forwards;
+    }
+
+    #choice-corner-2 {
+      animation: choice-corner-2 $duration $timing infinite normal forwards;
+    }
+
+    #choice-corner-3 {
+      animation: choice-corner-3 $duration $timing infinite normal forwards;
+    }
+
+    #choice-corner-4 {
+      animation: choice-corner-4 $duration $timing infinite normal forwards;
+    }
+  }
+
+  // ============================================
+  // Sustainability icon animations (auto-play)
+  // ============================================
+  .brand-icon--sustainability {
+    $duration: 1500ms;
+    $timing: linear;
+    $easing: cubic-bezier(0.9, 0, 0.1, 1);
+
+    @keyframes sustainability-leaf-diagonal {
+      0% {
+        transform: translate(513.613px, 513.613px);
+        animation-timing-function: $easing;
+      }
+      66.67%,
+      100% {
+        transform: translate(288px, 288px);
+      }
+    }
+
+    @keyframes sustainability-leaf-3-move {
+      0% {
+        transform: translate(225px, 225px);
+        animation-timing-function: $easing;
+      }
+      66.67%,
+      100% {
+        transform: translate(225.806px, 0.138px);
+      }
+    }
+
+    @keyframes sustainability-leaf-4-move {
+      0% {
+        transform: translate(225px, 225px);
+        animation-timing-function: $easing;
+      }
+      66.67%,
+      100% {
+        transform: translate(225px, 0.138px);
+      }
+    }
+
+    @keyframes sustainability-leaf-5-move {
+      0% {
+        transform: translate(225px, 225px);
+        animation-timing-function: $easing;
+      }
+      66.67%,
+      100% {
+        transform: translate(225px, 56.25px);
+      }
+    }
+
+    @keyframes sustainability-leaf-5-scale {
+      0% {
+        transform: scale(1, 1);
+        animation-timing-function: $easing;
+      }
+      66.67%,
+      100% {
+        transform: scale(0.25, 0.25);
+      }
+    }
+
+    #sustainability-leaf-1,
+    #sustainability-leaf-2 {
+      animation: sustainability-leaf-diagonal $duration $timing infinite normal forwards;
+    }
+
+    #sustainability-leaf-3 {
+      animation: sustainability-leaf-3-move $duration $timing infinite normal forwards;
+    }
+
+    #sustainability-leaf-4 {
+      animation: sustainability-leaf-4-move $duration $timing infinite normal forwards;
+    }
+
+    #sustainability-leaf-5-wrap,
+    #sustainability-leaf-6-wrap {
+      animation: sustainability-leaf-5-move $duration $timing infinite normal forwards;
+    }
+
+    #sustainability-leaf-5,
+    #sustainability-leaf-6 {
+      animation: sustainability-leaf-5-scale $duration $timing infinite normal forwards;
+    }
+  }
+
+  // ============================================
+  // Privacy icon animations (auto-play)
+  // ============================================
+  .brand-icon--privacy {
+    $duration: 3700ms;
+    $timing: linear;
+    $easing: cubic-bezier(0.9, 0, 0.1, 0.995);
+
+    @keyframes privacy-scale {
+      0% {
+        transform: translate(288px, 288px) scale(1, 1);
+        animation-timing-function: $easing;
+      }
+      16.22% {
+        transform: translate(288px, 288px) scale(5, 5);
+      }
+      18.92%,
+      100% {
+        transform: translate(288px, 288px) scale(1, 1);
+      }
+    }
+
+    @keyframes privacy-quad-1 {
+      0%,
+      16.22% {
+        transform: translate(225px, 225px);
+      }
+      18.92% {
+        transform: translate(97.71px, 352.29px);
+        animation-timing-function: $easing;
+      }
+      35.14%,
+      100% {
+        transform: translate(225px, 225px);
+      }
+    }
+
+    @keyframes privacy-quad-2 {
+      0%,
+      16.22% {
+        transform: translate(225px, 225px);
+      }
+      18.92% {
+        transform: translate(351.71px, 351.71px);
+        animation-timing-function: $easing;
+      }
+      67.57% {
+        transform: translate(351.71px, 351.71px);
+        animation-timing-function: $easing;
+      }
+      83.78%,
+      100% {
+        transform: translate(225px, 225px);
+      }
+    }
+
+    @keyframes privacy-quad-3 {
+      0%,
+      16.22% {
+        transform: translate(225px, 225px);
+      }
+      18.92% {
+        transform: translate(351.71px, 98.29px);
+        animation-timing-function: $easing;
+      }
+      51.35% {
+        transform: translate(351.71px, 98.29px);
+        animation-timing-function: $easing;
+      }
+      67.57%,
+      100% {
+        transform: translate(225px, 225px);
+      }
+    }
+
+    @keyframes privacy-quad-4 {
+      0%,
+      16.22% {
+        transform: translate(225px, 225px);
+      }
+      18.92% {
+        transform: translate(97.14px, 97.14px);
+        animation-timing-function: $easing;
+      }
+      35.14% {
+        transform: translate(97.14px, 97.14px);
+        animation-timing-function: $easing;
+      }
+      51.35%,
+      100% {
+        transform: translate(225px, 225px);
+      }
+    }
+
+    #privacy-scale {
+      animation: privacy-scale $duration $timing infinite normal forwards;
+    }
+
+    #privacy-quad-1 {
+      animation: privacy-quad-1 $duration $timing infinite normal forwards;
+    }
+
+    #privacy-quad-2 {
+      animation: privacy-quad-2 $duration $timing infinite normal forwards;
+    }
+
+    #privacy-quad-3 {
+      animation: privacy-quad-3 $duration $timing infinite normal forwards;
+    }
+
+    #privacy-quad-4 {
+      animation: privacy-quad-4 $duration $timing infinite normal forwards;
+    }
+  }
+</style>
