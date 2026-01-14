@@ -29,7 +29,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
   }
 
   // ============================================
-  // Building icon animations (auto-play)
+  // Building icon animations (5s cycle, plays in first 30%)
   // ============================================
   .brand-icon--building {
     $timing: linear;
@@ -39,14 +39,11 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      42.265% {
+      12.68% {
         transform: translate(112.5px, 112.5px);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      84.53% {
-        transform: translate(0px, 0px);
-      }
-      100% {
+      25.36%, 100% {
         transform: translate(0px, 0px);
       }
     }
@@ -56,48 +53,29 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(113px, 113px);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      42.265% {
+      12.68% {
         transform: translate(0.32px, 113px);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      84.53% {
-        transform: translate(-112.36px, 113px);
-      }
-      100% {
+      25.36%, 100% {
         transform: translate(-112.36px, 113px);
       }
     }
 
     @keyframes building-fade-corner {
-      0% {
+      0%, 12% {
         opacity: 0;
       }
-      39.98% {
-        opacity: 0;
-        animation-timing-function: step-end;
-      }
-      40.83% {
-        opacity: 1;
-        animation-timing-function: step-end;
-      }
-      100% {
+      12.25%, 100% {
         opacity: 0.86;
       }
     }
 
     @keyframes building-fade-side {
-      0% {
+      0%, 12.43% {
         opacity: 0;
       }
-      41.42% {
-        opacity: 0;
-        animation-timing-function: step-end;
-      }
-      42.265% {
-        opacity: 1;
-        animation-timing-function: step-end;
-      }
-      100% {
+      12.68%, 100% {
         opacity: 0.8634;
       }
     }
@@ -107,14 +85,11 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px) scale(0.25, 0.25);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      42.265% {
+      12.68% {
         transform: translate(225px, 225px) scale(0.5, 0.5);
         animation-timing-function: cubic-bezier(0.9, 0, 0.1, 1);
       }
-      84.53% {
-        transform: translate(225px, 225px) scale(0.25, 0.25);
-      }
-      100% {
+      25.36%, 100% {
         transform: translate(225px, 225px) scale(0.25, 0.25);
       }
     }
@@ -127,7 +102,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
     #building-anim-6,
     #building-anim-7,
     #building-anim-8 {
-      animation: building-corner-move var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: building-corner-move var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #building-anim-9,
@@ -138,30 +113,30 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
     #building-anim-14,
     #building-anim-15,
     #building-anim-16 {
-      animation: building-side-move var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: building-side-move var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #building-fade-1,
     #building-fade-2,
     #building-fade-3,
     #building-fade-4 {
-      animation: building-fade-corner var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: building-fade-corner var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #building-fade-5,
     #building-fade-6,
     #building-fade-7,
     #building-fade-8 {
-      animation: building-fade-side var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: building-fade-side var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #building-anim-center {
-      animation: building-center-scale var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: building-center-scale var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
   }
 
   // ============================================
-  // Choice icon animations (auto-play)
+  // Choice icon animations (5s cycle, plays in first 30%)
   // ============================================
   .brand-icon--choice {
     $timing: linear;
@@ -172,104 +147,90 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px) scale(1, 1);
         animation-timing-function: $easing;
       }
-      12.24% {
+      3.67% {
         transform: translate(225px, 225px) scale(2, 2);
         animation-timing-function: $easing;
       }
-      24.49% {
+      7.35% {
         transform: translate(225px, 225px) scale(2, 2);
         animation-timing-function: $easing;
       }
-      36.73% {
-        transform: translate(225px, 225px) scale(6.9, 6.9);
-      }
-      100% {
+      11.02%, 100% {
         transform: translate(225px, 225px) scale(6.9, 6.9);
       }
     }
 
     @keyframes choice-corner-1 {
-      0%,
-      36.73%,
-      48.98% {
+      0%, 11.02%, 14.69% {
         transform: translate(392.65px, 167.65px) scale(0, 0);
       }
-      48.98% {
+      14.69% {
         animation-timing-function: $easing;
       }
-      61.22%,
-      100% {
+      18.37%, 100% {
         transform: translate(392.65px, 167.65px) scale(1, 1);
       }
     }
 
     @keyframes choice-corner-2 {
-      0%,
-      36.73% {
+      0%, 11.02% {
         transform: translate(167.65px, 167.65px) scale(0, 0);
       }
-      36.73% {
+      11.02% {
         animation-timing-function: $easing;
       }
-      48.98%,
-      100% {
+      14.69%, 100% {
         transform: translate(167.65px, 167.65px) scale(1, 1);
       }
     }
 
     @keyframes choice-corner-3 {
-      0%,
-      36.73%,
-      75.51% {
+      0%, 11.02%, 22.65% {
         transform: translate(167.65px, 392.65px) scale(0, 0);
       }
-      75.51% {
+      22.65% {
         animation-timing-function: $easing;
       }
-      87.76%,
-      100% {
+      26.33%, 100% {
         transform: translate(167.65px, 392.65px) scale(1, 1);
       }
     }
 
     @keyframes choice-corner-4 {
-      0%,
-      36.73%,
-      61.22% {
+      0%, 11.02%, 18.37% {
         transform: translate(392.65px, 392.65px) scale(0, 0);
       }
-      61.22% {
+      18.37% {
         animation-timing-function: $easing;
       }
-      73.47%,
-      100% {
+      22.04%, 100% {
         transform: translate(392.65px, 392.65px) scale(1, 1);
       }
     }
 
     #choice-center {
-      animation: choice-center-scale var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: choice-center-scale var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #choice-corner-1 {
-      animation: choice-corner-1 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: choice-corner-1 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #choice-corner-2 {
-      animation: choice-corner-2 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: choice-corner-2 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #choice-corner-3 {
-      animation: choice-corner-3 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: choice-corner-3 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #choice-corner-4 {
-      animation: choice-corner-4 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: choice-corner-4 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
   }
 
   // ============================================
-  // Sustainability icon animations (auto-play)
+  // Sustainability icon animations (5s cycle, plays in first 30%)
   // ============================================
   .brand-icon--sustainability {
     $timing: linear;
@@ -280,8 +241,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(513.613px, 513.613px);
         animation-timing-function: $easing;
       }
-      66.67%,
-      100% {
+      20%, 100% {
         transform: translate(288px, 288px);
       }
     }
@@ -291,8 +251,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px);
         animation-timing-function: $easing;
       }
-      66.67%,
-      100% {
+      20%, 100% {
         transform: translate(225.806px, 0.138px);
       }
     }
@@ -302,8 +261,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px);
         animation-timing-function: $easing;
       }
-      66.67%,
-      100% {
+      20%, 100% {
         transform: translate(225px, 0.138px);
       }
     }
@@ -313,8 +271,7 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(225px, 225px);
         animation-timing-function: $easing;
       }
-      66.67%,
-      100% {
+      20%, 100% {
         transform: translate(225px, 56.25px);
       }
     }
@@ -324,38 +281,37 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: scale(1, 1);
         animation-timing-function: $easing;
       }
-      66.67%,
-      100% {
+      20%, 100% {
         transform: scale(0.25, 0.25);
       }
     }
 
     #sustainability-leaf-1,
     #sustainability-leaf-2 {
-      animation: sustainability-leaf-diagonal var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: sustainability-leaf-diagonal var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #sustainability-leaf-3 {
-      animation: sustainability-leaf-3-move var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: sustainability-leaf-3-move var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #sustainability-leaf-4 {
-      animation: sustainability-leaf-4-move var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: sustainability-leaf-4-move var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #sustainability-leaf-5-wrap,
     #sustainability-leaf-6-wrap {
-      animation: sustainability-leaf-5-move var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: sustainability-leaf-5-move var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #sustainability-leaf-5,
     #sustainability-leaf-6 {
-      animation: sustainability-leaf-5-scale var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: sustainability-leaf-5-scale var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
   }
 
   // ============================================
-  // Privacy icon animations (auto-play)
+  // Privacy icon animations (5s cycle, plays in first 30%)
   // ============================================
   .brand-icon--privacy {
     $timing: linear;
@@ -366,105 +322,96 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
         transform: translate(288px, 288px) scale(1, 1);
         animation-timing-function: $easing;
       }
-      16.22% {
+      4.87% {
         transform: translate(288px, 288px) scale(5, 5);
       }
-      18.92%,
-      100% {
+      5.68%, 100% {
         transform: translate(288px, 288px) scale(1, 1);
       }
     }
 
     @keyframes privacy-quad-1 {
-      0%,
-      16.22% {
+      0%, 4.87% {
         transform: translate(225px, 225px);
       }
-      18.92% {
+      5.68% {
         transform: translate(97.71px, 352.29px);
         animation-timing-function: $easing;
       }
-      35.14%,
-      100% {
+      10.54%, 100% {
         transform: translate(225px, 225px);
       }
     }
 
     @keyframes privacy-quad-2 {
-      0%,
-      16.22% {
+      0%, 4.87% {
         transform: translate(225px, 225px);
       }
-      18.92% {
+      5.68% {
         transform: translate(351.71px, 351.71px);
         animation-timing-function: $easing;
       }
-      67.57% {
+      20.27% {
         transform: translate(351.71px, 351.71px);
         animation-timing-function: $easing;
       }
-      83.78%,
-      100% {
+      25.13%, 100% {
         transform: translate(225px, 225px);
       }
     }
 
     @keyframes privacy-quad-3 {
-      0%,
-      16.22% {
+      0%, 4.87% {
         transform: translate(225px, 225px);
       }
-      18.92% {
+      5.68% {
         transform: translate(351.71px, 98.29px);
         animation-timing-function: $easing;
       }
-      51.35% {
+      15.41% {
         transform: translate(351.71px, 98.29px);
         animation-timing-function: $easing;
       }
-      67.57%,
-      100% {
+      20.27%, 100% {
         transform: translate(225px, 225px);
       }
     }
 
     @keyframes privacy-quad-4 {
-      0%,
-      16.22% {
+      0%, 4.87% {
         transform: translate(225px, 225px);
       }
-      18.92% {
+      5.68% {
         transform: translate(97.14px, 97.14px);
         animation-timing-function: $easing;
       }
-      35.14% {
+      10.54% {
         transform: translate(97.14px, 97.14px);
         animation-timing-function: $easing;
       }
-      51.35%,
-      100% {
+      15.41%, 100% {
         transform: translate(225px, 225px);
       }
     }
 
     #privacy-scale {
-      animation: privacy-scale var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: privacy-scale var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #privacy-quad-1 {
-      animation: privacy-quad-1 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: privacy-quad-1 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #privacy-quad-2 {
-      animation: privacy-quad-2 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: privacy-quad-2 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #privacy-quad-3 {
-      animation: privacy-quad-3 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: privacy-quad-3 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
 
     #privacy-quad-4 {
-      animation: privacy-quad-4 var(--brand-icon-duration, 1500ms) $timing infinite normal forwards;
+      animation: privacy-quad-4 var(--brand-icon-duration, 5000ms) $timing infinite normal forwards;
     }
   }
 </style>
