@@ -17,8 +17,8 @@ import BrandIcon from "./BrandIcon.astro";
 
   <div class="brand-icons">
     <BrandIcon icon="building" />
-    <BrandIcon icon="privacy" />
-    <BrandIcon icon="choice" />
+    <BrandIcon icon="privacy" duration={3000} />
+    <BrandIcon icon="choice" duration={3000} />
     <BrandIcon icon="sustainability" />
   </div>
 
@@ -115,5 +115,6 @@ import BrandIcon from "./BrandIcon.astro";
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: auto;
     }
+
   }
 </style>
