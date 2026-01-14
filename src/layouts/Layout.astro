@@ -71,9 +71,16 @@ import "../styles/_typography.scss";
       }
     }
   );
-</script>
 
-<script>
   import { initMatter } from "../lib/matter";
-  initMatter();
+  const siteFooter = document.querySelector("#matter-container");
+  if (siteFooter) {
+    ScrollTrigger.create({
+      trigger: siteFooter,
+      start: "top bottom",
+      onEnter: () => {
+        initMatter();
+      },
+    });
+  }
 </script>
