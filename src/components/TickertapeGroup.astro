@@ -1,9 +1,11 @@
 ---
 import Tickertape from "./Tickertape.astro";
+import Ticket from "./Ticket.astro";
 ---
 
 <div class="tickertape-group-container">
   <Tickertape class="top" speed={0.95} offset={0} />
+  <Ticket />
   <Tickertape class="middle" theme="yellow" speed={1.1} offset={0.33} />
   <Tickertape class="bottom" theme="purple" speed={1.2} offset={0.66} />
 </div>
@@ -15,6 +17,7 @@ import Tickertape from "./Tickertape.astro";
     gap: 1rem;
     padding-top: 9rem;
     padding-bottom: 9rem;
+    position: relative;
 
     :global(.top) {
       transform: rotate(-2.038deg);
