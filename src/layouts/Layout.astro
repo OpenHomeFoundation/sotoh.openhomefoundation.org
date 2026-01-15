@@ -28,6 +28,8 @@ import "../styles/_typography.scss";
         <slot />
       </div>
     </div>
+
+    <div class="noise"></div>
   </body>
 </html>
 
@@ -39,6 +41,76 @@ import "../styles/_typography.scss";
 
   #smooth-content {
     padding-top: var(--header-height);
+  }
+
+  .noise {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 110;
+    pointer-events: none;
+  }
+
+  .noise:before {
+    content: "";
+    width: 200vw;
+    height: 200vh;
+    background-image: url(/src/images/noise.webp);
+    background-repeat: repeat;
+    position: absolute;
+    left: -50vw;
+    top: -50vh;
+    z-index: 2;
+    opacity: 0.15;
+    animation: noiseMoving 0.2s infinite steps(1);
+  }
+
+  @keyframes noiseMoving {
+    0% {
+      transform: translate(0);
+    }
+
+    10% {
+      transform: translate(-10vw, -10vh);
+    }
+
+    20% {
+      transform: translate(8vw, 12vh);
+    }
+
+    30% {
+      transform: translate(-12vw, 6vh);
+    }
+
+    40% {
+      transform: translate(10vw, -8vh);
+    }
+
+    50% {
+      transform: translate(-6vw, 14vh);
+    }
+
+    60% {
+      transform: translate(14vw, -12vh);
+    }
+
+    70% {
+      transform: translate(-8vw, 10vh);
+    }
+
+    80% {
+      transform: translate(12vw, -6vh);
+    }
+
+    90% {
+      transform: translate(-10vw, 8vh);
+    }
+
+    to {
+      transform: translate(0);
+    }
   }
 </style>
 
