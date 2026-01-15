@@ -6,7 +6,9 @@ const { image } = Astro.props;
 ---
 
 <div class="full-image">
-  <Image src={image} alt="" />
+  <div class="full-image-media">
+    <Image src={image} alt="" />
+  </div>
   <div class="full-image-content">
     <Container>
       <slot />
@@ -14,24 +16,87 @@ const { image } = Astro.props;
   </div>
 </div>
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mediaQuery = window.matchMedia("(min-width: 768px)");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (mediaQuery.matches && !prefersReducedMotion) {
+    document
+      .querySelectorAll(".full-image-media:not([data-initialized])")
+      .forEach((media) => {
+        media.setAttribute("data-initialized", "");
+
+        gsap.fromTo(
+          media,
+          { scale: 0.75 },
+          {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: media,
+              start: "top bottom",
+              end: "center center",
+              scrub: 0.5,
+            },
+          }
+        );
+      });
+  }
+</script>
+
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
   .full-image {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     color: var(--text-on-dark);
+    padding-bottom: 3rem;
 
-    img,
-    &-content {
-      grid-area: 1/1;
+    @include bp(desktop) {
+      display: grid;
+      padding-bottom: 0;
+      margin-bottom: -1px;
+
+      .full-image-media,
+      .full-image-content {
+        grid-area: 1/1;
+      }
+    }
+
+    &-media {
+      padding: 0 1.5rem;
+
+      @include bp(desktop) {
+        padding: 0;
+        will-change: transform;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 0.75rem;
+
+        @include bp(desktop) {
+          border-radius: 0;
+        }
+      }
     }
 
     &-content {
-      align-items: flex-end;
-      display: flex;
-      padding-bottom: 1rem;
-
-      @include bp(tablet) {
+      @include bp(desktop) {
+        align-items: flex-end;
+        display: flex;
+        padding: 1rem 0;
         padding-bottom: 3rem;
       }
 
@@ -40,9 +105,22 @@ const { image } = Astro.props;
       }
     }
   }
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
+
+  .full-image-content {
+    :global(.container) {
+      gap: 0;
+
+      @include bp(tablet) {
+        gap: 3rem;
+      }
+    }
+
+    :global(.content-container) {
+      text-align: center;
+
+      @include bp(tablet) {
+        text-align: left;
+      }
+    }
   }
 </style>
