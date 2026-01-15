@@ -54,6 +54,16 @@ export class MatterScene {
   private render: Matter.Render | null = null;
   private runner: Matter.Runner | null = null;
   private options: MatterSceneOptions;
+  private walls: {
+    ground: Matter.Body | null;
+    leftWall: Matter.Body | null;
+    rightWall: Matter.Body | null;
+    ceiling: Matter.Body | null;
+  } = { ground: null, leftWall: null, rightWall: null, ceiling: null };
+  private resizeHandler: (() => void) | null = null;
+  private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private gyroHandler: ((event: DeviceOrientationEvent) => void) | null = null;
+  private gyroEnabled: boolean = false;
 
   constructor(options: MatterSceneOptions = {}) {
     this.options = {
@@ -91,6 +101,10 @@ export class MatterScene {
     // Create bodies
     const bodies: Matter.Body[] = [];
 
+    // Calculate scale factor for mobile (scale down below 768px)
+    const baseWidth = 1200;
+    const scale = Math.min(1, Math.max(0.5, width / baseWidth));
+
     // Get vertices for each shape type
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
@@ -114,13 +128,13 @@ export class MatterScene {
 
         switch (shapeType) {
           case "circle":
-            body = Bodies.circle(x, y, 87, {
+            body = Bodies.circle(x, y, 87 * scale, {
               angle,
               render: {
                 sprite: {
                   texture: svgToDataUrl(shapes.circle, color),
-                  xScale: 1,
-                  yScale: 1,
+                  xScale: scale,
+                  yScale: scale,
                 },
               },
             });
@@ -131,6 +145,9 @@ export class MatterScene {
                 angle,
                 render: { fillStyle: color },
               });
+              if (body && scale !== 1) {
+                Matter.Body.scale(body, scale, scale);
+              }
             }
             break;
           case "halfCircle":
@@ -139,6 +156,9 @@ export class MatterScene {
                 angle,
                 render: { fillStyle: color },
               });
+              if (body && scale !== 1) {
+                Matter.Body.scale(body, scale, scale);
+              }
             }
             break;
           case "petal":
@@ -147,6 +167,9 @@ export class MatterScene {
                 angle,
                 render: { fillStyle: color },
               });
+              if (body && scale !== 1) {
+                Matter.Body.scale(body, scale, scale);
+              }
             }
             break;
         }
@@ -159,7 +182,7 @@ export class MatterScene {
 
     // Create bounds (invisible walls on all sides)
     const wallThickness = 100;
-    const ground = Bodies.rectangle(
+    this.walls.ground = Bodies.rectangle(
       width / 2,
       height + wallThickness / 2,
       width + wallThickness * 2,
@@ -169,7 +192,7 @@ export class MatterScene {
         render: { visible: false },
       }
     );
-    const leftWall = Bodies.rectangle(
+    this.walls.leftWall = Bodies.rectangle(
       -wallThickness / 2,
       height / 2,
       wallThickness,
@@ -179,7 +202,7 @@ export class MatterScene {
         render: { visible: false },
       }
     );
-    const rightWall = Bodies.rectangle(
+    this.walls.rightWall = Bodies.rectangle(
       width + wallThickness / 2,
       height / 2,
       wallThickness,
@@ -190,7 +213,7 @@ export class MatterScene {
       }
     );
 
-    bodies.push(ground, leftWall, rightWall);
+    bodies.push(this.walls.ground, this.walls.leftWall, this.walls.rightWall);
 
     // add all bodies to the world
     Composite.add(this.engine.world, bodies);
@@ -224,18 +247,36 @@ export class MatterScene {
     // Add ceiling after delay so objects can fall in first
     setTimeout(() => {
       if (!this.engine) return;
-      const ceiling = Bodies.rectangle(
-        width / 2,
+      const currentWidth = this.container?.clientWidth || width;
+      this.walls.ceiling = Bodies.rectangle(
+        currentWidth / 2,
         -wallThickness / 2,
-        width + wallThickness * 2,
+        currentWidth + wallThickness * 2,
         wallThickness,
         {
           isStatic: true,
           render: { visible: false },
         }
       );
-      Composite.add(this.engine.world, ceiling);
+      Composite.add(this.engine.world, this.walls.ceiling);
     }, 1500);
+
+    // Style canvas to cover container absolutely
+    this.render.canvas.style.position = "absolute";
+    this.render.canvas.style.top = "0";
+    this.render.canvas.style.left = "0";
+    this.render.canvas.style.width = "100%";
+    this.render.canvas.style.height = "100%";
+    this.render.canvas.style.pointerEvents = "auto";
+
+    // Set up debounced resize handler
+    this.resizeHandler = () => {
+      if (this.resizeTimeout) {
+        clearTimeout(this.resizeTimeout);
+      }
+      this.resizeTimeout = setTimeout(() => this.updateSize(), 100);
+    };
+    window.addEventListener("resize", this.resizeHandler);
 
     // Debug UI
     if (
@@ -245,10 +286,159 @@ export class MatterScene {
       this.createDebugUI();
     }
 
+    // Enable gyro control on mobile devices
+    this.initGyroControl();
+
     return true;
   }
 
+  private initGyroControl(): void {
+    // Gyro requires secure context (HTTPS)
+    if (!window.isSecureContext) return;
+
+    // Check for touch support (mobile device)
+    const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (!hasTouch) return;
+
+    // iOS 13+ requires permission request
+    const requestPermission = (
+      DeviceOrientationEvent as unknown as {
+        requestPermission?: () => Promise<string>;
+      }
+    ).requestPermission;
+
+    if (typeof requestPermission === "function") {
+      // iOS - need to request permission on user interaction
+      const requestGyroPermission = async () => {
+        try {
+          const permission = await requestPermission();
+          if (permission === "granted") {
+            this.enableGyro();
+          }
+        } catch (e) {
+          // Permission denied or error
+        }
+      };
+      document.addEventListener("touchstart", requestGyroPermission, {
+        once: true,
+      });
+    } else {
+      // Android and other devices - enable directly
+      this.enableGyro();
+    }
+  }
+
+  private enableGyro(): void {
+    if (this.gyroEnabled || !this.engine) return;
+
+    this.gyroHandler = (event: DeviceOrientationEvent) => {
+      if (!this.engine) return;
+
+      const beta = event.beta;
+      const gamma = event.gamma;
+
+      // Skip if no valid data
+      if (beta === null || gamma === null) return;
+
+      // Convert device orientation to gravity
+      // beta: 0 = flat, 90 = vertical facing user, -90 = vertical facing away
+      // gamma: 0 = flat, 90 = tilted right, -90 = tilted left
+      const gravityY = Math.sin((beta * Math.PI) / 180) * this.options.gravity!;
+      const gravityX =
+        Math.sin((gamma * Math.PI) / 180) * this.options.gravity!;
+
+      this.engine.gravity.x = gravityX;
+      this.engine.gravity.y = gravityY;
+    };
+
+    window.addEventListener("deviceorientation", this.gyroHandler);
+    this.gyroEnabled = true;
+  }
+
+  private disableGyro(): void {
+    if (this.gyroHandler) {
+      window.removeEventListener("deviceorientation", this.gyroHandler);
+      this.gyroHandler = null;
+    }
+    this.gyroEnabled = false;
+  }
+
+  private updateSize(): void {
+    if (!this.container || !this.render || !this.engine) return;
+
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    const wallThickness = 100;
+
+    // Update canvas size
+    this.render.canvas.width = width;
+    this.render.canvas.height = height;
+    this.render.options.width = width;
+    this.render.options.height = height;
+
+    // Remove old walls
+    const oldWalls = [
+      this.walls.ground,
+      this.walls.leftWall,
+      this.walls.rightWall,
+      this.walls.ceiling,
+    ].filter((w): w is Matter.Body => w !== null);
+
+    if (oldWalls.length > 0) {
+      Composite.remove(this.engine.world, oldWalls);
+    }
+
+    // Create new walls with correct dimensions
+    this.walls.ground = Bodies.rectangle(
+      width / 2,
+      height + wallThickness / 2,
+      width + wallThickness * 2,
+      wallThickness,
+      { isStatic: true, render: { visible: false } }
+    );
+    this.walls.leftWall = Bodies.rectangle(
+      -wallThickness / 2,
+      height / 2,
+      wallThickness,
+      height + wallThickness * 2,
+      { isStatic: true, render: { visible: false } }
+    );
+    this.walls.rightWall = Bodies.rectangle(
+      width + wallThickness / 2,
+      height / 2,
+      wallThickness,
+      height + wallThickness * 2,
+      { isStatic: true, render: { visible: false } }
+    );
+    this.walls.ceiling = Bodies.rectangle(
+      width / 2,
+      -wallThickness / 2,
+      width + wallThickness * 2,
+      wallThickness,
+      { isStatic: true, render: { visible: false } }
+    );
+
+    Composite.add(this.engine.world, [
+      this.walls.ground,
+      this.walls.leftWall,
+      this.walls.rightWall,
+      this.walls.ceiling,
+    ]);
+  }
+
   destroy(): void {
+    // Disable gyro control
+    this.disableGyro();
+
+    // Remove resize listener and clear timeout
+    if (this.resizeHandler) {
+      window.removeEventListener("resize", this.resizeHandler);
+      this.resizeHandler = null;
+    }
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = null;
+    }
     if (this.render) {
       Render.stop(this.render);
       this.render.canvas.remove();
@@ -262,6 +452,8 @@ export class MatterScene {
       Engine.clear(this.engine);
       this.engine = null;
     }
+    // Reset walls references
+    this.walls = { ground: null, leftWall: null, rightWall: null, ceiling: null };
     const debugPanel = document.getElementById("matter-debug");
     if (debugPanel) {
       debugPanel.remove();
