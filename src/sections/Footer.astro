@@ -11,7 +11,10 @@ import TextWipe from "../components/TextWipe.astro";
       <div class="footer-subtitle">
         An event organized by the Open Home Foundation
       </div>
-      <Button href="/" class="button button--primary">
+      <Button
+        href="/"
+        class="button button--primary button--primary-hover-light"
+      >
         Tickets coming soon
       </Button>
       <div class="footer-content-bottom">
@@ -101,6 +104,10 @@ import TextWipe from "../components/TextWipe.astro";
 
       :global(.button) {
         margin-top: 2rem;
+      }
+
+      .h2 {
+        text-align: left;
       }
 
       &-bottom {

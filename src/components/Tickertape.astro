@@ -6,6 +6,7 @@ interface Props {
   class?: string;
   speed?: number;
   offset?: number;
+  fullWidth?: boolean;
 }
 
 const {
@@ -13,12 +14,14 @@ const {
   class: className = "",
   speed = 1,
   offset = 0,
+  fullWidth = false,
 } = Astro.props;
 ---
 
 <div
-  class={`tickertape tickertape--${theme} ${className}`}
-  style={`--speed: ${speed}; --offset: ${offset};`}
+  class={`tickertape tickertape--${theme} ${className} ${fullWidth ? "tickertape--full-width" : ""}`}
+  data-speed={speed}
+  style={`--offset: ${offset};`}
 >
   <div class="tickertape-track">
     <div class="tickertape-item">
@@ -33,6 +36,13 @@ const {
     <div class="tickertape-item" aria-hidden="true">
       <Fragment set:html={ICONS["tickerTape"]} />
     </div>
+    {
+      fullWidth && (
+        <div class="tickertape-item" aria-hidden="true">
+          <Fragment set:html={ICONS["tickerTape"]} />
+        </div>
+      )
+    }
   </div>
 </div>
 
@@ -51,6 +61,17 @@ const {
       .querySelectorAll(".tickertape:not([data-initialized])")
       .forEach((tickertape) => {
         tickertape.setAttribute("data-initialized", "");
+
+        const track = tickertape.querySelector(
+          ".tickertape-track"
+        ) as HTMLElement;
+        const speed = parseFloat(tickertape.getAttribute("data-speed") || "1");
+        const baseDuration = 15;
+        const duration = baseDuration / speed;
+
+        if (track) {
+          track.style.setProperty("--duration", `${duration}s`);
+        }
 
         ScrollTrigger.create({
           trigger: tickertape,
@@ -75,14 +96,21 @@ const {
     }
   }
 
+  @keyframes tickertape-scroll-full-width {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-20%);
+    }
+  }
+
   .tickertape {
     --text-color: var(--text-on-dark);
     --background-color: var(--sotoh-blue);
     --overhang: 3.75rem;
     --max-width: 1600px;
-    --speed: 1;
     --offset: 0;
-    --duration: calc(15s / var(--speed));
 
     &--blue {
       transform: scale(0.8);
@@ -121,6 +149,8 @@ const {
   }
 
   .tickertape-track {
+    --duration: 15s;
+
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -131,6 +161,10 @@ const {
 
     .tickertape.is-visible & {
       animation-play-state: running;
+    }
+
+    .tickertape--full-width & {
+      animation-name: tickertape-scroll-full-width;
     }
 
     @media (prefers-reduced-motion: reduce) {

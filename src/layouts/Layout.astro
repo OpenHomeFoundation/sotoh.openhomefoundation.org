@@ -4,6 +4,8 @@ import "../styles/_variables.scss";
 import "../styles/_reset.scss";
 import "../styles/_global.scss";
 import "../styles/_typography.scss";
+
+// TODO: Update META, OG, Schema
 ---
 
 <!doctype html>
@@ -11,9 +13,76 @@ import "../styles/_typography.scss";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>SOTOH</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>State of the Open Home - Open Home Foundation</title>
+    <meta
+      name="description"
+      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Open Home Foundation" />
+    <link rel="canonical" href="https://sotoh.openhomefoundation.org/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sotoh.openhomefoundation.org/" />
+    <meta property="og:title" content="State of the Open Home 2026" />
+    <meta
+      property="og:description"
+      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
+    />
+    <meta
+      property="og:image"
+      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+    />
+    <meta
+      property="og:site_name"
+      content="State of the Open Home - Open Home Foundation"
+    />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="State of the Open Home 2026" />
+    <meta
+      name="twitter:description"
+      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
+    />
+    <meta
+      name="twitter:image"
+      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+    />
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "State of the Open Home 2026",
+        "description": "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!",
+        "startDate": "2026-04-08",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+          "@type": "Place",
+          "name": "Utrecht",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Utrecht",
+            "addressCountry": "NL"
+          }
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "Open Home Foundation",
+          "url": "https://www.openhomefoundation.org"
+        },
+        "image": "https://sotoh.openhomefoundation.org/og-image.jpg"
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
