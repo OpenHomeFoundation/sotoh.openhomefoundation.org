@@ -1,6 +1,7 @@
 ---
 import Button from "../components/Button.astro";
 import Container from "../components/Container.astro";
+import TextWipe from "../components/TextWipe.astro";
 ---
 
 <footer id="matter-container">
@@ -14,7 +15,7 @@ import Container from "../components/Container.astro";
         Tickets coming soon
       </Button>
       <div class="footer-content-bottom">
-        <a href="#">Help & support</a>
+        <TextWipe href="#">Help & support</TextWipe>
         <span>Copyright @ Open Home Foundation</span>
       </div>
     </div>
@@ -22,42 +23,49 @@ import Container from "../components/Container.astro";
       <div class="footer-nav-column">
         <div class="footer-nav-title">Home</div>
         <div class="footer-nav-items">
-          <a class="footer-nav-item" href="#">What is State of the Open Home?</a
+          <TextWipe class="footer-nav-item" href="#"
+            >What is State of the Open Home?</TextWipe
           >
-          <a class="footer-nav-item" href="#">Why we're building in the open</a>
-          <a class="footer-nav-item" href="#">Be part of the conversation</a>
+          <TextWipe class="footer-nav-item" href="#"
+            >Why we're building in the open</TextWipe
+          >
+          <TextWipe class="footer-nav-item" href="#"
+            >Be part of the conversation</TextWipe
+          >
         </div>
       </div>
       <div class="footer-nav-column">
         <div class="footer-nav-title">Conference</div>
         <div class="footer-nav-items">
-          <a class="footer-nav-item" href="#">Speakers</a>
-          <a class="footer-nav-item" href="#">Agenda</a>
+          <TextWipe class="footer-nav-item" href="#">Speakers</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Agenda</TextWipe>
         </div>
       </div>
       <div class="footer-nav-column">
         <div class="footer-nav-title">Resources</div>
         <div class="footer-nav-items">
-          <a class="footer-nav-item" href="#">The venue</a>
-          <a class="footer-nav-item" href="#">FAQ</a>
-          <a class="footer-nav-item" href="#">Accessibility guide</a>
+          <TextWipe class="footer-nav-item" href="#">The venue</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">FAQ</TextWipe>
+          <TextWipe class="footer-nav-item" href="#"
+            >Accessibility guide</TextWipe
+          >
         </div>
       </div>
       <div class="footer-nav-column">
         <div class="footer-nav-title">Legal</div>
         <div class="footer-nav-items">
-          <a class="footer-nav-item" href="#">Privacy</a>
-          <a class="footer-nav-item" href="#">Terms of use</a>
+          <TextWipe class="footer-nav-item" href="#">Privacy</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Terms of use</TextWipe>
         </div>
       </div>
       <div class="footer-nav-column">
         <div class="footer-nav-title">Social</div>
         <div class="footer-nav-items">
-          <a class="footer-nav-item" href="#">Discord</a>
-          <a class="footer-nav-item" href="#">Mastodon</a>
-          <a class="footer-nav-item" href="#">Bluesky</a>
-          <a class="footer-nav-item" href="#">Instagram</a>
-          <a class="footer-nav-item" href="#">Facebook</a>
+          <TextWipe class="footer-nav-item" href="#">Discord</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Mastodon</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Bluesky</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Instagram</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Facebook</TextWipe>
         </div>
       </div>
     </div>
@@ -73,18 +81,42 @@ import Container from "../components/Container.astro";
     position: relative;
     display: flex;
     isolation: isolate;
-    padding: 40px 24px 120px 24px;
+    padding: 40px 0 120px 0;
 
     @include bp(desktop) {
-      padding: 80px 80px 200px 80px;
+      padding: 80px 0 200px 0;
     }
 
     :global(canvas) {
       z-index: -1;
     }
-
     :global(.container) {
       gap: 40px 96px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      :global(.button) {
+        margin-top: 2rem;
+      }
+
+      &-bottom {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+        gap: 8px;
+
+        :global(.text-wipe) {
+          font-weight: 500;
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
     }
 
     .footer-nav {
@@ -101,7 +133,7 @@ import Container from "../components/Container.astro";
       &-column {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 12px;
       }
 
       &-title {
@@ -113,12 +145,16 @@ import Container from "../components/Container.astro";
       &-items {
         display: flex;
         flex-direction: column;
+        gap: 10px;
 
-        .footer-nav-item {
+        :global(.footer-nav-item) {
           color: #a2aab6;
-          font-size: 12px;
           text-decoration: none;
           padding: 4px 0;
+        }
+
+        :global(.text-wipe) {
+          font-size: 12px;
         }
       }
     }

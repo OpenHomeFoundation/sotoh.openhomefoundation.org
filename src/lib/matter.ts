@@ -13,14 +13,6 @@ const {
   Svg,
 } = Matter;
 
-// Color palette for shapes
-const colors = ["#D655EC", "#8B26FF", "#FFD351"];
-
-// Get random color from palette
-function getRandomColor(): string {
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
 // Replace fill color in SVG string
 function recolorSvg(svgString: string, color: string): string {
   return svgString.replace(/fill="#[A-Fa-f0-9]{6}"/, `fill="${color}"`);
@@ -78,7 +70,8 @@ export class MatterScene {
     this.container = document.getElementById(this.options.containerId!);
     if (!this.container) return false;
 
-    const width = this.container.clientWidth;
+    const maxWidth = 1200;
+    const width = Math.min(this.container.clientWidth, maxWidth);
     const height = this.container.clientHeight;
 
     // create an engine
@@ -110,73 +103,91 @@ export class MatterScene {
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
     const petalVertices = getSvgVertices(shapes.petal);
 
+    // Color definitions
+    const pink = "#D655EC";
+    const purple = "#8B26FF";
+    const yellow = "#FFD351";
+
     // Helper to get random values
     const randomBetween = (min: number, max: number) =>
       Math.random() * (max - min) + min;
 
-    // Create 5 of each shape type
-    const shapeTypes = ["circle", "halfPipe", "halfCircle", "petal"] as const;
+    // Define specific shapes:
+    // 3 purple pipes, 1 yellow pipe, 1 pink circle, 1 purple circle,
+    // 3 yellow petals, 1 purple petal, 1 pink petal, 2 pink semicircles
+    const shapeList: { type: "circle" | "halfPipe" | "halfCircle" | "petal"; color: string }[] = [
+      { type: "halfPipe", color: purple },
+      { type: "halfPipe", color: purple },
+      { type: "halfPipe", color: purple },
+      { type: "halfPipe", color: yellow },
+      { type: "circle", color: pink },
+      { type: "circle", color: purple },
+      { type: "petal", color: yellow },
+      { type: "petal", color: yellow },
+      { type: "petal", color: yellow },
+      { type: "petal", color: purple },
+      { type: "petal", color: pink },
+      { type: "halfCircle", color: pink },
+      { type: "halfCircle", color: pink },
+    ];
 
-    for (const shapeType of shapeTypes) {
-      for (let i = 0; i < 5; i++) {
-        const color = getRandomColor();
-        const x = randomBetween(100, width - 100);
-        const y = randomBetween(-600, -100);
-        const angle = randomBetween(0, Math.PI * 2);
+    for (const { type, color } of shapeList) {
+      const x = randomBetween(100, width - 100);
+      const y = randomBetween(-600, -100);
+      const angle = randomBetween(0, Math.PI * 2);
 
-        let body: Matter.Body | null = null;
+      let body: Matter.Body | null = null;
 
-        switch (shapeType) {
-          case "circle":
-            body = Bodies.circle(x, y, 87 * scale, {
-              angle,
-              render: {
-                sprite: {
-                  texture: svgToDataUrl(shapes.circle, color),
-                  xScale: scale,
-                  yScale: scale,
-                },
+      switch (type) {
+        case "circle":
+          body = Bodies.circle(x, y, 87 * scale, {
+            angle,
+            render: {
+              sprite: {
+                texture: svgToDataUrl(shapes.circle, color),
+                xScale: scale,
+                yScale: scale,
               },
+            },
+          });
+          break;
+        case "halfPipe":
+          if (halfPipeVertices) {
+            body = Bodies.fromVertices(x, y, [halfPipeVertices], {
+              angle,
+              render: { fillStyle: color },
             });
-            break;
-          case "halfPipe":
-            if (halfPipeVertices) {
-              body = Bodies.fromVertices(x, y, [halfPipeVertices], {
-                angle,
-                render: { fillStyle: color },
-              });
-              if (body && scale !== 1) {
-                Matter.Body.scale(body, scale, scale);
-              }
+            if (body && scale !== 1) {
+              Matter.Body.scale(body, scale, scale);
             }
-            break;
-          case "halfCircle":
-            if (halfCircleVertices) {
-              body = Bodies.fromVertices(x, y, [halfCircleVertices], {
-                angle,
-                render: { fillStyle: color },
-              });
-              if (body && scale !== 1) {
-                Matter.Body.scale(body, scale, scale);
-              }
+          }
+          break;
+        case "halfCircle":
+          if (halfCircleVertices) {
+            body = Bodies.fromVertices(x, y, [halfCircleVertices], {
+              angle,
+              render: { fillStyle: color },
+            });
+            if (body && scale !== 1) {
+              Matter.Body.scale(body, scale, scale);
             }
-            break;
-          case "petal":
-            if (petalVertices) {
-              body = Bodies.fromVertices(x, y, [petalVertices], {
-                angle,
-                render: { fillStyle: color },
-              });
-              if (body && scale !== 1) {
-                Matter.Body.scale(body, scale, scale);
-              }
+          }
+          break;
+        case "petal":
+          if (petalVertices) {
+            body = Bodies.fromVertices(x, y, [petalVertices], {
+              angle,
+              render: { fillStyle: color },
+            });
+            if (body && scale !== 1) {
+              Matter.Body.scale(body, scale, scale);
             }
-            break;
-        }
+          }
+          break;
+      }
 
-        if (body) {
-          bodies.push(body);
-        }
+      if (body) {
+        bodies.push(body);
       }
     }
 
@@ -261,12 +272,11 @@ export class MatterScene {
       Composite.add(this.engine.world, this.walls.ceiling);
     }, 1500);
 
-    // Style canvas to cover container absolutely
+    // Style canvas to be centered with max-width
     this.render.canvas.style.position = "absolute";
     this.render.canvas.style.top = "0";
-    this.render.canvas.style.left = "0";
-    this.render.canvas.style.width = "100%";
-    this.render.canvas.style.height = "100%";
+    this.render.canvas.style.left = "50%";
+    this.render.canvas.style.transform = "translateX(-50%)";
     this.render.canvas.style.pointerEvents = "auto";
 
     // Set up debounced resize handler
@@ -366,7 +376,8 @@ export class MatterScene {
   private updateSize(): void {
     if (!this.container || !this.render || !this.engine) return;
 
-    const width = this.container.clientWidth;
+    const maxWidth = 1200;
+    const width = Math.min(this.container.clientWidth, maxWidth);
     const height = this.container.clientHeight;
     const wallThickness = 100;
 
