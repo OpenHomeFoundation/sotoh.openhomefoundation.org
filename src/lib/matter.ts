@@ -192,7 +192,7 @@ export class MatterScene {
     }
 
     // Create bounds (invisible walls on all sides)
-    const wallThickness = 100;
+    const wallThickness = 300;
     this.walls.ground = Bodies.rectangle(
       width / 2,
       height + wallThickness / 2,
@@ -245,7 +245,13 @@ export class MatterScene {
     // Keep mouse in sync with rendering
     this.render.mouse = mouse;
 
+    // Release dragged object when mouse leaves canvas
+    this.render.canvas.addEventListener("mouseleave", () => {
+      mouse.button = -1;
+    });
+
     // Allow page scrolling over the canvas
+    // @ts-expect-error - mousewheel exists on Mouse but not in types
     mouse.element.removeEventListener("wheel", mouse.mousewheel);
 
     // run the renderer
@@ -379,7 +385,7 @@ export class MatterScene {
     const maxWidth = 1200;
     const width = Math.min(this.container.clientWidth, maxWidth);
     const height = this.container.clientHeight;
-    const wallThickness = 100;
+    const wallThickness = 300;
 
     // Update canvas size
     this.render.canvas.width = width;
