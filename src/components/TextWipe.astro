@@ -24,6 +24,7 @@ const { href = "#", ...attrs } = Astro.props;
     &__default,
     &__hover {
       display: block;
+      padding: 2px 0;
       transition: transform 0.2s ease-out;
     }
 
@@ -31,13 +32,13 @@ const { href = "#", ...attrs } = Astro.props;
       position: absolute;
       top: 0;
       left: 0;
-      transform: translateY(110%);
+      transform: translateY(100%);
       color: #fff;
     }
 
     &:hover {
       .text-wipe__default {
-        transform: translateY(-110%);
+        transform: translateY(-100%);
       }
 
       .text-wipe__hover {
