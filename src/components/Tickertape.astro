@@ -18,8 +18,7 @@ const {
 
 <div
   class={`tickertape tickertape--${theme} ${className}`}
-  data-speed={speed}
-  style={offset ? `--animation-offset: ${offset}` : undefined}
+  style={`--speed: ${speed}; --offset: ${offset};`}
 >
   <div class="tickertape-track">
     <div class="tickertape-item">
@@ -37,14 +36,53 @@ const {
   </div>
 </div>
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (!prefersReducedMotion) {
+    document
+      .querySelectorAll(".tickertape:not([data-initialized])")
+      .forEach((tickertape) => {
+        tickertape.setAttribute("data-initialized", "");
+
+        ScrollTrigger.create({
+          trigger: tickertape,
+          start: "top bottom",
+          end: "bottom top",
+          onEnter: () => tickertape.classList.add("is-visible"),
+          onLeave: () => tickertape.classList.remove("is-visible"),
+          onEnterBack: () => tickertape.classList.add("is-visible"),
+          onLeaveBack: () => tickertape.classList.remove("is-visible"),
+        });
+      });
+  }
+</script>
+
 <style lang="scss">
+  @keyframes tickertape-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-25%);
+    }
+  }
+
   .tickertape {
     --text-color: var(--text-on-dark);
     --background-color: var(--sotoh-blue);
-    --animation-duration: 15s;
-    --animation-offset: 0;
     --overhang: 3.75rem;
     --max-width: 1600px;
+    --speed: 1;
+    --offset: 0;
+    --duration: calc(15s / var(--speed));
 
     &--blue {
       transform: scale(0.8);
@@ -86,10 +124,14 @@ const {
     display: flex;
     flex-direction: row;
     width: fit-content;
-    animation: marquee var(--animation-duration) linear infinite;
-    animation-delay: calc(
-      var(--animation-offset) * var(--animation-duration) * -1
-    );
+    will-change: transform;
+    animation: tickertape-scroll var(--duration) linear infinite;
+    animation-play-state: paused;
+    animation-delay: calc(var(--offset) * var(--duration) * -1);
+
+    .tickertape.is-visible & {
+      animation-play-state: running;
+    }
 
     @media (prefers-reduced-motion: reduce) {
       animation: none;
@@ -101,15 +143,6 @@ const {
 
     :global(svg) {
       display: block;
-    }
-  }
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-100% / 4));
     }
   }
 </style>
