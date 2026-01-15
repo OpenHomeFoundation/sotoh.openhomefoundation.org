@@ -35,14 +35,14 @@ const { image } = Astro.props;
 
         gsap.fromTo(
           media,
-          { scale: 0.75 },
+          { scale: 0.85 },
           {
             scale: 1,
             ease: "none",
             scrollTrigger: {
               trigger: media,
               start: "top bottom",
-              end: "center center",
+              end: "25% 50%",
               scrub: 0.5,
             },
           }
