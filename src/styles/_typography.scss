@@ -1,3 +1,5 @@
+@use '../styles/mixins/breakpoint' as *;
+
 body {
   font-family: var(--typography-body-font-family);
   color: var(--text-on-dark);
@@ -16,6 +18,11 @@ body {
   margin-bottom: 2rem;
   text-transform: uppercase;
   line-height: 1;
+  text-align: center;
+
+  @include bp(tablet) {
+    text-align: left;
+  }
 
   &:last-child {
     margin-bottom: 0;
