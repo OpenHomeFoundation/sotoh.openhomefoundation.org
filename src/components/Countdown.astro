@@ -1,24 +1,39 @@
 ---
-import { calculateCountdown, formatCountdownValue, TARGET_DATE } from "../lib/countdown";
+import {
+  calculateCountdown,
+  formatCountdownValue,
+  TARGET_DATE,
+} from "../lib/countdown";
 
 const initial = calculateCountdown();
 ---
 
 <div class="countdown" data-target={TARGET_DATE.toISOString()}>
   <div class="countdown-item">
-    <span class="countdown-value" data-days>{formatCountdownValue(initial.days)}</span>
+    <span class="countdown-value" data-days
+      >{formatCountdownValue(initial.days)}</span
+    >
     <span class="countdown-label">Days</span>
   </div>
+  <span class="countdown-separator">:</span>
   <div class="countdown-item">
-    <span class="countdown-value" data-hours>{formatCountdownValue(initial.hours)}</span>
+    <span class="countdown-value" data-hours
+      >{formatCountdownValue(initial.hours)}</span
+    >
     <span class="countdown-label">Hours</span>
   </div>
+  <span class="countdown-separator countdown-separator--hide-mobile">:</span>
   <div class="countdown-item">
-    <span class="countdown-value" data-minutes>{formatCountdownValue(initial.minutes)}</span>
+    <span class="countdown-value" data-minutes
+      >{formatCountdownValue(initial.minutes)}</span
+    >
     <span class="countdown-label">Minutes</span>
   </div>
+  <span class="countdown-separator">:</span>
   <div class="countdown-item">
-    <span class="countdown-value" data-seconds>{formatCountdownValue(initial.seconds)}</span>
+    <span class="countdown-value" data-seconds
+      >{formatCountdownValue(initial.seconds)}</span
+    >
     <span class="countdown-label">Seconds</span>
   </div>
 </div>
@@ -37,7 +52,8 @@ const initial = calculateCountdown();
     const secondsEl = countdownEl.querySelector("[data-seconds]");
 
     function update() {
-      const { days, hours, minutes, seconds, isExpired } = calculateCountdown(targetDate);
+      const { days, hours, minutes, seconds, isExpired } =
+        calculateCountdown(targetDate);
 
       if (daysEl) daysEl.textContent = formatCountdownValue(days);
       if (hoursEl) hoursEl.textContent = formatCountdownValue(hours);
@@ -56,11 +72,20 @@ const initial = calculateCountdown();
   initCountdown();
 </script>
 
-<style>
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .countdown {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto auto;
     gap: 1rem;
     justify-content: center;
+
+    @include bp(desktop) {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
   }
 
   .countdown-item {
@@ -69,14 +94,48 @@ const initial = calculateCountdown();
     align-items: center;
   }
 
+  .countdown-separator {
+    font-family: var(--typography-heading-font-family);
+    font-size: 64px;
+
+    -webkit-text-stroke: 1px currentColor;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+
+    @include bp(desktop) {
+      font-size: 120px;
+    }
+
+    &--hide-mobile {
+      display: none;
+
+      @include bp(desktop) {
+        display: block;
+      }
+    }
+  }
+
   .countdown-value {
-    font-size: 2rem;
-    font-weight: bold;
+    font-family: var(--typography-heading-font-family);
+    font-size: 64px;
+
     font-variant-numeric: tabular-nums;
+    -webkit-text-stroke: 1px currentColor;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+
+    @include bp(desktop) {
+      font-size: 120px;
+    }
   }
 
   .countdown-label {
-    font-size: 0.875rem;
+    font-family: var(--typography-heading-font-family);
+    font-size: 12px;
     text-transform: uppercase;
+
+    @include bp(desktop) {
+      font-size: 20px;
+    }
   }
 </style>
