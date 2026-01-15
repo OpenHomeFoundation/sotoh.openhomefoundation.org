@@ -24,13 +24,17 @@ import CarouselTrack from "./CarouselTrack.astro";
     ).matches;
 
     if (!prefersReducedMotion) {
-      const tween = gsap.to(inner, {
-        xPercent: -50,
-        duration: 40,
-        ease: "none",
-        repeat: -1,
-        paused: true,
-      });
+      const tween = gsap.fromTo(
+        inner,
+        { xPercent: -50 },
+        {
+          xPercent: 0,
+          duration: 40,
+          ease: "none",
+          repeat: -1,
+          paused: true,
+        }
+      );
 
       ScrollTrigger.create({
         trigger: carousel,

@@ -153,7 +153,9 @@ const {
       }
 
       &__default {
-        transition: color 0.3s ease-in-out;
+        transition:
+          color 0.3s ease-in-out,
+          transform 0.3s ease-in-out;
       }
 
       &__hover {
@@ -206,6 +208,22 @@ const {
         @media (prefers-reduced-motion: reduce) {
           .button-text__default {
             color: var(--sotoh-yellow);
+          }
+        }
+      }
+
+      &.button--primary-hover-light {
+        .button-text__hover {
+          color: var(--text-on-light);
+        }
+
+        &:hover {
+          background-color: var(--text-on-dark);
+
+          @media (prefers-reduced-motion: reduce) {
+            .button-text__default {
+              color: var(--text-on-light);
+            }
           }
         }
       }

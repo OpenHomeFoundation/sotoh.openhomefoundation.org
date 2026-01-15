@@ -7,7 +7,7 @@ const { image } = Astro.props;
 
 <div class="full-image">
   <div class="full-image-media">
-    <Image src={image} alt="" />
+    <Image width="1440" src={image} alt="" />
   </div>
   <div class="full-image-content">
     <Container>
@@ -33,20 +33,35 @@ const { image } = Astro.props;
       .forEach((media) => {
         media.setAttribute("data-initialized", "");
 
+        const img = media.querySelector("img");
+        const scrollTriggerConfig = {
+          trigger: media,
+          start: "top bottom",
+          end: "25% 50%",
+          scrub: 0.5,
+        };
+
         gsap.fromTo(
           media,
           { scale: 0.85 },
           {
             scale: 1,
             ease: "none",
-            scrollTrigger: {
-              trigger: media,
-              start: "top bottom",
-              end: "25% 50%",
-              scrub: 0.5,
-            },
+            scrollTrigger: scrollTriggerConfig,
           }
         );
+
+        if (img) {
+          gsap.fromTo(
+            img,
+            {},
+            {
+              borderRadius: "0",
+              ease: "none",
+              scrollTrigger: scrollTriggerConfig,
+            }
+          );
+        }
       });
   }
 </script>
@@ -80,6 +95,26 @@ const { image } = Astro.props;
         will-change: transform;
       }
 
+      &:after {
+        width: 100%;
+        height: 100%;
+
+        background: linear-gradient(
+          180deg,
+          rgba(4, 87, 255, 0) 0%,
+          var(--Coding-On-Light, rgba(4, 87, 255, 0.8)) 100%
+        );
+        mix-blend-mode: multiply;
+
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+
+        @include bp(desktop) {
+          content: "";
+        }
+      }
+
       img {
         width: 100%;
         height: auto;
@@ -87,21 +122,21 @@ const { image } = Astro.props;
         border-radius: 0.75rem;
 
         @include bp(desktop) {
-          border-radius: 0;
+          border-radius: 1.5rem;
+          max-height: 810px;
+          object-fit: cover;
+          object-position: center bottom;
         }
       }
     }
 
     &-content {
+      z-index: 1;
+
       @include bp(desktop) {
         align-items: flex-end;
         display: flex;
-        padding: 1rem 0;
-        padding-bottom: 3rem;
-      }
-
-      @include bp(desktop) {
-        padding-bottom: 5rem;
+        padding: 1rem 0 5rem;
       }
     }
   }
