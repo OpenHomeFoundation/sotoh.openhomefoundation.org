@@ -4,7 +4,7 @@
 export const BRAND_ICONS = {
   building: {
     svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 450" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" style="background-color:transparent">
-<defs><linearGradient id="building-gradient" x1="0" y1="0" x2="450" y2="450" spreadMethod="pad" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="var(--gradient-start, #18bcf2)"/><stop offset="50%" stop-color="var(--gradient-mid, #7788ef)"/><stop offset="100%" stop-color="var(--gradient-end, #d655ec)"/></linearGradient></defs>
+<defs><linearGradient id="building-gradient" x1="0" y1="0" x2="450" y2="450" spreadMethod="pad" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="var(--gradient-start, #1E76E1)"/><stop offset="100%" stop-color="var(--gradient-end, #CD30E8)"/></linearGradient></defs>
 <g transform="translate(-63 -63)" mask="url(#building-mask)">
   <g transform="translate(288 288)">
     <rect width="450" height="450" rx="0" ry="0" transform="translate(-225 -225)" fill="url(#building-gradient)" stroke-width="0"/>
