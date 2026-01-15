@@ -1,3 +1,64 @@
-<ul>
-  <li>Carousel</li>
-</ul>
+---
+import CarouselTrack from "./CarouselTrack.astro";
+---
+
+<div class="image-carousel">
+  <div class="image-carousel-inner">
+    <CarouselTrack />
+    <CarouselTrack aria-hidden="true" />
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const carousel = document.querySelector(".image-carousel");
+  const inner = document.querySelector(".image-carousel-inner");
+
+  if (carousel && inner) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (!prefersReducedMotion) {
+      const tween = gsap.to(inner, {
+        xPercent: -50,
+        duration: 40,
+        ease: "none",
+        repeat: -1,
+        paused: true,
+      });
+
+      ScrollTrigger.create({
+        trigger: carousel,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => tween.play(),
+        onLeave: () => tween.pause(),
+        onEnterBack: () => tween.play(),
+        onLeaveBack: () => tween.pause(),
+      });
+    }
+  }
+</script>
+
+<style lang="scss">
+  .image-carousel {
+    --unit: clamp(65px, calc(65px + 65 * (100vw - 375px) / 825), 130px);
+
+    overflow: hidden;
+    max-width: 2400px;
+    margin-inline: auto;
+  }
+
+  .image-carousel-inner {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: calc(var(--unit) * 0.077);
+    will-change: transform;
+  }
+</style>

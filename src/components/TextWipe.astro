@@ -1,0 +1,64 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  href?: string;
+}
+
+const { href = "#", ...attrs } = Astro.props;
+---
+
+<a class="text-wipe" href={href} {...attrs}>
+  <span class="text-wipe__default"><slot /></span>
+  <span class="text-wipe__hover" aria-hidden="true"><slot /></span>
+</a>
+
+<style lang="scss">
+  .text-wipe {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: #a2aab6;
+
+    &__default,
+    &__hover {
+      display: block;
+      padding: 2px 0;
+      transition: transform 0.2s ease-out;
+    }
+
+    &__hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(100%);
+      color: #fff;
+    }
+
+    &:hover {
+      .text-wipe__default {
+        transform: translateY(-100%);
+      }
+
+      .text-wipe__hover {
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &__hover {
+        display: none;
+      }
+
+      &__default,
+      &__hover {
+        transition: none;
+      }
+
+      &:hover .text-wipe__default {
+        transform: none;
+      }
+    }
+  }
+</style>

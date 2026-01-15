@@ -1,9 +1,162 @@
-<footer id="matter-container"></footer>
+---
+import Button from "../components/Button.astro";
+import Container from "../components/Container.astro";
+import TextWipe from "../components/TextWipe.astro";
+---
 
-<style>
+<footer id="matter-container">
+  <Container>
+    <div class="footer-content">
+      <div class="h2">State of the Open Home 2026</div>
+      <div class="footer-subtitle">
+        An event organized by the Open Home Foundation
+      </div>
+      <Button href="/" class="button button--primary">
+        Tickets coming soon
+      </Button>
+      <div class="footer-content-bottom">
+        <TextWipe href="#">Help & support</TextWipe>
+        <span>Copyright @ Open Home Foundation</span>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Home</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#"
+            >What is State of the Open Home?</TextWipe
+          >
+          <TextWipe class="footer-nav-item" href="#"
+            >Why we're building in the open</TextWipe
+          >
+          <TextWipe class="footer-nav-item" href="#"
+            >Be part of the conversation</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Conference</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Speakers</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Agenda</TextWipe>
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Resources</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">The venue</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">FAQ</TextWipe>
+          <TextWipe class="footer-nav-item" href="#"
+            >Accessibility guide</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Legal</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Privacy</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Terms of use</TextWipe>
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Social</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Discord</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Mastodon</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Bluesky</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Instagram</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Facebook</TextWipe>
+        </div>
+      </div>
+    </div>
+  </Container>
+</footer>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   footer {
     background-color: var(--ohf-dark-blue);
-    height: 460px;
+    //height: 580px;
     position: relative;
+    display: flex;
+    isolation: isolate;
+    padding: 40px 0 120px 0;
+
+    @include bp(desktop) {
+      padding: 80px 0 200px 0;
+    }
+
+    :global(canvas) {
+      z-index: -1;
+    }
+    :global(.container) {
+      gap: 40px 96px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      :global(.button) {
+        margin-top: 2rem;
+      }
+
+      &-bottom {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+        gap: 8px;
+
+        :global(.text-wipe) {
+          font-weight: 500;
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 20px 6px;
+      flex-grow: 1;
+      justify-content: space-between;
+      flex-direction: column;
+
+      @include bp(tablet) {
+        flex-direction: row;
+      }
+
+      &-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      &-title {
+        font-family: var(--typography-heading-font-family);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      &-items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        :global(.footer-nav-item) {
+          color: #a2aab6;
+          text-decoration: none;
+          padding: 4px 0;
+        }
+
+        :global(.text-wipe) {
+          font-size: 12px;
+        }
+      }
+    }
   }
 </style>
