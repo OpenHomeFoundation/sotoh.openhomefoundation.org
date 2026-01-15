@@ -16,37 +16,39 @@ import CarouselTrack from "./CarouselTrack.astro";
   gsap.registerPlugin(ScrollTrigger);
 
   const carousel = document.querySelector(".image-carousel");
+  const inner = document.querySelector(".image-carousel-inner");
 
-  if (carousel) {
+  if (carousel && inner) {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
     if (!prefersReducedMotion) {
+      const tween = gsap.to(inner, {
+        xPercent: -50,
+        duration: 40,
+        ease: "none",
+        repeat: -1,
+        paused: true,
+      });
+
       ScrollTrigger.create({
         trigger: carousel,
         start: "top bottom",
         end: "bottom top",
-        onEnter: () => carousel.classList.add("is-visible"),
-        onLeave: () => carousel.classList.remove("is-visible"),
-        onEnterBack: () => carousel.classList.add("is-visible"),
-        onLeaveBack: () => carousel.classList.remove("is-visible"),
+        onEnter: () => tween.play(),
+        onLeave: () => tween.pause(),
+        onEnterBack: () => tween.play(),
+        onLeaveBack: () => tween.pause(),
       });
     }
   }
 </script>
 
 <style lang="scss">
-  @keyframes carousel-scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
   .image-carousel {
+    --unit: clamp(65px, calc(65px + 65 * (100vw - 375px) / 825), 130px);
+
     overflow: hidden;
     max-width: 2400px;
     margin-inline: auto;
@@ -56,17 +58,7 @@ import CarouselTrack from "./CarouselTrack.astro";
     width: fit-content;
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: calc(var(--unit) * 0.077);
     will-change: transform;
-    animation: carousel-scroll 40s linear infinite;
-    animation-play-state: paused;
-
-    .image-carousel.is-visible & {
-      animation-play-state: running;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
-    }
   }
 </style>
