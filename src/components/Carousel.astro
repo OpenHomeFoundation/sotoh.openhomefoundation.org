@@ -1,3 +1,72 @@
-<ul>
-  <li>Carousel</li>
-</ul>
+---
+import CarouselTrack from "./CarouselTrack.astro";
+---
+
+<div class="image-carousel">
+  <div class="image-carousel-inner">
+    <CarouselTrack />
+    <CarouselTrack aria-hidden="true" />
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const carousel = document.querySelector(".image-carousel");
+
+  if (carousel) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (!prefersReducedMotion) {
+      ScrollTrigger.create({
+        trigger: carousel,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => carousel.classList.add("is-visible"),
+        onLeave: () => carousel.classList.remove("is-visible"),
+        onEnterBack: () => carousel.classList.add("is-visible"),
+        onLeaveBack: () => carousel.classList.remove("is-visible"),
+      });
+    }
+  }
+</script>
+
+<style lang="scss">
+  @keyframes carousel-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .image-carousel {
+    overflow: hidden;
+    max-width: 2400px;
+    margin-inline: auto;
+  }
+
+  .image-carousel-inner {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    will-change: transform;
+    animation: carousel-scroll 40s linear infinite;
+    animation-play-state: paused;
+
+    .image-carousel.is-visible & {
+      animation-play-state: running;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+</style>
