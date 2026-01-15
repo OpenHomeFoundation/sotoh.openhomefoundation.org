@@ -76,6 +76,7 @@ export class MatterScene {
 
   // Game mode state
   private gameMode: boolean = false;
+  private gameOver: boolean = false;
   private clickCount: number = 0;
   private pendingShape: Matter.Body | null = null;
   private pendingShapeIndex: number = 0;
@@ -83,6 +84,11 @@ export class MatterScene {
   private canDrop: boolean = true;
   private mouseMoveHandler: ((e: MouseEvent) => void) | null = null;
   private dropHandler: ((e: MouseEvent) => void) | null = null;
+  private score: number = 0;
+  private scoreElement: HTMLElement | null = null;
+  private gameOverLine: number = 80; // Y position for game over line
+  private gameCheckInterval: ReturnType<typeof setInterval> | null = null;
+  private lastDropTime: number = 0;
 
   constructor(options: MatterSceneOptions = {}) {
     this.options = {
@@ -436,6 +442,11 @@ export class MatterScene {
     if (!this.engine || !this.render || !this.container) return;
 
     this.gameMode = true;
+    this.gameOver = false;
+    this.score = 0;
+
+    // Add game-mode class to container (for CSS styling, especially mobile)
+    this.container.classList.add("game-mode");
 
     // Set game gravity
     this.engine.gravity.y = 1.5;
@@ -446,12 +457,90 @@ export class MatterScene {
     Composite.remove(this.engine.world, toRemove);
 
     // Remove mouse constraint (no more dragging)
-    const constraints = Composite.allConstraints(this.engine.world);
+    const world = this.engine.world;
+    const constraints = Composite.allConstraints(world);
     constraints.forEach((constraint) => {
       if ((constraint as Matter.Constraint).label === "Mouse Constraint") {
-        Composite.remove(this.engine.world, constraint);
+        Composite.remove(world, constraint);
       }
     });
+
+    // Create score display
+    this.scoreElement = document.createElement("div");
+    this.scoreElement.id = "game-score";
+    this.scoreElement.innerHTML = `
+      <style>
+        #game-score {
+          position: absolute;
+          bottom: 15px;
+          left: 15px;
+          font-family: var(--typography-heading-font-family), sans-serif;
+          font-size: 10px;
+          color: white;
+          z-index: 100;
+          text-align: left;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 6px 10px;
+          border-radius: 6px;
+        }
+        #game-score .score-value {
+          font-size: 18px;
+          font-weight: bold;
+        }
+        #game-over-line {
+          position: absolute;
+          top: ${this.gameOverLine}px;
+          left: 0;
+          right: 0;
+          height: 0;
+          border-top: 1px dashed rgba(162, 170, 182, 0.5);
+          z-index: 50;
+        }
+        #game-over-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 200;
+          font-family: var(--typography-heading-font-family), sans-serif;
+          color: white;
+        }
+        #game-over-overlay h2 {
+          font-size: 48px;
+          margin: 0 0 20px 0;
+        }
+        #game-over-overlay .final-score {
+          font-size: 32px;
+          margin-bottom: 30px;
+        }
+        #game-over-overlay button {
+          padding: 15px 30px;
+          font-size: 20px;
+          background: #8B26FF;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+        #game-over-overlay button:hover {
+          background: #7020d9;
+        }
+      </style>
+      <div>Score</div>
+      <div class="score-value">0</div>
+    `;
+    this.container.appendChild(this.scoreElement);
+
+    // Create game over line
+    const gameOverLineEl = document.createElement("div");
+    gameOverLineEl.id = "game-over-line";
+    this.container.appendChild(gameOverLineEl);
+
+    // Check for game over periodically
+    this.gameCheckInterval = setInterval(() => this.checkGameOver(), 500);
 
     // Set up collision detection for merging
     Events.on(
@@ -486,21 +575,29 @@ export class MatterScene {
     this.container.addEventListener("mousedown", this.dropHandler);
 
     // Touch support for mobile
-    this.container.addEventListener("touchstart", (e: TouchEvent) => {
-      if (!this.render) return;
-      const touch = e.touches[0];
-      const rect = this.render.canvas.getBoundingClientRect();
-      this.mouseX = touch.clientX - rect.left;
-      this.updatePendingShapePosition();
-    }, { passive: true });
+    this.container.addEventListener(
+      "touchstart",
+      (e: TouchEvent) => {
+        if (!this.render) return;
+        const touch = e.touches[0];
+        const rect = this.render.canvas.getBoundingClientRect();
+        this.mouseX = touch.clientX - rect.left;
+        this.updatePendingShapePosition();
+      },
+      { passive: true }
+    );
 
-    this.container.addEventListener("touchmove", (e: TouchEvent) => {
-      if (!this.render) return;
-      const touch = e.touches[0];
-      const rect = this.render.canvas.getBoundingClientRect();
-      this.mouseX = touch.clientX - rect.left;
-      this.updatePendingShapePosition();
-    }, { passive: true });
+    this.container.addEventListener(
+      "touchmove",
+      (e: TouchEvent) => {
+        if (!this.render) return;
+        const touch = e.touches[0];
+        const rect = this.render.canvas.getBoundingClientRect();
+        this.mouseX = touch.clientX - rect.left;
+        this.updatePendingShapePosition();
+      },
+      { passive: true }
+    );
 
     this.container.addEventListener("touchend", (e: TouchEvent) => {
       // Don't interfere with interactive elements
@@ -519,6 +616,9 @@ export class MatterScene {
     // Create first pending shape
     this.pendingShapeIndex = Math.floor(Math.random() * 2); // Start with small shapes only
     this.createPendingShape();
+
+    // Update size after a delay to adapt to CSS changes (especially mobile 100vh)
+    setTimeout(() => this.updateSize(), 350);
   }
 
   private createPendingShape(): void {
@@ -526,9 +626,9 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[this.pendingShapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.5, width / 1200)) * shapeConfig.size;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size;
     const x = this.mouseX || width / 2;
-    const y = 0;
+    const y = 30;
     const angle = Math.random() * Math.PI * 2;
 
     // Get vertices for shape types
@@ -615,6 +715,7 @@ export class MatterScene {
     if (!this.pendingShape || !this.engine || !this.render) return;
 
     this.canDrop = false;
+    this.lastDropTime = Date.now();
 
     // Store position, angle and shape info before removing
     const x = this.pendingShape.position.x;
@@ -635,7 +736,7 @@ export class MatterScene {
       // Pick next shape (only small shapes to start)
       this.pendingShapeIndex = Math.floor(Math.random() * 2);
       this.createPendingShape();
-    }, 500);
+    }, 250);
   }
 
   private createDynamicShape(
@@ -648,7 +749,7 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[shapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.5, width / 1200)) * shapeConfig.size;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size;
 
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
@@ -756,6 +857,10 @@ export class MatterScene {
         const midY = (bodyA.position.y + bodyB.position.y) / 2;
         this.createMergedShape(shapeIndex + 1, midX, midY);
 
+        // Add score based on new shape level (higher = more points)
+        const points = (shapeIndex + 2) * 10;
+        this.addScore(points);
+
         // Only handle one merge per frame to avoid issues
         break;
       }
@@ -766,6 +871,103 @@ export class MatterScene {
     // Reuse createDynamicShape with a random angle for merged shapes
     const angle = Math.random() * Math.PI * 2;
     this.createDynamicShape(shapeIndex, x, y, angle);
+  }
+
+  private addScore(points: number): void {
+    this.score += points;
+    if (this.scoreElement) {
+      const valueEl = this.scoreElement.querySelector(".score-value");
+      if (valueEl) {
+        valueEl.textContent = this.score.toString();
+      }
+    }
+  }
+
+  private checkGameOver(): void {
+    if (!this.engine || this.gameOver) return;
+
+    // Grace period after dropping (1.5 seconds)
+    if (Date.now() - this.lastDropTime < 1500) return;
+
+    const bodies = Composite.allBodies(this.engine.world);
+    for (const body of bodies) {
+      // Skip static bodies (walls) and pending shape
+      if (body.isStatic) continue;
+      if (body === this.pendingShape) continue;
+
+      // Check if body is above the game over line (with some settling time)
+      if (body.position.y < this.gameOverLine && body.speed < 0.5) {
+        this.triggerGameOver();
+        break;
+      }
+    }
+  }
+
+  private triggerGameOver(): void {
+    if (!this.container || this.gameOver) return;
+
+    this.gameOver = true;
+    this.canDrop = false;
+
+    // Remove pending shape
+    if (this.pendingShape && this.engine) {
+      Composite.remove(this.engine.world, this.pendingShape);
+      this.pendingShape = null;
+    }
+
+    // Stop game check interval
+    if (this.gameCheckInterval) {
+      clearInterval(this.gameCheckInterval);
+      this.gameCheckInterval = null;
+    }
+
+    // Show game over overlay
+    const overlay = document.createElement("div");
+    overlay.id = "game-over-overlay";
+    overlay.innerHTML = `
+      <h2>Game Over</h2>
+      <div class="final-score">Final Score: ${this.score}</div>
+      <button id="restart-game">Play Again</button>
+    `;
+    this.container.appendChild(overlay);
+
+    // Restart button handler
+    const restartBtn = overlay.querySelector("#restart-game");
+    if (restartBtn) {
+      restartBtn.addEventListener("click", () => {
+        overlay.remove();
+        this.restartGame();
+      });
+    }
+  }
+
+  private restartGame(): void {
+    if (!this.engine || !this.container) return;
+
+    // Remove all game shapes
+    const bodies = Composite.allBodies(this.engine.world);
+    const toRemove = bodies.filter((body) => !body.isStatic);
+    Composite.remove(this.engine.world, toRemove);
+
+    // Reset state
+    this.gameOver = false;
+    this.score = 0;
+    this.canDrop = true;
+
+    // Update score display
+    if (this.scoreElement) {
+      const valueEl = this.scoreElement.querySelector(".score-value");
+      if (valueEl) {
+        valueEl.textContent = "0";
+      }
+    }
+
+    // Restart game check interval
+    this.gameCheckInterval = setInterval(() => this.checkGameOver(), 500);
+
+    // Create first pending shape
+    this.pendingShapeIndex = Math.floor(Math.random() * 2);
+    this.createPendingShape();
   }
 
   private updateSize(): void {
@@ -836,8 +1038,9 @@ export class MatterScene {
     // Disable gyro control
     this.disableGyro();
 
-    // Remove game mode event listeners
+    // Remove game mode event listeners and class
     if (this.container) {
+      this.container.classList.remove("game-mode");
       if (this.mouseMoveHandler) {
         this.container.removeEventListener("mousemove", this.mouseMoveHandler);
         this.mouseMoveHandler = null;
@@ -879,12 +1082,35 @@ export class MatterScene {
     };
     // Reset game mode state
     this.gameMode = false;
+    this.gameOver = false;
     this.clickCount = 0;
+    this.score = 0;
     this.pendingShape = null;
+
+    // Clear game check interval
+    if (this.gameCheckInterval) {
+      clearInterval(this.gameCheckInterval);
+      this.gameCheckInterval = null;
+    }
+
+    // Remove game UI elements
     const debugPanel = document.getElementById("matter-debug");
     if (debugPanel) {
       debugPanel.remove();
     }
+    const scoreEl = document.getElementById("game-score");
+    if (scoreEl) {
+      scoreEl.remove();
+    }
+    const gameOverLine = document.getElementById("game-over-line");
+    if (gameOverLine) {
+      gameOverLine.remove();
+    }
+    const gameOverOverlay = document.getElementById("game-over-overlay");
+    if (gameOverOverlay) {
+      gameOverOverlay.remove();
+    }
+    this.scoreElement = null;
   }
 
   private createDebugUI(): void {
