@@ -11,7 +11,10 @@ import TextWipe from "../components/TextWipe.astro";
       <div class="footer-subtitle">
         An event organized by the Open Home Foundation
       </div>
-      <Button href="/" class="button button--primary">
+      <Button
+        href="/"
+        class="button button--primary button--primary-hover-light"
+      >
         Tickets coming soon
       </Button>
       <div class="footer-content-bottom">
@@ -82,9 +85,21 @@ import TextWipe from "../components/TextWipe.astro";
     display: flex;
     isolation: isolate;
     padding: 40px 0 120px 0;
+    transition: min-height 0.3s ease;
+    user-select: none;
 
     @include bp(desktop) {
       padding: 80px 0 200px 0;
+    }
+
+    // Mobile game mode - expand to fill viewport minus header
+    &:global(.game-mode) {
+      @media (max-width: 767px) {
+        min-height: calc(100vh - var(--header-height));
+        min-height: calc(100dvh - var(--header-height));
+        padding-bottom: 0;
+        flex-direction: column;
+      }
     }
 
     :global(canvas) {
@@ -101,6 +116,10 @@ import TextWipe from "../components/TextWipe.astro";
 
       :global(.button) {
         margin-top: 2rem;
+      }
+
+      .h2 {
+        text-align: left;
       }
 
       &-bottom {
