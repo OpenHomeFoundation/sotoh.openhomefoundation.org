@@ -123,8 +123,6 @@ import { ICONS } from "../lib/icons";
       0.3s background-color ease-in-out,
       0.3s padding ease-in-out;
 
-    overflow-x: clip;
-
     @include bp(tablet) {
       padding: 40px 0;
     }
@@ -632,7 +630,6 @@ import { ICONS } from "../lib/icons";
     });
   }
 
-  // Handle anchor link clicks with smooth scroll and menu close
   const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
     '.mobile-nav a[href^="#"]'
   );
@@ -646,18 +643,15 @@ import { ICONS } from "../lib/icons";
 
       e.preventDefault();
 
-      // Close the menu
       if (menuToggle) {
         menuToggle.checked = false;
         menuToggle.dispatchEvent(new Event("change"));
       }
 
-      // Smooth scroll using GSAP ScrollSmoother
       const smoother = ScrollSmoother.get();
       if (smoother) {
         smoother.scrollTo(target, true, "top top+=120");
       } else {
-        // Fallback for when ScrollSmoother isn't available
         const targetPosition =
           target.getBoundingClientRect().top + window.scrollY - 120;
         window.scrollTo({ top: targetPosition, behavior: "smooth" });
