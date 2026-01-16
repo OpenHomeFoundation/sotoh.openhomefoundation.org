@@ -4,105 +4,51 @@
 
 <div class="ticket">
   <div class="glass"></div>
+  <div class="glass"></div>
 </div>
 
-<script>
-  function initTicket3D() {
-    const body = document.body as HTMLElement;
-    const glass = document.querySelector(".glass") as HTMLElement;
-    if (!glass) return;
-
-    const maxTilt = 4; // degrees
-
-    body.addEventListener("mousemove", (e) => {
-      const rect = glass.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      // Calculate position as percentage (-0.5 to 0.5)
-      const xPercent = x / rect.width - 0.5;
-      const yPercent = y / rect.height - 0.5;
-
-      // Calculate rotation (inverted for natural feel)
-      const rotateY = xPercent * maxTilt;
-      const rotateX = -yPercent * maxTilt;
-
-      glass.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    glass.addEventListener("mouseleave", () => {
-      glass.style.transform =
-        "translate(-50%, -50%) perspective(1000px) rotateX(0deg) rotateY(0deg)";
-    });
-  }
-
-  initTicket3D();
-</script>
-
-<svg style="display: none">
-  <filter
-    id="glass-distortion"
-    x="0%"
-    y="0%"
-    width="100%"
-    height="100%"
-    filterUnits="objectBoundingBox"
-  >
-    <feTurbulence
-      type="fractalNoise"
-      baseFrequency="0.01 0.01"
-      numOctaves="1"
-      seed="5"
-      result="turbulence"></feTurbulence>
-    <!-- Seeds: 14, 17,  -->
-
-    <feComponentTransfer in="turbulence" result="mapped">
-      <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5"></feFuncR>
-      <feFuncG type="gamma" amplitude="0" exponent="1" offset="0"></feFuncG>
-      <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5"></feFuncB>
-    </feComponentTransfer>
-
-    <feGaussianBlur in="turbulence" stdDeviation="1" result="softMap"
-    ></feGaussianBlur>
-
-    <feSpecularLighting
-      in="softMap"
-      surfaceScale="5"
-      specularConstant="1"
-      specularExponent="100"
-      lighting-color="white"
-      result="specLight"
-    >
-      <fePointLight x="-200" y="-200" z="300"></fePointLight>
-    </feSpecularLighting>
-
-    <feComposite
-      in="specLight"
-      operator="arithmetic"
-      k1="0"
-      k2="1"
-      k3="1"
-      k4="0"
-      result="litImage"></feComposite>
-
-    <feDisplacementMap
-      in="SourceGraphic"
-      in2="softMap"
-      scale="50"
-      xChannelSelector="R"
-      yChannelSelector="G"></feDisplacementMap>
-  </filter>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="0"
+  height="0"
+  style="position:absolute; overflow:hidden"
+>
+  <defs>
+    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.008 0.008"
+        numOctaves="2"
+        seed="92"
+        result="noise"></feTurbulence>
+      <feGaussianBlur in="noise" stdDeviation="2" result="blurred"
+      ></feGaussianBlur>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="blurred"
+        scale="20"
+        xChannelSelector="R"
+        yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </defs>
 </svg>
 <style lang="scss">
   .ticket {
     --glass-drop-shadow-blur: 24px;
-    --glass-frost: 5px;
+    --glass-frost: 8px;
     --glass-shadow-blur: 2px;
     --glass-shadow-color: #ffffff;
     --glass-shadow-offset: 0;
     --glass-shadow-spread: 0px;
     --glass-tint-color: 255, 255, 255;
-    --glass-tint-opacity: 0.1;
+    --glass-tint-opacity: 0.2;
+
+    display: flex;
+    gap: 6px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(5deg);
   }
 
   svg filter feDisplacementMap {
@@ -116,24 +62,27 @@
   }
 
   .glass {
-    border-radius: 12px;
-    box-shadow: 0px 6px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.2);
-    left: 50%;
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    box-shadow: 0px 20px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.1);
+    position: relative;
     transition: transform 0.2s ease-out;
-    aspect-ratio: 16 / 8;
-    max-width: 550px;
-    width: 90%;
+    height: 254px;
+    z-index: 1;
+    overflow: hidden;
+
+    &:nth-child(1) {
+      width: 170px;
+    }
+    &:nth-child(2) {
+      width: 570px;
+    }
 
     &:before {
       background-color: rgba(
         var(--glass-tint-color),
         var(--glass-tint-opacity)
       );
-      border-radius: 12px;
+      border-radius: 20px;
       box-shadow: inset var(--glass-shadow-offset) var(--glass-shadow-offset)
         var(--glass-shadow-blur) var(--glass-shadow-spread)
         var(--glass-shadow-color);
