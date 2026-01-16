@@ -148,6 +148,7 @@ export class MatterScene {
 
     // Define shapes for the footer
     const lightBlue = "#59B2FF";
+    const teal = "#4ECDC4";
     const shapeList: {
       type: "circle" | "halfPipe" | "halfCircle" | "petal" | "corner";
       color: string;
@@ -166,7 +167,7 @@ export class MatterScene {
       { type: "petal", color: purple },
       { type: "petal", color: pink },
       { type: "halfCircle", color: pink },
-      { type: "halfCircle", color: pink },
+      { type: "halfCircle", color: teal },
     ];
 
     for (const { type, color } of shapeList) {
