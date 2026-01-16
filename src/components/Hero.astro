@@ -145,6 +145,12 @@ import BrandIcon from "./BrandIcon.astro";
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, auto);
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 
     @include bp(desktop) {
       grid-template-columns: repeat(4, 1fr);
