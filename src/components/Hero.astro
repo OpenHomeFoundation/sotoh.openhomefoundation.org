@@ -35,6 +35,17 @@ import BrandIcon from "./BrandIcon.astro";
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
+  @keyframes animate-up-fade {
+    0% {
+      transform: translate3d(0, 50%, 0);
+      opacity: 0;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
   img {
     width: 100%;
     height: auto;
@@ -43,11 +54,27 @@ import BrandIcon from "./BrandIcon.astro";
   h1 {
     margin-bottom: 0;
     text-align: center;
+
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+    animation-timing-function: var(--entry-ease);
+    animation-delay: 0.65s;
   }
 
   p.event-host {
     line-height: 1.4;
     margin-bottom: 0;
+
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.45s;
+    animation-timing-function: var(--entry-ease);
+    animation-delay: 0.55s;
   }
 
   .event-details {
@@ -58,6 +85,13 @@ import BrandIcon from "./BrandIcon.astro";
     justify-content: center;
     gap: 0.5rem;
     font-size: clamp(1rem, 0.9886rem + 0.6818vw, 1.5rem);
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.45s;
+    animation-timing-function: var(--entry-ease);
+    animation-delay: 0.85s;
 
     @include bp(tablet) {
       flex-direction: row;
@@ -111,6 +145,12 @@ import BrandIcon from "./BrandIcon.astro";
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, auto);
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.85s;
+    animation-timing-function: var(--entry-ease);
 
     @include bp(desktop) {
       grid-template-columns: repeat(4, 1fr);
