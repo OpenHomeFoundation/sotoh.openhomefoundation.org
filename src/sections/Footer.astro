@@ -17,6 +17,10 @@ import TextWipe from "../components/TextWipe.astro";
       >
         Tickets coming soon
       </Button>
+      <div class="footer-content-bottom">
+        <TextWipe href="#">Help & support</TextWipe>
+        <span>Copyright @ Open Home Foundation</span>
+      </div>
     </div>
     <div class="footer-nav">
       <div class="footer-nav-column">
@@ -38,6 +42,30 @@ import TextWipe from "../components/TextWipe.astro";
         </div>
       </div>
       <div class="footer-nav-column">
+        <div class="footer-nav-title">Conference</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Speakers</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Agenda</TextWipe>
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Resources</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">The venue</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">FAQ</TextWipe>
+          <TextWipe class="footer-nav-item" href="#"
+            >Accessibility guide</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Legal</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Privacy</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Terms of use</TextWipe>
+        </div>
+      </div>
+      <div class="footer-nav-column">
         <div class="footer-nav-title">Social</div>
         <div class="footer-nav-items">
           <TextWipe class="footer-nav-item" href="#">Discord</TextWipe>
@@ -45,12 +73,6 @@ import TextWipe from "../components/TextWipe.astro";
           <TextWipe class="footer-nav-item" href="#">Bluesky</TextWipe>
           <TextWipe class="footer-nav-item" href="#">Instagram</TextWipe>
           <TextWipe class="footer-nav-item" href="#">Facebook</TextWipe>
-        </div>
-      </div>
-      <div class="footer-nav-column">
-        <div class="footer-extra">
-          <TextWipe href="#">Help & support</TextWipe>
-          <span>Copyright @ Open Home Foundation</span>
         </div>
       </div>
     </div>
@@ -95,7 +117,6 @@ import TextWipe from "../components/TextWipe.astro";
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      max-width: 400px;
 
       :global(.button) {
         margin-top: 2rem;
@@ -104,25 +125,26 @@ import TextWipe from "../components/TextWipe.astro";
       .h2 {
         text-align: left;
       }
-    }
-    .footer-extra {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: -4px;
 
-      :global(.text-wipe) {
-        font-weight: 500;
-      }
+      &-bottom {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+        gap: 8px;
 
-      span {
-        font-size: 12px;
+        :global(.text-wipe) {
+          font-weight: 500;
+        }
+
+        span {
+          font-size: 12px;
+        }
       }
     }
 
     .footer-nav {
       display: flex;
-      gap: 20px 60px;
+      gap: 20px 6px;
       flex-grow: 1;
       justify-content: space-between;
       flex-direction: column;
