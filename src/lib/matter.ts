@@ -15,19 +15,20 @@ const {
   Body,
 } = Matter;
 
-// Game shape hierarchy (smallest to largest) - 10 levels
-// Shapes evolve: petal → petal → circle → circle → halfCircle → halfCircle → halfPipe → halfPipe → circle → circle
+// Game shape hierarchy (smallest to largest) - 11 levels
+// Shapes evolve: corner → petal → petal → circle → circle → halfCircle → halfCircle → halfPipe → halfPipe → circle → circle
 const GAME_SHAPES = [
-  { type: "petal", color: "#D655EC", size: 0.5 }, // 1. pink petal (tiny)
-  { type: "petal", color: "#FF6B6B", size: 0.7 }, // 2. red petal
-  { type: "circle", color: "#FFD351", size: 0.65 }, // 3. yellow circle (small)
-  { type: "circle", color: "#8B26FF", size: 0.85 }, // 4. purple circle
-  { type: "halfCircle", color: "#4ECDC4", size: 1.1 }, // 5. teal halfCircle (bigger)
-  { type: "halfCircle", color: "#FF8C42", size: 1.3 }, // 6. orange halfCircle
-  { type: "halfPipe", color: "#18BCFF", size: 1.3 }, // 7. cyan halfPipe (bigger)
-  { type: "halfPipe", color: "#95E85A", size: 1.5 }, // 8. green halfPipe
-  { type: "circle", color: "#FFFFFF", size: 1.7 }, // 9. white circle (huge)
-  { type: "circle", color: "#FFD700", size: 2.0 }, // 10. gold circle (final)
+  { type: "corner", color: "#59B2FF", size: 0.4 }, // 1. light blue corner (tiny)
+  { type: "corner", color: "#D655EC", size: 0.55 }, // 2. pink corner
+  { type: "petal", color: "#FF6B6B", size: 0.6 }, // 3. red petal
+  { type: "circle", color: "#FFD351", size: 0.65 }, // 4. yellow circle (small)
+  { type: "circle", color: "#8B26FF", size: 0.85 }, // 5. purple circle
+  { type: "halfCircle", color: "#4ECDC4", size: 1.1 }, // 6. teal halfCircle (bigger)
+  { type: "halfCircle", color: "#FF8C42", size: 1.3 }, // 7. orange halfCircle
+  { type: "halfPipe", color: "#18BCFF", size: 1.3 }, // 8. cyan halfPipe (bigger)
+  { type: "halfPipe", color: "#95E85A", size: 1.5 }, // 9. green halfPipe
+  { type: "circle", color: "#FFFFFF", size: 1.7 }, // 10. white circle (huge)
+  { type: "circle", color: "#FFD700", size: 2.0 }, // 11. gold circle (final)
 ] as const;
 
 // Replace fill color in SVG string
@@ -84,11 +85,7 @@ export class MatterScene {
   private canDrop: boolean = true;
   private mouseMoveHandler: ((e: MouseEvent) => void) | null = null;
   private dropHandler: ((e: MouseEvent) => void) | null = null;
-  private score: number = 0;
-  private scoreElement: HTMLElement | null = null;
-  private gameOverLine: number = 80; // Y position for game over line
   private gameCheckInterval: ReturnType<typeof setInterval> | null = null;
-  private lastDropTime: number = 0;
 
   constructor(options: MatterSceneOptions = {}) {
     this.options = {
@@ -138,6 +135,7 @@ export class MatterScene {
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
     const petalVertices = getSvgVertices(shapes.petal);
+    const cornerVertices = getSvgVertices(shapes.corner);
 
     // Color definitions
     const pink = "#D655EC";
@@ -148,20 +146,21 @@ export class MatterScene {
     const randomBetween = (min: number, max: number) =>
       Math.random() * (max - min) + min;
 
-    // Define specific shapes:
-    // 3 purple pipes, 1 yellow pipe, 1 pink circle, 1 purple circle,
-    // 3 yellow petals, 1 purple petal, 1 pink petal, 2 pink semicircles
+    // Define shapes for the footer
+    const lightBlue = "#59B2FF";
     const shapeList: {
-      type: "circle" | "halfPipe" | "halfCircle" | "petal";
+      type: "circle" | "halfPipe" | "halfCircle" | "petal" | "corner";
       color: string;
     }[] = [
-      { type: "halfPipe", color: purple },
+      { type: "corner", color: pink },
+      { type: "corner", color: purple },
+      { type: "corner", color: lightBlue },
+      { type: "corner", color: yellow },
       { type: "halfPipe", color: purple },
       { type: "halfPipe", color: purple },
       { type: "halfPipe", color: yellow },
       { type: "circle", color: pink },
       { type: "circle", color: purple },
-      { type: "petal", color: yellow },
       { type: "petal", color: yellow },
       { type: "petal", color: yellow },
       { type: "petal", color: purple },
@@ -174,18 +173,21 @@ export class MatterScene {
       const x = randomBetween(100, width - 100);
       const y = randomBetween(-600, -100);
       const angle = randomBetween(0, Math.PI * 2);
+      // Random size variation (0.7x to 1.3x)
+      const sizeVariation = randomBetween(0.7, 1.3);
+      const shapeScale = scale * sizeVariation;
 
       let body: Matter.Body | null = null;
 
       switch (type) {
         case "circle":
-          body = Bodies.circle(x, y, 87 * scale, {
+          body = Bodies.circle(x, y, 87 * shapeScale, {
             angle,
             render: {
               sprite: {
                 texture: svgToDataUrl(shapes.circle, color),
-                xScale: scale,
-                yScale: scale,
+                xScale: shapeScale,
+                yScale: shapeScale,
               },
             },
           });
@@ -196,8 +198,8 @@ export class MatterScene {
               angle,
               render: { fillStyle: color },
             });
-            if (body && scale !== 1) {
-              Matter.Body.scale(body, scale, scale);
+            if (body) {
+              Matter.Body.scale(body, shapeScale, shapeScale);
             }
           }
           break;
@@ -207,8 +209,8 @@ export class MatterScene {
               angle,
               render: { fillStyle: color },
             });
-            if (body && scale !== 1) {
-              Matter.Body.scale(body, scale, scale);
+            if (body) {
+              Matter.Body.scale(body, shapeScale, shapeScale);
             }
           }
           break;
@@ -218,8 +220,19 @@ export class MatterScene {
               angle,
               render: { fillStyle: color },
             });
-            if (body && scale !== 1) {
-              Matter.Body.scale(body, scale, scale);
+            if (body) {
+              Matter.Body.scale(body, shapeScale, shapeScale);
+            }
+          }
+          break;
+        case "corner":
+          if (cornerVertices) {
+            body = Bodies.fromVertices(x, y, [cornerVertices], {
+              angle,
+              render: { fillStyle: color },
+            });
+            if (body) {
+              Matter.Body.scale(body, shapeScale, shapeScale);
             }
           }
           break;
@@ -290,22 +303,18 @@ export class MatterScene {
     });
 
     // Track clicks on shapes for game mode activation
-    Events.on(
-      mouseConstraint,
-      "mousedown",
-      (event: Matter.IEventCollision<Matter.MouseConstraint>) => {
-        if (this.gameMode) return;
+    Events.on(mouseConstraint, "mousedown", () => {
+      if (this.gameMode) return;
 
-        // Check if clicking on a body (not walls)
-        const body = event.source.body;
-        if (body && !body.isStatic) {
-          this.clickCount++;
-          if (this.clickCount >= 10) {
-            this.startGameMode();
-          }
+      // Check if clicking on a body (not walls)
+      const body = mouseConstraint.body;
+      if (body && !body.isStatic) {
+        this.clickCount++;
+        if (this.clickCount >= 10) {
+          this.startGameMode();
         }
       }
-    );
+    });
 
     // Allow page scrolling over the canvas
     // @ts-expect-error - mousewheel exists on Mouse but not in types
@@ -446,7 +455,6 @@ export class MatterScene {
 
     this.gameMode = true;
     this.gameOver = false;
-    this.score = 0;
 
     // Add game-mode class to container (for CSS styling, especially mobile)
     this.container.classList.add("game-mode");
@@ -468,82 +476,6 @@ export class MatterScene {
       }
     });
 
-    // Create score display
-    this.scoreElement = document.createElement("div");
-    this.scoreElement.id = "game-score";
-    this.scoreElement.innerHTML = `
-      <style>
-        #game-score {
-          position: absolute;
-          bottom: 15px;
-          left: 15px;
-          font-family: var(--typography-heading-font-family), sans-serif;
-          font-size: 10px;
-          color: white;
-          z-index: 100;
-          text-align: left;
-          background: rgba(0, 0, 0, 0.5);
-          padding: 6px 10px;
-          border-radius: 6px;
-        }
-        #game-score .score-value {
-          font-size: 18px;
-          font-weight: bold;
-        }
-        #game-over-line {
-          position: absolute;
-          top: ${this.gameOverLine}px;
-          left: 0;
-          right: 0;
-          height: 0;
-          border-top: 1px dashed rgba(162, 170, 182, 0.5);
-          z-index: 50;
-        }
-        #game-over-overlay {
-          position: absolute;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.8);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          z-index: 200;
-          font-family: var(--typography-heading-font-family), sans-serif;
-          color: white;
-        }
-        #game-over-overlay h2 {
-          font-size: 48px;
-          margin: 0 0 20px 0;
-        }
-        #game-over-overlay .final-score {
-          font-size: 32px;
-          margin-bottom: 30px;
-        }
-        #game-over-overlay button {
-          padding: 15px 30px;
-          font-size: 20px;
-          background: #8B26FF;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-        #game-over-overlay button:hover {
-          background: #7020d9;
-        }
-      </style>
-      <div>Score</div>
-      <div class="score-value">0</div>
-    `;
-    this.container.appendChild(this.scoreElement);
-
-    // Create game over line
-    const gameOverLineEl = document.createElement("div");
-    gameOverLineEl.id = "game-over-line";
-    this.container.appendChild(gameOverLineEl);
-
-    // Check for game over periodically
-    this.gameCheckInterval = setInterval(() => this.checkGameOver(), 500);
 
     // Set up collision detection for merging
     Events.on(
@@ -617,7 +549,7 @@ export class MatterScene {
     });
 
     // Create first pending shape
-    this.pendingShapeIndex = Math.floor(Math.random() * 2); // Start with small shapes only
+    this.pendingShapeIndex = Math.floor(Math.random() * 3); // Start with small shapes only
     this.createPendingShape();
 
     // Update size after a delay to adapt to CSS changes (especially mobile 100vh)
@@ -638,6 +570,7 @@ export class MatterScene {
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
     const petalVertices = getSvgVertices(shapes.petal);
+    const cornerVertices = getSvgVertices(shapes.corner);
 
     let body: Matter.Body | null = null;
 
@@ -695,6 +628,19 @@ export class MatterScene {
           }
         }
         break;
+      case "corner":
+        if (cornerVertices) {
+          body = Bodies.fromVertices(x, y, [cornerVertices], {
+            isStatic: true,
+            angle,
+            render: { fillStyle: shapeConfig.color },
+            label: `game-shape-${this.pendingShapeIndex}`,
+          });
+          if (body && scale !== 1) {
+            Body.scale(body, scale, scale);
+          }
+        }
+        break;
     }
 
     if (body) {
@@ -718,7 +664,6 @@ export class MatterScene {
     if (!this.pendingShape || !this.engine || !this.render) return;
 
     this.canDrop = false;
-    this.lastDropTime = Date.now();
 
     // Store position, angle and shape info before removing
     const x = this.pendingShape.position.x;
@@ -737,7 +682,7 @@ export class MatterScene {
     setTimeout(() => {
       this.canDrop = true;
       // Pick next shape (only small shapes to start)
-      this.pendingShapeIndex = Math.floor(Math.random() * 2);
+      this.pendingShapeIndex = Math.floor(Math.random() * 3);
       this.createPendingShape();
     }, 250);
   }
@@ -757,6 +702,7 @@ export class MatterScene {
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
     const petalVertices = getSvgVertices(shapes.petal);
+    const cornerVertices = getSvgVertices(shapes.corner);
 
     // Low friction for easier rolling
     const physicsOptions = {
@@ -821,6 +767,19 @@ export class MatterScene {
           }
         }
         break;
+      case "corner":
+        if (cornerVertices) {
+          body = Bodies.fromVertices(x, y, [cornerVertices], {
+            angle,
+            ...physicsOptions,
+            render: { fillStyle: shapeConfig.color },
+            label: `game-shape-${shapeIndex}`,
+          });
+          if (body && scale !== 1) {
+            Body.scale(body, scale, scale);
+          }
+        }
+        break;
     }
 
     if (body) {
@@ -860,10 +819,6 @@ export class MatterScene {
         const midY = (bodyA.position.y + bodyB.position.y) / 2;
         this.createMergedShape(shapeIndex + 1, midX, midY);
 
-        // Add score based on new shape level (higher = more points)
-        const points = (shapeIndex + 2) * 10;
-        this.addScore(points);
-
         // Only handle one merge per frame to avoid issues
         break;
       }
@@ -876,102 +831,6 @@ export class MatterScene {
     this.createDynamicShape(shapeIndex, x, y, angle);
   }
 
-  private addScore(points: number): void {
-    this.score += points;
-    if (this.scoreElement) {
-      const valueEl = this.scoreElement.querySelector(".score-value");
-      if (valueEl) {
-        valueEl.textContent = this.score.toString();
-      }
-    }
-  }
-
-  private checkGameOver(): void {
-    if (!this.engine || this.gameOver) return;
-
-    // Grace period after dropping (1.5 seconds)
-    if (Date.now() - this.lastDropTime < 1500) return;
-
-    const bodies = Composite.allBodies(this.engine.world);
-    for (const body of bodies) {
-      // Skip static bodies (walls) and pending shape
-      if (body.isStatic) continue;
-      if (body === this.pendingShape) continue;
-
-      // Check if body is above the game over line (with some settling time)
-      if (body.position.y < this.gameOverLine && body.speed < 0.5) {
-        this.triggerGameOver();
-        break;
-      }
-    }
-  }
-
-  private triggerGameOver(): void {
-    if (!this.container || this.gameOver) return;
-
-    this.gameOver = true;
-    this.canDrop = false;
-
-    // Remove pending shape
-    if (this.pendingShape && this.engine) {
-      Composite.remove(this.engine.world, this.pendingShape);
-      this.pendingShape = null;
-    }
-
-    // Stop game check interval
-    if (this.gameCheckInterval) {
-      clearInterval(this.gameCheckInterval);
-      this.gameCheckInterval = null;
-    }
-
-    // Show game over overlay
-    const overlay = document.createElement("div");
-    overlay.id = "game-over-overlay";
-    overlay.innerHTML = `
-      <h2>Game Over</h2>
-      <div class="final-score">Final Score: ${this.score}</div>
-      <button id="restart-game">Play Again</button>
-    `;
-    this.container.appendChild(overlay);
-
-    // Restart button handler
-    const restartBtn = overlay.querySelector("#restart-game");
-    if (restartBtn) {
-      restartBtn.addEventListener("click", () => {
-        overlay.remove();
-        this.restartGame();
-      });
-    }
-  }
-
-  private restartGame(): void {
-    if (!this.engine || !this.container) return;
-
-    // Remove all game shapes
-    const bodies = Composite.allBodies(this.engine.world);
-    const toRemove = bodies.filter((body) => !body.isStatic);
-    Composite.remove(this.engine.world, toRemove);
-
-    // Reset state
-    this.gameOver = false;
-    this.score = 0;
-    this.canDrop = true;
-
-    // Update score display
-    if (this.scoreElement) {
-      const valueEl = this.scoreElement.querySelector(".score-value");
-      if (valueEl) {
-        valueEl.textContent = "0";
-      }
-    }
-
-    // Restart game check interval
-    this.gameCheckInterval = setInterval(() => this.checkGameOver(), 500);
-
-    // Create first pending shape
-    this.pendingShapeIndex = Math.floor(Math.random() * 2);
-    this.createPendingShape();
-  }
 
   private updateSize(): void {
     if (!this.container || !this.render || !this.engine) return;
@@ -1087,7 +946,6 @@ export class MatterScene {
     this.gameMode = false;
     this.gameOver = false;
     this.clickCount = 0;
-    this.score = 0;
     this.pendingShape = null;
 
     // Clear game check interval
@@ -1096,24 +954,11 @@ export class MatterScene {
       this.gameCheckInterval = null;
     }
 
-    // Remove game UI elements
+    // Remove debug UI
     const debugPanel = document.getElementById("matter-debug");
     if (debugPanel) {
       debugPanel.remove();
     }
-    const scoreEl = document.getElementById("game-score");
-    if (scoreEl) {
-      scoreEl.remove();
-    }
-    const gameOverLine = document.getElementById("game-over-line");
-    if (gameOverLine) {
-      gameOverLine.remove();
-    }
-    const gameOverOverlay = document.getElementById("game-over-overlay");
-    if (gameOverOverlay) {
-      gameOverOverlay.remove();
-    }
-    this.scoreElement = null;
   }
 
   private createDebugUI(): void {

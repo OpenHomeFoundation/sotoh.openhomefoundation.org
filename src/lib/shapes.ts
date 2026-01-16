@@ -7,4 +7,6 @@ export const shapes = {
     '<svg width="140" height="70" viewBox="0 0 140 70" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M69.6347 0C108.093 0 139.269 31.1765 139.269 69.6346H104.452C104.452 50.4056 88.8638 34.8173 69.6347 34.8173C50.4056 34.8173 34.8174 50.4056 34.8174 69.6346H0C0 31.1765 31.1765 0 69.6347 0Z" fill="#8B26FF"/></svg>',
   petal:
     '<svg width="122" height="51" viewBox="0 0 122 51" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M-0.000153727 25.262C33.6826 58.9447 88.293 58.9447 121.976 25.262C88.293 -8.42071 33.6826 -8.42072 -0.000153727 25.262Z" fill="#FFD351"/></svg>',
+  corner:
+    '<svg width="126" height="126" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 62.25V0C34.3797 1.50279e-06 62.25 27.8703 62.25 62.25H0Z" fill="#8B26FF"/></svg>',
 };
