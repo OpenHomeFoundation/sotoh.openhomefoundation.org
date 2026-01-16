@@ -407,6 +407,19 @@ import { ICONS } from "../lib/icons";
       .mobile-nav {
         transform: scaleY(1);
         pointer-events: all;
+
+        .mobile-nav__inner > ul,
+        .mobile-nav__inner > .meta-links {
+          opacity: 1;
+        }
+
+        .mobile-nav__inner > ul {
+          transition-delay: 0.35s;
+        }
+
+        .mobile-nav__inner > .meta-links {
+          transition-delay: 0.45s;
+        }
       }
     }
   }
@@ -445,6 +458,20 @@ import { ICONS } from "../lib/icons";
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      > ul,
+      > .meta-links {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      > ul {
+        transition-delay: 0s;
+      }
+
+      > .meta-links {
+        transition-delay: 0s;
+      }
 
       ul {
         width: 100%;
