@@ -97,9 +97,6 @@ export class MatterScene {
   }
 
   init(): boolean {
-    // Disable on mobile devices
-    if (window.innerWidth < 768) return false;
-
     this.container = document.getElementById(this.options.containerId!);
     if (!this.container) return false;
 
@@ -303,19 +300,22 @@ export class MatterScene {
       mouse.button = -1;
     });
 
-    // Track clicks on shapes for game mode activation
-    Events.on(mouseConstraint, "mousedown", () => {
-      if (this.gameMode) return;
+    // Track clicks on shapes for game mode activation (desktop only)
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) {
+      Events.on(mouseConstraint, "mousedown", () => {
+        if (this.gameMode) return;
 
-      // Check if clicking on a body (not walls)
-      const body = mouseConstraint.body;
-      if (body && !body.isStatic) {
-        this.clickCount++;
-        if (this.clickCount >= 10) {
-          this.startGameMode();
+        // Check if clicking on a body (not walls)
+        const body = mouseConstraint.body;
+        if (body && !body.isStatic) {
+          this.clickCount++;
+          if (this.clickCount >= 10) {
+            this.startGameMode();
+          }
         }
-      }
-    });
+      });
+    }
 
     // Allow page scrolling over the canvas
     // @ts-expect-error - mousewheel exists on Mouse but not in types
@@ -369,11 +369,15 @@ export class MatterScene {
       this.createDebugUI();
     }
 
-    // Enable gyro control on mobile devices
-    this.initGyroControl();
+    // Enable gyro control on mobile devices (delay on mobile to let shapes fall first)
+    if (isMobile) {
+      setTimeout(() => this.initGyroControl(), 2000);
+    } else {
+      this.initGyroControl();
+    }
 
-    // Start game mode immediately if debug is set
-    if (isDebug) {
+    // Start game mode immediately if debug is set (desktop only)
+    if (isDebug && !isMobile) {
       setTimeout(() => this.startGameMode(), 100);
     }
 
