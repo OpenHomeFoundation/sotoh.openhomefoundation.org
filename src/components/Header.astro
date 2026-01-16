@@ -79,12 +79,6 @@ import { ICONS } from "../lib/icons";
             </li>
           </ul>
         </li>
-        <li class="disabled">
-          <TextWipe href="/">Conference</TextWipe>
-        </li>
-        <li class="disabled">
-          <TextWipe href="/">Resources</TextWipe>
-        </li>
       </ul>
 
       <div class="meta-links">
@@ -512,26 +506,13 @@ import { ICONS } from "../lib/icons";
 
             :global(.text-wipe__hover) {
               color: var(--ohf-dark-blue);
+              text-decoration: underline;
             }
           }
 
           a {
             font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
             text-transform: uppercase;
-          }
-
-          &.disabled {
-            :global(.text-wipe) {
-              color: var(--ohf-dark-grey);
-
-              :global(.text-wipe__hover) {
-                color: var(--ohf-dark-grey);
-              }
-            }
-
-            a {
-              pointer-events: none;
-            }
           }
 
           ul {
@@ -579,6 +560,7 @@ import { ICONS } from "../lib/icons";
 
           :global(.text-wipe__hover) {
             color: var(--ohf-dark-blue);
+            text-decoration: underline;
           }
         }
 
