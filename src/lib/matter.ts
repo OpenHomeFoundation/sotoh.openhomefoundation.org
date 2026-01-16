@@ -98,6 +98,7 @@ export class MatterScene {
     this.container = document.getElementById(this.options.containerId!);
     if (!this.container) return false;
 
+    const isMobile = window.innerWidth < 768;
     const maxWidth = 1200;
     const width = Math.min(this.container.clientWidth, maxWidth);
     const height = this.container.clientHeight;
@@ -122,9 +123,10 @@ export class MatterScene {
     // Create bodies
     const bodies: Matter.Body[] = [];
 
-    // Calculate scale factor for mobile (scale down below 768px)
+    // Calculate scale factor (bigger shapes on mobile)
     const baseWidth = 1200;
-    const scale = Math.min(1, Math.max(0.5, width / baseWidth));
+    const mobileMultiplier = isMobile ? 1.5 : 1;
+    const scale = Math.min(1, Math.max(0.5, width / baseWidth)) * mobileMultiplier;
 
     // Get vertices for each shape type
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
@@ -298,22 +300,19 @@ export class MatterScene {
       mouse.button = -1;
     });
 
-    // Track clicks on shapes for game mode activation (desktop only)
-    const isMobile = window.innerWidth < 768;
-    if (!isMobile) {
-      Events.on(mouseConstraint, "mousedown", () => {
-        if (this.gameMode) return;
+    // Track clicks on shapes for game mode activation
+    Events.on(mouseConstraint, "mousedown", () => {
+      if (this.gameMode) return;
 
-        // Check if clicking on a body (not walls)
-        const body = mouseConstraint.body;
-        if (body && !body.isStatic) {
-          this.clickCount++;
-          if (this.clickCount >= 10) {
-            this.startGameMode();
-          }
+      // Check if clicking on a body (not walls)
+      const body = mouseConstraint.body;
+      if (body && !body.isStatic) {
+        this.clickCount++;
+        if (this.clickCount >= 10) {
+          this.startGameMode();
         }
-      });
-    }
+      }
+    });
 
     // Allow page scrolling over the canvas
     // @ts-expect-error - mousewheel exists on Mouse but not in types
@@ -446,11 +445,38 @@ export class MatterScene {
     this.gameMode = true;
     this.gameOver = false;
 
+    // Disable gyro control and reset gravity when game starts
+    this.disableGyro();
+    this.engine.gravity.x = 0;
+    this.engine.gravity.y = 1.5;
+
     // Add game-mode class to container (for CSS styling, especially mobile)
     this.container.classList.add("game-mode");
 
-    // Set game gravity
-    this.engine.gravity.y = 1.5;
+    // Create dedicated 500px game area below the footer content
+    const gameArea = document.createElement("div");
+    gameArea.id = "game-area";
+    gameArea.style.width = "100%";
+    gameArea.style.height = "500px";
+    gameArea.style.position = "relative";
+    this.container.appendChild(gameArea);
+
+    // Move canvas to game area
+    this.render.canvas.style.position = "absolute";
+    this.render.canvas.style.top = "0";
+    this.render.canvas.style.left = "50%";
+    this.render.canvas.style.transform = "translateX(-50%)";
+    gameArea.appendChild(this.render.canvas);
+
+    // Update canvas size to 500px height
+    const width = Math.min(gameArea.clientWidth, 1200);
+    this.render.canvas.width = width;
+    this.render.canvas.height = 500;
+    this.render.options.width = width;
+    this.render.options.height = 500;
+
+    // Scroll down to show the game area
+    gameArea.scrollIntoView({ behavior: "smooth", block: "center" });
 
     // Remove all non-static bodies (clear the shapes)
     const bodies = Composite.allBodies(this.engine.world);
@@ -550,7 +576,8 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[this.pendingShapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size;
+    const mobileMultiplier = window.innerWidth < 768 ? 1.5 : 1;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * mobileMultiplier;
     const x = this.mouseX || width / 2;
     const y = 30;
     const angle = Math.random() * Math.PI * 2;
@@ -686,7 +713,8 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[shapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size;
+    const mobileMultiplier = window.innerWidth < 768 ? 1.5 : 1;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * mobileMultiplier;
 
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
@@ -824,8 +852,10 @@ export class MatterScene {
     if (!this.container || !this.render || !this.engine) return;
 
     const maxWidth = 1200;
-    const width = Math.min(this.container.clientWidth, maxWidth);
-    const height = this.container.clientHeight;
+    const gameArea = document.getElementById("game-area");
+    const width = Math.min(gameArea?.clientWidth || this.container.clientWidth, maxWidth);
+    // Use fixed 500px height in game mode, otherwise container height
+    const height = this.gameMode ? 500 : this.container.clientHeight;
     const wallThickness = 300;
 
     // Update canvas size
@@ -888,9 +918,13 @@ export class MatterScene {
     // Disable gyro control
     this.disableGyro();
 
-    // Remove game mode event listeners and class
+    // Remove game mode event listeners, class, and game area
     if (this.container) {
       this.container.classList.remove("game-mode");
+      const gameArea = document.getElementById("game-area");
+      if (gameArea) {
+        gameArea.remove();
+      }
       if (this.mouseMoveHandler) {
         this.container.removeEventListener("mousemove", this.mouseMoveHandler);
         this.mouseMoveHandler = null;
