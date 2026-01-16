@@ -112,6 +112,10 @@ import "../styles/_typography.scss";
     margin: 0;
   }
 
+  body.menu-open {
+    overflow: hidden;
+  }
+
   #smooth-content {
     padding-top: var(--header-height);
   }
@@ -146,6 +150,23 @@ import "../styles/_typography.scss";
 
       if (reduceMotion) {
         gsap.defaults({ duration: 0 });
+      }
+
+      // Fade up animation for elements with .animate--fade-up
+      if (!reduceMotion) {
+        document.querySelectorAll(".animate--fade-up").forEach((el) => {
+          gsap.from(el, {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 95%",
+              toggleActions: "play none none none",
+            },
+          });
+        });
       }
     }
   );

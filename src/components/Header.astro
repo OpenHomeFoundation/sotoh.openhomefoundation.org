@@ -217,11 +217,8 @@ import { ICONS } from "../lib/icons";
 
     .logo {
       width: 120px;
-
       display: flex;
       flex-direction: row;
-
-      transform: translate3d(0, 3px, 0);
 
       @include bp(large-mobile) {
         width: 150px;
@@ -254,6 +251,7 @@ import { ICONS } from "../lib/icons";
         .icon-light,
         .icon-dark {
           transition: transform 0.3s ease-in-out;
+          display: flex;
         }
 
         .icon-light {
@@ -420,16 +418,22 @@ import { ICONS } from "../lib/icons";
         .mobile-nav__inner > .meta-links {
           transition-delay: 0.45s;
         }
+
+        .mobile-nav__inner::-webkit-scrollbar-thumb {
+          background-color: var(--ohf-dark-blue);
+          transition-delay: 0.5s;
+        }
       }
     }
   }
 
   .mobile-nav {
     width: 100%;
+    max-height: 100vh;
     position: absolute;
     top: 0;
     right: 0;
-    padding: 2rem 1rem 2rem;
+    padding: 2rem 1rem 1rem;
     z-index: 1;
     pointer-events: none;
     border-radius: 0 0 1.5rem 1.5rem;
@@ -446,14 +450,29 @@ import { ICONS } from "../lib/icons";
     background-color: var(--header-bgc);
 
     @include bp(tablet) {
-      padding: 120px 1rem 2rem;
+      padding: 120px 1rem 1rem;
     }
 
     &__inner {
       width: 100%;
       max-width: 1200px;
-
+      padding-bottom: 1rem;
       overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 4px;
+        transition: background-color 0.3s ease-in-out;
+      }
 
       display: flex;
       flex-direction: column;
@@ -480,7 +499,7 @@ import { ICONS } from "../lib/icons";
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 5rem 0 2rem;
+        padding: 4rem 0 2rem;
         text-align: center;
 
         @include bp(large-mobile) {
@@ -597,6 +616,8 @@ import { ICONS } from "../lib/icons";
 </style>
 
 <script>
+  import { ScrollSmoother } from "gsap/ScrollSmoother";
+
   const header = document.querySelector(".site-header");
   if (header) {
     const onScroll = () => {
@@ -609,5 +630,18 @@ import { ICONS } from "../lib/icons";
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+  }
+
+  const menuToggle = document.querySelector<HTMLInputElement>(
+    "#site-header-burger-toggle"
+  );
+  if (menuToggle) {
+    menuToggle.addEventListener("change", () => {
+      const smoother = ScrollSmoother.get();
+      if (smoother) {
+        smoother.paused(menuToggle.checked);
+      }
+      document.body.classList.toggle("menu-open", menuToggle.checked);
+    });
   }
 </script>

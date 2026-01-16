@@ -55,7 +55,6 @@ function getSvgVertices(svgString: string, sampleLength: number = 15) {
 export interface MatterSceneOptions {
   containerId?: string;
   gravity?: number;
-  debug?: boolean;
 }
 
 export class MatterScene {
@@ -91,7 +90,6 @@ export class MatterScene {
     this.options = {
       containerId: "matter-container",
       gravity: 2,
-      debug: false,
       ...options,
     };
   }
@@ -361,25 +359,8 @@ export class MatterScene {
     };
     window.addEventListener("resize", this.resizeHandler);
 
-    // Debug UI
-    const isDebug =
-      this.options.debug ||
-      new URLSearchParams(window.location.search).has("debug");
-    if (isDebug) {
-      this.createDebugUI();
-    }
-
-    // Enable gyro control on mobile devices (delay on mobile to let shapes fall first)
-    if (isMobile) {
-      setTimeout(() => this.initGyroControl(), 2000);
-    } else {
-      this.initGyroControl();
-    }
-
-    // Start game mode immediately if debug is set (desktop only)
-    if (isDebug && !isMobile) {
-      setTimeout(() => this.startGameMode(), 100);
-    }
+    // Enable gyro control on mobile devices
+    this.initGyroControl();
 
     return true;
   }
@@ -480,7 +461,6 @@ export class MatterScene {
         Composite.remove(world, constraint);
       }
     });
-
 
     // Set up collision detection for merging
     Events.on(
@@ -836,7 +816,6 @@ export class MatterScene {
     this.createDynamicShape(shapeIndex, x, y, angle);
   }
 
-
   private updateSize(): void {
     if (!this.container || !this.render || !this.engine) return;
 
@@ -958,139 +937,6 @@ export class MatterScene {
       clearInterval(this.gameCheckInterval);
       this.gameCheckInterval = null;
     }
-
-    // Remove debug UI
-    const debugPanel = document.getElementById("matter-debug");
-    if (debugPanel) {
-      debugPanel.remove();
-    }
-  }
-
-  private createDebugUI(): void {
-    if (!this.render || !this.engine) return;
-
-    const render = this.render;
-    const engine = this.engine;
-
-    const panel = document.createElement("div");
-    panel.id = "matter-debug";
-    panel.innerHTML = `
-      <style>
-        #matter-debug {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 15px;
-          border-radius: 8px;
-          font-family: monospace;
-          font-size: 12px;
-          z-index: 9999;
-          min-width: 200px;
-        }
-        #matter-debug h4 {
-          margin: 0 0 10px 0;
-          color: #8B26FF;
-        }
-        #matter-debug label {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin: 8px 0;
-          cursor: pointer;
-        }
-        #matter-debug input[type="checkbox"] {
-          cursor: pointer;
-        }
-        #matter-debug input[type="range"] {
-          width: 100%;
-          cursor: pointer;
-        }
-        #matter-debug .slider-group {
-          margin: 10px 0;
-        }
-        #matter-debug .slider-label {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 4px;
-        }
-        #matter-debug button {
-          width: 100%;
-          padding: 8px;
-          margin-top: 10px;
-          background: #8B26FF;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        #matter-debug button:hover {
-          background: #7020d9;
-        }
-      </style>
-      <h4>Matter.js Debug</h4>
-      <label>
-        <input type="checkbox" id="debug-wireframes"> Wireframes
-      </label>
-      <label>
-        <input type="checkbox" id="debug-bounds"> Show Bounds
-      </label>
-      <label>
-        <input type="checkbox" id="debug-collisions"> Show Collisions
-      </label>
-      <div class="slider-group">
-        <div class="slider-label">
-          <span>Gravity</span>
-          <span id="gravity-value">2</span>
-        </div>
-        <input type="range" id="debug-gravity" min="0" max="5" step="0.1" value="2">
-      </div>
-      <button id="debug-reset">Reset Scene</button>
-    `;
-
-    document.body.appendChild(panel);
-
-    // Wireframes toggle
-    const wireframesCheckbox = document.getElementById(
-      "debug-wireframes"
-    ) as HTMLInputElement;
-    wireframesCheckbox.addEventListener("change", () => {
-      render.options.wireframes = wireframesCheckbox.checked;
-    });
-
-    // Show bounds toggle
-    const boundsCheckbox = document.getElementById(
-      "debug-bounds"
-    ) as HTMLInputElement;
-    boundsCheckbox.addEventListener("change", () => {
-      render.options.showBounds = boundsCheckbox.checked;
-    });
-
-    // Show collisions toggle
-    const collisionsCheckbox = document.getElementById(
-      "debug-collisions"
-    ) as HTMLInputElement;
-    collisionsCheckbox.addEventListener("change", () => {
-      render.options.showCollisions = collisionsCheckbox.checked;
-    });
-
-    // Gravity slider
-    const gravitySlider = document.getElementById(
-      "debug-gravity"
-    ) as HTMLInputElement;
-    const gravityValue = document.getElementById("gravity-value")!;
-    gravitySlider.addEventListener("input", () => {
-      const value = parseFloat(gravitySlider.value);
-      engine.gravity.y = value;
-      gravityValue.textContent = value.toFixed(1);
-    });
-
-    // Reset button
-    const resetButton = document.getElementById("debug-reset")!;
-    resetButton.addEventListener("click", () => {
-      window.location.reload();
-    });
   }
 }
 
