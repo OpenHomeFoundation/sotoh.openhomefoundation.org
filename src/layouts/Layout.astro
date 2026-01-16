@@ -5,7 +5,22 @@ import "../styles/_reset.scss";
 import "../styles/_global.scss";
 import "../styles/_typography.scss";
 
-// TODO: Update META, OG, Schema (validate this)
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+
+const defaultTitle = "State of the Open Home - Open Home Foundation";
+const defaultDescription = "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!";
+
+const {
+  title = defaultTitle,
+  description = defaultDescription,
+  canonical = "https://sotoh.openhomefoundation.org/"
+} = Astro.props;
+
+const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundation`;
 ---
 
 <!doctype html>
@@ -16,25 +31,16 @@ import "../styles/_typography.scss";
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>State of the Open Home - Open Home Foundation</title>
-    <meta
-      name="description"
-      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!"
-    />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
     <meta name="author" content="Open Home Foundation" />
-    <link rel="canonical" href="https://sotoh.openhomefoundation.org/" />
+    <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://sotoh.openhomefoundation.org/" />
-    <meta
-      property="og:title"
-      content="State of the Open Home - Open Home Foundation"
-    />
-    <meta
-      property="og:description"
-      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
-    />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
     <meta
       property="og:image"
       content="https://sotoh.openhomefoundation.org/og-image.jpg"
@@ -47,14 +53,8 @@ import "../styles/_typography.scss";
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="State of the Open Home - Open Home Foundation"
-    />
-    <meta
-      name="twitter:description"
-      content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
-    />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
       content="https://sotoh.openhomefoundation.org/og-image.jpg"
