@@ -88,6 +88,9 @@ const { image } = Astro.props;
     }
 
     &-media {
+      width: 100%;
+      max-width: 2800px;
+      margin: 0 auto;
       padding: 0 1.5rem;
 
       @include bp(desktop) {
@@ -125,7 +128,7 @@ const { image } = Astro.props;
           border-radius: 1.5rem;
           max-height: 810px;
           object-fit: cover;
-          object-position: center bottom;
+          object-position: center 85%;
         }
       }
     }

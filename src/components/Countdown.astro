@@ -91,13 +91,15 @@ const initial = calculateCountdown();
     grid-template-columns: auto auto auto;
     gap: 1rem;
     justify-content: center;
-    opacity: 0;
 
-    animation-name: animate-up-fade;
-    animation-fill-mode: forwards;
-    animation-duration: 0.45s;
-    animation-timing-function: var(--entry-ease);
-    animation-delay: 1.2s;
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation-name: animate-up-fade;
+      animation-fill-mode: forwards;
+      animation-duration: 0.45s;
+      animation-timing-function: var(--entry-ease);
+      animation-delay: 1.2s;
+    }
 
     @include bp(desktop) {
       display: flex;
