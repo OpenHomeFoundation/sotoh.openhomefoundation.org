@@ -97,6 +97,7 @@ const initial = calculateCountdown();
   .countdown-separator {
     font-family: var(--typography-heading-font-family);
     font-size: 64px;
+    font-variant-numeric: tabular-nums;
 
     -webkit-text-stroke: 1px currentColor;
     -webkit-text-fill-color: transparent;
@@ -118,14 +119,15 @@ const initial = calculateCountdown();
   .countdown-value {
     font-family: var(--typography-heading-font-family);
     font-size: 64px;
-
-    font-variant-numeric: tabular-nums;
     -webkit-text-stroke: 1px currentColor;
     -webkit-text-fill-color: transparent;
     line-height: 1;
+    text-align: center;
+    width: 112px;
 
     @include bp(desktop) {
       font-size: 120px;
+      width: 200px;
     }
   }
 
