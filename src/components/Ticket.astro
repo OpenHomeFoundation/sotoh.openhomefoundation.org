@@ -2,9 +2,11 @@
 
 ---
 
-<div class="ticket">
-  <div class="glass"></div>
-  <div class="glass"></div>
+<div class="ticket-wrapper">
+  <div class="ticket">
+    <div class="glass"></div>
+    <div class="glass"></div>
+  </div>
 </div>
 
 <svg
@@ -33,6 +35,8 @@
   </defs>
 </svg>
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .ticket {
     --glass-drop-shadow-blur: 24px;
     --glass-frost: 8px;
@@ -42,13 +46,25 @@
     --glass-shadow-spread: 0px;
     --glass-tint-color: 255, 255, 255;
     --glass-tint-opacity: 0.2;
+    --radius: 10px;
+
+    @include bp(desktop) {
+      --radius: 16px;
+    }
 
     display: flex;
     gap: 6px;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%) rotate(5deg);
+    transform: translateX(-50%) translateY(-50%);
+    width: 90%;
+    aspect-ratio: 2.83858268/1;
+    max-width: 600px;
+  }
+
+  .ticket-wrapper {
+    animation: subtle-rotate 8s ease-in-out infinite;
   }
 
   svg filter feDisplacementMap {
@@ -62,19 +78,19 @@
   }
 
   .glass {
-    border-radius: 20px;
+    border-radius: var(--radius);
     box-shadow: 0px 20px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.1);
     position: relative;
     transition: transform 0.2s ease-out;
-    height: 254px;
     z-index: 1;
     overflow: hidden;
+    width: 100%;
 
     &:nth-child(1) {
-      width: 170px;
+      flex-basis: 22%;
     }
     &:nth-child(2) {
-      width: 570px;
+      flex-basis: 78%;
     }
 
     &:before {
@@ -82,7 +98,7 @@
         var(--glass-tint-color),
         var(--glass-tint-opacity)
       );
-      border-radius: 20px;
+      border-radius: var(--radius);
       box-shadow: inset var(--glass-shadow-offset) var(--glass-shadow-offset)
         var(--glass-shadow-blur) var(--glass-shadow-spread)
         var(--glass-shadow-color);
@@ -108,5 +124,15 @@
     position: absolute;
     width: 100%;
     z-index: -1;
+  }
+
+  @keyframes subtle-rotate {
+    0%,
+    100% {
+      transform: rotate(2deg);
+    }
+    50% {
+      transform: rotate(7deg);
+    }
   }
 </style>
