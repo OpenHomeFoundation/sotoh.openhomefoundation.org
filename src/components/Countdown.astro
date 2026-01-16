@@ -75,11 +75,29 @@ const initial = calculateCountdown();
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
+  @keyframes animate-up-fade {
+    0% {
+      transform: translate3d(0, 100%, 0);
+      opacity: 0;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
   .countdown {
     display: grid;
     grid-template-columns: auto auto auto;
     gap: 1rem;
     justify-content: center;
+    opacity: 0;
+
+    animation-name: animate-up-fade;
+    animation-fill-mode: forwards;
+    animation-duration: 0.45s;
+    animation-timing-function: var(--entry-ease);
+    animation-delay: 1.2s;
 
     @include bp(desktop) {
       display: flex;
