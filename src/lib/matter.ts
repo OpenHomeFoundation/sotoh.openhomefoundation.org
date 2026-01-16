@@ -82,6 +82,7 @@ export class MatterScene {
   private pendingShapeIndex: number = 0;
   private mouseX: number = 0;
   private canDrop: boolean = true;
+  private isSliding: boolean = false;
   private mouseMoveHandler: ((e: MouseEvent) => void) | null = null;
   private dropHandler: ((e: MouseEvent) => void) | null = null;
   private gameCheckInterval: ReturnType<typeof setInterval> | null = null;
@@ -123,10 +124,9 @@ export class MatterScene {
     // Create bodies
     const bodies: Matter.Body[] = [];
 
-    // Calculate scale factor (bigger shapes on mobile)
+    // Calculate scale factor for initial footer shapes
     const baseWidth = 1200;
-    const mobileMultiplier = isMobile ? 1.5 : 1;
-    const scale = Math.min(1, Math.max(0.5, width / baseWidth)) * mobileMultiplier;
+    const scale = Math.min(1, Math.max(0.5, width / baseWidth));
 
     // Get vertices for each shape type
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
@@ -448,40 +448,7 @@ export class MatterScene {
     // Disable gyro control and reset gravity when game starts
     this.disableGyro();
     this.engine.gravity.x = 0;
-    this.engine.gravity.y = 1.5;
-
-    // Add game-mode class to container (for CSS styling, especially mobile)
-    this.container.classList.add("game-mode");
-
-    // Create dedicated 500px game area below the footer content
-    const gameArea = document.createElement("div");
-    gameArea.id = "game-area";
-    gameArea.style.width = "100%";
-    gameArea.style.height = "500px";
-    gameArea.style.position = "relative";
-    this.container.appendChild(gameArea);
-
-    // Move canvas to game area
-    this.render.canvas.style.position = "absolute";
-    this.render.canvas.style.top = "0";
-    this.render.canvas.style.left = "50%";
-    this.render.canvas.style.transform = "translateX(-50%)";
-    gameArea.appendChild(this.render.canvas);
-
-    // Update canvas size to 500px height
-    const width = Math.min(gameArea.clientWidth, 1200);
-    this.render.canvas.width = width;
-    this.render.canvas.height = 500;
-    this.render.options.width = width;
-    this.render.options.height = 500;
-
-    // Scroll down to show the game area
-    gameArea.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    // Remove all non-static bodies (clear the shapes)
-    const bodies = Composite.allBodies(this.engine.world);
-    const toRemove = bodies.filter((body) => !body.isStatic);
-    Composite.remove(this.engine.world, toRemove);
+    this.engine.gravity.y = 2;
 
     // Remove mouse constraint (no more dragging)
     const world = this.engine.world;
@@ -491,6 +458,62 @@ export class MatterScene {
         Composite.remove(world, constraint);
       }
     });
+
+    // Open the floor so shapes fall out
+    if (this.walls.ground) {
+      Composite.remove(this.engine.world, this.walls.ground);
+      this.walls.ground = null;
+    }
+
+    // Wait for shapes to fall out, then set up the game
+    setTimeout(() => this.setupGameArea(), 1500);
+  }
+
+  private setupGameArea(): void {
+    if (!this.engine || !this.render || !this.container) return;
+
+    // Remove any remaining non-static bodies
+    const bodies = Composite.allBodies(this.engine.world);
+    const toRemove = bodies.filter((body) => !body.isStatic);
+    Composite.remove(this.engine.world, toRemove);
+
+    // Set game gravity
+    this.engine.gravity.y = 1.5;
+
+    // Add game-mode class to container (for CSS styling, especially mobile)
+    this.container.classList.add("game-mode");
+
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Mobile: Create dedicated 500px game area below the footer content
+      const gameArea = document.createElement("div");
+      gameArea.id = "game-area";
+      gameArea.style.width = "100%";
+      gameArea.style.height = "500px";
+      gameArea.style.position = "relative";
+      this.container.appendChild(gameArea);
+
+      // Move canvas to game area
+      this.render.canvas.style.position = "absolute";
+      this.render.canvas.style.top = "0";
+      this.render.canvas.style.left = "50%";
+      this.render.canvas.style.transform = "translateX(-50%)";
+      gameArea.appendChild(this.render.canvas);
+
+      // Update canvas size to 500px height
+      const width = Math.min(gameArea.clientWidth, 1200);
+      this.render.canvas.width = width;
+      this.render.canvas.height = 500;
+      this.render.options.width = width;
+      this.render.options.height = 500;
+
+      // Scroll down to show the game area
+      gameArea.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    // Rebuild all walls for game mode
+    this.updateSize();
 
     // Set up collision detection for merging
     Events.on(
@@ -563,23 +586,20 @@ export class MatterScene {
       }
     });
 
-    // Create first pending shape
+    // Create first pending shape with slide-in animation
     this.pendingShapeIndex = Math.floor(Math.random() * 3); // Start with small shapes only
-    this.createPendingShape();
-
-    // Update size after a delay to adapt to CSS changes (especially mobile 100vh)
-    setTimeout(() => this.updateSize(), 350);
+    this.createPendingShape(true);
   }
 
-  private createPendingShape(): void {
+  private createPendingShape(slideIn: boolean = false): void {
     if (!this.engine || !this.render || !this.container) return;
 
     const shapeConfig = GAME_SHAPES[this.pendingShapeIndex];
     const width = this.render.canvas.width;
-    const mobileMultiplier = window.innerWidth < 768 ? 1.5 : 1;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * mobileMultiplier;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
     const x = this.mouseX || width / 2;
-    const y = 30;
+    const startY = slideIn ? -100 : 30;
+    const targetY = 30;
     const angle = Math.random() * Math.PI * 2;
 
     // Get vertices for shape types
@@ -592,7 +612,7 @@ export class MatterScene {
 
     switch (shapeConfig.type) {
       case "circle":
-        body = Bodies.circle(x, y, 87 * scale, {
+        body = Bodies.circle(x, startY, 87 * scale, {
           isStatic: true,
           angle,
           render: {
@@ -607,7 +627,7 @@ export class MatterScene {
         break;
       case "halfPipe":
         if (halfPipeVertices) {
-          body = Bodies.fromVertices(x, y, [halfPipeVertices], {
+          body = Bodies.fromVertices(x, startY, [halfPipeVertices], {
             isStatic: true,
             angle,
             render: { fillStyle: shapeConfig.color },
@@ -620,7 +640,7 @@ export class MatterScene {
         break;
       case "halfCircle":
         if (halfCircleVertices) {
-          body = Bodies.fromVertices(x, y, [halfCircleVertices], {
+          body = Bodies.fromVertices(x, startY, [halfCircleVertices], {
             isStatic: true,
             angle,
             render: { fillStyle: shapeConfig.color },
@@ -633,7 +653,7 @@ export class MatterScene {
         break;
       case "petal":
         if (petalVertices) {
-          body = Bodies.fromVertices(x, y, [petalVertices], {
+          body = Bodies.fromVertices(x, startY, [petalVertices], {
             isStatic: true,
             angle,
             render: { fillStyle: shapeConfig.color },
@@ -646,7 +666,7 @@ export class MatterScene {
         break;
       case "corner":
         if (cornerVertices) {
-          body = Bodies.fromVertices(x, y, [cornerVertices], {
+          body = Bodies.fromVertices(x, startY, [cornerVertices], {
             isStatic: true,
             angle,
             render: { fillStyle: shapeConfig.color },
@@ -662,6 +682,32 @@ export class MatterScene {
     if (body) {
       this.pendingShape = body;
       Composite.add(this.engine.world, body);
+
+      // Animate slide-in if requested
+      if (slideIn) {
+        this.isSliding = true;
+        const animateSlideIn = () => {
+          if (!this.pendingShape) {
+            this.isSliding = false;
+            return;
+          }
+          const currentY = this.pendingShape.position.y;
+          if (currentY < targetY) {
+            Body.setPosition(this.pendingShape, {
+              x: this.pendingShape.position.x,
+              y: currentY + 5,
+            });
+            requestAnimationFrame(animateSlideIn);
+          } else {
+            Body.setPosition(this.pendingShape, {
+              x: this.pendingShape.position.x,
+              y: targetY,
+            });
+            this.isSliding = false;
+          }
+        };
+        requestAnimationFrame(animateSlideIn);
+      }
     }
   }
 
@@ -673,7 +719,9 @@ export class MatterScene {
       padding,
       Math.min(this.render.canvas.width - padding, this.mouseX)
     );
-    Body.setPosition(this.pendingShape, { x: clampedX, y: 30 });
+    // During slide-in animation, only update x position
+    const y = this.isSliding ? this.pendingShape.position.y : 30;
+    Body.setPosition(this.pendingShape, { x: clampedX, y });
   }
 
   private dropShape(): void {
@@ -713,8 +761,7 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[shapeIndex];
     const width = this.render.canvas.width;
-    const mobileMultiplier = window.innerWidth < 768 ? 1.5 : 1;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * mobileMultiplier;
+    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
 
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
@@ -852,10 +899,11 @@ export class MatterScene {
     if (!this.container || !this.render || !this.engine) return;
 
     const maxWidth = 1200;
+    const isMobile = window.innerWidth < 768;
     const gameArea = document.getElementById("game-area");
     const width = Math.min(gameArea?.clientWidth || this.container.clientWidth, maxWidth);
-    // Use fixed 500px height in game mode, otherwise container height
-    const height = this.gameMode ? 500 : this.container.clientHeight;
+    // Use fixed 500px height only in game mode on mobile, otherwise container height
+    const height = this.gameMode && isMobile ? 500 : this.container.clientHeight;
     const wallThickness = 300;
 
     // Update canvas size
