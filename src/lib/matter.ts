@@ -100,6 +100,9 @@ export class MatterScene {
   }
 
   init(): boolean {
+    // Disable on mobile devices
+    if (window.innerWidth < 768) return false;
+
     this.container = document.getElementById(this.options.containerId!);
     if (!this.container) return false;
 
