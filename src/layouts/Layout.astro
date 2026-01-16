@@ -5,7 +5,8 @@ import "../styles/_reset.scss";
 import "../styles/_global.scss";
 import "../styles/_typography.scss";
 
-// TODO: Update META, OG, Schema
+// TODO: Update META, OG, Schema (validate this)
+// TODO: Content should be visible on the page when JS is disabled
 ---
 
 <!doctype html>
@@ -21,14 +22,16 @@ import "../styles/_typography.scss";
       name="description"
       content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!"
     />
-    <meta name="robots" content="index, follow" />
     <meta name="author" content="Open Home Foundation" />
     <link rel="canonical" href="https://sotoh.openhomefoundation.org/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sotoh.openhomefoundation.org/" />
-    <meta property="og:title" content="State of the Open Home 2026" />
+    <meta
+      property="og:title"
+      content="State of the Open Home - Open Home Foundation"
+    />
     <meta
       property="og:description"
       content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
@@ -45,7 +48,10 @@ import "../styles/_typography.scss";
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="State of the Open Home 2026" />
+    <meta
+      name="twitter:title"
+      content="State of the Open Home - Open Home Foundation"
+    />
     <meta
       name="twitter:description"
       content="Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!"
@@ -60,11 +66,11 @@ import "../styles/_typography.scss";
       {
         "@context": "https://schema.org",
         "@type": "Event",
-        "name": "State of the Open Home 2026",
+        "name": "State of the Open Home 2026 - Open Home Foundation",
         "description": "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!",
         "startDate": "2026-04-08",
         "eventStatus": "https://schema.org/EventScheduled",
-        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
         "location": {
           "@type": "Place",
           "name": "Utrecht",
