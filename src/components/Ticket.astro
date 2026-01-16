@@ -1,0 +1,112 @@
+---
+
+---
+
+<div class="ticket">
+  <div class="glass"></div>
+  <div class="glass"></div>
+</div>
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="0"
+  height="0"
+  style="position:absolute; overflow:hidden"
+>
+  <defs>
+    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.008 0.008"
+        numOctaves="2"
+        seed="92"
+        result="noise"></feTurbulence>
+      <feGaussianBlur in="noise" stdDeviation="2" result="blurred"
+      ></feGaussianBlur>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="blurred"
+        scale="20"
+        xChannelSelector="R"
+        yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </defs>
+</svg>
+<style lang="scss">
+  .ticket {
+    --glass-drop-shadow-blur: 24px;
+    --glass-frost: 8px;
+    --glass-shadow-blur: 2px;
+    --glass-shadow-color: #ffffff;
+    --glass-shadow-offset: 0;
+    --glass-shadow-spread: 0px;
+    --glass-tint-color: 255, 255, 255;
+    --glass-tint-opacity: 0.2;
+
+    display: flex;
+    gap: 6px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(5deg);
+  }
+
+  svg filter feDisplacementMap {
+    scale: 100;
+  }
+
+  @-moz-document url-prefix() {
+    .glass {
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  .glass {
+    border-radius: 20px;
+    box-shadow: 0px 20px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.2s ease-out;
+    height: 254px;
+    z-index: 1;
+    overflow: hidden;
+
+    &:nth-child(1) {
+      width: 170px;
+    }
+    &:nth-child(2) {
+      width: 570px;
+    }
+
+    &:before {
+      background-color: rgba(
+        var(--glass-tint-color),
+        var(--glass-tint-opacity)
+      );
+      border-radius: 20px;
+      box-shadow: inset var(--glass-shadow-offset) var(--glass-shadow-offset)
+        var(--glass-shadow-blur) var(--glass-shadow-spread)
+        var(--glass-shadow-color);
+      content: "";
+      inset: 0;
+      position: absolute;
+    }
+
+    &:after {
+      backdrop-filter: blur(var(--glass-frost));
+      content: "";
+      filter: url("#glass-distortion");
+      inset: 0;
+      position: absolute;
+      z-index: -1;
+    }
+  }
+
+  img {
+    height: 100%;
+    inset: 0;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
