@@ -359,8 +359,12 @@ export class MatterScene {
     };
     window.addEventListener("resize", this.resizeHandler);
 
-    // Enable gyro control on mobile devices
-    this.initGyroControl();
+    // Enable gyro control on mobile devices (delay on mobile to let shapes fall first)
+    if (isMobile) {
+      setTimeout(() => this.initGyroControl(), 2000);
+    } else {
+      this.initGyroControl();
+    }
 
     return true;
   }
