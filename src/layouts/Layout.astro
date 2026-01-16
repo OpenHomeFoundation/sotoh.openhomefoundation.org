@@ -183,4 +183,17 @@ import "../styles/_typography.scss";
       },
     });
   }
+
+  // Debounced ScrollTrigger refresh on resize
+  let resizeTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener(
+    "resize",
+    () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    },
+    { passive: true }
+  );
 </script>
