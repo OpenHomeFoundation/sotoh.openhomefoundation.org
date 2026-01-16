@@ -28,7 +28,7 @@ const GAME_SHAPES = [
   { type: "halfPipe", color: "#18BCFF", size: 1.3 }, // 8. cyan halfPipe (bigger)
   { type: "halfPipe", color: "#95E85A", size: 1.5 }, // 9. green halfPipe
   { type: "circle", color: "#FFFFFF", size: 1.7 }, // 10. white circle (huge)
-  { type: "circle", color: "#FFD700", size: 2.0 }, // 11. gold circle (final)
+  { type: "circle", color: "#FFD351", size: 2.0 }, // 11. yellow circle (final)
 ] as const;
 
 // Replace fill color in SVG string
