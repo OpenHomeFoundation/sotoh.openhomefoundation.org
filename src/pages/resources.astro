@@ -5,6 +5,9 @@ import Tickertape from "../components/Tickertape.astro";
 import Footer from "../sections/Footer.astro";
 import Tivolivredenburg from "../sections/Tivolivredenburg.astro";
 import EventFAQ from "../sections/EventFAQ.astro";
+import Tabs from "../components/Tabs.astro";
+import Tab from "../components/Tab.astro";
+import TicketInclusioonsFAQ from "../sections/TicketInclusioonsFAQ.astro";
 ---
 
 <Layout>
@@ -16,33 +19,41 @@ import EventFAQ from "../sections/EventFAQ.astro";
     <Tickertape theme="yellow" class="full-width" fullWidth={true} />
   </section>
   <section class="block block-event-faq">
-    <EventFAQ />
+    <h2 class="h1">Got some questions?</h2>
+    <Tabs>
+      <Tab group="resources" title="The Event" isActive={true}>
+        <EventFAQ />
+      </Tab>
+      <Tab group="resources" title="Ticket and Inclusions">
+        <TicketInclusioonsFAQ />
+      </Tab>
+    </Tabs>
+    <Footer />
   </section>
-  <Footer />
+
+  <style lang="scss">
+    .block {
+      &-hero {
+        margin-bottom: 2rem;
+      }
+
+      &-countdown {
+        margin-bottom: 6rem;
+      }
+
+      &-tickertape-group {
+        overflow: hidden;
+      }
+
+      &-image-carousel {
+        padding-top: 5rem;
+      }
+
+      &-what-is,
+      &-image-carousel,
+      &-why {
+        margin-bottom: 5rem;
+      }
+    }
+  </style>
 </Layout>
-
-<style lang="scss">
-  .block {
-    &-hero {
-      margin-bottom: 2rem;
-    }
-
-    &-countdown {
-      margin-bottom: 6rem;
-    }
-
-    &-tickertape-group {
-      overflow: hidden;
-    }
-
-    &-image-carousel {
-      padding-top: 5rem;
-    }
-
-    &-what-is,
-    &-image-carousel,
-    &-why {
-      margin-bottom: 5rem;
-    }
-  }
-</style>

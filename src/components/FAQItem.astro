@@ -1,18 +1,11 @@
 ---
+import { slugify } from "../lib/slugify";
+
 const { title } = Astro.props;
 
 if (!title) {
   throw new Error("FAQItem component requires a 'title' prop.");
 }
-
-const slugify = (text: string) =>
-  text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
 
 const sluggifiedTitle = slugify(title);
 ---
@@ -32,7 +25,7 @@ const sluggifiedTitle = slugify(title);
   <div class="accordion-item-content-animation-wrapper">
     <div class="accordion-item-content-animation">
       <div class="accordion-item-content-transform-wrapper">
-        <div class="accordion-item-content"><slot name="content" /></div>
+        <div class="accordion-item-content"><slot /></div>
       </div>
     </div>
   </div>
@@ -43,7 +36,7 @@ const sluggifiedTitle = slugify(title);
 
   .accordion-item {
     --open: 0;
-    border-bottom: 1px solid #72787e;
+    border-bottom: 1px solid #4f606e;
     display: flex;
     flex-direction: column;
 
@@ -145,9 +138,9 @@ const sluggifiedTitle = slugify(title);
       }
 
       &-title {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 20px;
-        color: #002332;
+        color: var(--ohf-dark-blue);
         @include bp(desktop) {
           font-size: 24px;
         }
@@ -271,7 +264,7 @@ const sluggifiedTitle = slugify(title);
 
       &,
       p {
-        color: #4f606e;
+        color: var(--ohf-dark-grey);
         font-size: 16px;
         line-height: 1.5;
         margin: 0;
