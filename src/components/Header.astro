@@ -567,8 +567,6 @@ import { ICONS } from "../lib/icons";
         .help-link {
           font-weight: 700;
 
-          text-decoration: underline;
-
           :global(.text-wipe__hover) {
             text-decoration: underline;
           }
@@ -600,7 +598,7 @@ import { ICONS } from "../lib/icons";
   }
 
   const menuToggle = document.querySelector<HTMLInputElement>(
-    "#site-header-burger-toggle"
+    "#site-header-burger-toggle",
   );
   if (menuToggle) {
     menuToggle.addEventListener("change", () => {
@@ -613,7 +611,7 @@ import { ICONS } from "../lib/icons";
   }
 
   const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
-    '.mobile-nav a[href^="#"]'
+    '.mobile-nav a[href^="#"]',
   );
   anchorLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
