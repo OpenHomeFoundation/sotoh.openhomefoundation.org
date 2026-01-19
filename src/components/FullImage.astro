@@ -7,7 +7,11 @@ const { image } = Astro.props;
 
 <div class="full-image">
   <div class="full-image-media">
-    <Image width="1440" src={image} alt="" />
+    <Image
+      widths={[500, 768, 1024, 1280, 1440, 1920, 2160, 2560]}
+      src={image}
+      alt=""
+    />
   </div>
   <div class="full-image-content">
     <Container>
