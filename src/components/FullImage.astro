@@ -2,10 +2,15 @@
 import { Image } from "astro:assets";
 import Container from "./Container.astro";
 
-const { image } = Astro.props;
+interface Props {
+  image: Image;
+  hasScrollEntry?: boolean;
+}
+
+const { image, hasScrollEntry = true } = Astro.props;
 ---
 
-<div class="full-image">
+<div class="full-image" data-has-scroll-entry={hasScrollEntry}>
   <div class="full-image-media">
     <Image width="1440" src={image} alt="" />
   </div>
@@ -20,62 +25,68 @@ const { image } = Astro.props;
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  const mediaQuery = window.matchMedia("(min-width: 768px)");
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
-
-  const initFullImageAnimations = () => {
-    if (prefersReducedMotion.matches) return;
-
+  const hasScrollEntry =
     document
-      .querySelectorAll(".full-image-media:not([data-initialized])")
-      .forEach((media) => {
-        media.setAttribute("data-initialized", "");
+      .querySelector(".full-image")
+      ?.getAttribute("data-has-scroll-entry") === "true";
 
-        const img = media.querySelector("img");
-        const scrollTriggerConfig = {
-          trigger: media,
-          start: "top bottom",
-          end: "25% 50%",
-          scrub: 0.5,
-        };
+  if (hasScrollEntry) {
+    gsap.registerPlugin(ScrollTrigger);
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
 
-        gsap.fromTo(
-          media,
-          { scale: 0.85 },
-          {
-            scale: 1,
-            ease: "none",
-            scrollTrigger: scrollTriggerConfig,
-          }
-        );
+    const initFullImageAnimations = () => {
+      if (prefersReducedMotion.matches) return;
 
-        if (img) {
+      document
+        .querySelectorAll(".full-image-media:not([data-initialized])")
+        .forEach((media) => {
+          media.setAttribute("data-initialized", "");
+
+          const img = media.querySelector("img");
+          const scrollTriggerConfig = {
+            trigger: media,
+            start: "top bottom",
+            end: "25% 50%",
+            scrub: 0.5,
+          };
+
           gsap.fromTo(
-            img,
-            {},
+            media,
+            { scale: 0.85 },
             {
-              borderRadius: "0",
+              scale: 1,
               ease: "none",
               scrollTrigger: scrollTriggerConfig,
             }
           );
-        }
-      });
-  };
 
-  if (mediaQuery.matches) {
-    initFullImageAnimations();
-  }
+          if (img) {
+            gsap.fromTo(
+              img,
+              {},
+              {
+                borderRadius: "0",
+                ease: "none",
+                scrollTrigger: scrollTriggerConfig,
+              }
+            );
+          }
+        });
+    };
 
-  mediaQuery.addEventListener("change", (e) => {
-    if (e.matches) {
+    if (mediaQuery.matches) {
       initFullImageAnimations();
     }
-  });
+
+    mediaQuery.addEventListener("change", (e) => {
+      if (e.matches) {
+        initFullImageAnimations();
+      }
+    });
+  }
 </script>
 
 <style lang="scss">
@@ -96,6 +107,18 @@ const { image } = Astro.props;
       .full-image-media,
       .full-image-content {
         grid-area: 1/1;
+      }
+    }
+
+    &[data-has-scroll-entry="true"] {
+      .full-image-media {
+        img {
+          border-radius: 0.75rem;
+
+          @include bp(desktop) {
+            border-radius: 1.5rem;
+          }
+        }
       }
     }
 
@@ -134,10 +157,8 @@ const { image } = Astro.props;
         width: 100%;
         height: auto;
         display: block;
-        border-radius: 0.75rem;
 
         @include bp(desktop) {
-          border-radius: 1.5rem;
           max-height: 810px;
           object-fit: cover;
           object-position: center 85%;
