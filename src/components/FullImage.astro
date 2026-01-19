@@ -12,7 +12,11 @@ const { image, hasScrollEntry = true } = Astro.props;
 
 <div class="full-image" data-has-scroll-entry={hasScrollEntry}>
   <div class="full-image-media">
-    <Image width="1440" src={image} alt="" />
+    <Image
+      widths={[500, 768, 1024, 1280, 1440, 1920, 2160, 2560]}
+      src={image}
+      alt=""
+    />
   </div>
   <div class="full-image-content">
     <Container>
@@ -113,10 +117,10 @@ const { image, hasScrollEntry = true } = Astro.props;
     &[data-has-scroll-entry="true"] {
       .full-image-media {
         img {
-          border-radius: 0.75rem;
+          border-radius: 1.5rem;
 
           @include bp(desktop) {
-            border-radius: 1.5rem;
+            border-radius: 3rem;
           }
         }
       }
