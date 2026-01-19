@@ -13,7 +13,11 @@
     const paragraphs = document.querySelectorAll(".h2, .content-container p");
 
     paragraphs.forEach((p) => {
-      const split = new SplitText(p, { type: "lines", linesClass: "line" });
+      const split = new SplitText(p, {
+        type: "lines",
+        linesClass: "line",
+        autoSplit: true,
+      });
 
       // Wrap each line in a clip container for overflow hidden
       split.lines.forEach((line) => {

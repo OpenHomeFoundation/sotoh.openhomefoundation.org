@@ -6,7 +6,6 @@ import "../styles/_global.scss";
 import "../styles/_typography.scss";
 
 // TODO: Update META, OG, Schema (validate this)
-// TODO: Content should be visible on the page when JS is disabled
 ---
 
 <!doctype html>
@@ -183,4 +182,17 @@ import "../styles/_typography.scss";
       },
     });
   }
+
+  // Debounced ScrollTrigger refresh on resize
+  let resizeTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener(
+    "resize",
+    () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    },
+    { passive: true }
+  );
 </script>

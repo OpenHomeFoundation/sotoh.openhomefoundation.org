@@ -25,9 +25,11 @@ const { image } = Astro.props;
   const mediaQuery = window.matchMedia("(min-width: 768px)");
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
-  ).matches;
+  );
 
-  if (mediaQuery.matches && !prefersReducedMotion) {
+  const initFullImageAnimations = () => {
+    if (prefersReducedMotion.matches) return;
+
     document
       .querySelectorAll(".full-image-media:not([data-initialized])")
       .forEach((media) => {
@@ -63,7 +65,17 @@ const { image } = Astro.props;
           );
         }
       });
+  };
+
+  if (mediaQuery.matches) {
+    initFullImageAnimations();
   }
+
+  mediaQuery.addEventListener("change", (e) => {
+    if (e.matches) {
+      initFullImageAnimations();
+    }
+  });
 </script>
 
 <style lang="scss">
@@ -88,6 +100,9 @@ const { image } = Astro.props;
     }
 
     &-media {
+      width: 100%;
+      max-width: 2800px;
+      margin: 0 auto;
       padding: 0 1.5rem;
 
       @include bp(desktop) {
@@ -125,7 +140,7 @@ const { image } = Astro.props;
           border-radius: 1.5rem;
           max-height: 810px;
           object-fit: cover;
-          object-position: center bottom;
+          object-position: center 85%;
         }
       }
     }

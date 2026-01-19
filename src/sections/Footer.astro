@@ -14,6 +14,7 @@ import TextWipe from "../components/TextWipe.astro";
       <Button
         href="/"
         class="button button--primary button--primary-hover-light"
+        disabled={true}
       >
         Tickets coming soon
       </Button>
@@ -35,6 +36,8 @@ import TextWipe from "../components/TextWipe.astro";
           <TextWipe class="footer-nav-item" href="/#be-part-of-the-conversation"
             >Be part of the conversation</TextWipe
           >
+          <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
+          <TextWipe href="/terms-of-service/">Terms of use</TextWipe>
         </div>
       </div>
       <div class="footer-nav-column">
@@ -67,7 +70,9 @@ import TextWipe from "../components/TextWipe.astro";
       </div>
       <div class="footer-nav-column">
         <div class="footer-extra">
-          <TextWipe href="#">Help & support</TextWipe>
+          <TextWipe href="mailto:events@openhomefoundation.org"
+            >Help & support</TextWipe
+          >
           <span>Copyright @ Open Home Foundation</span>
         </div>
       </div>

@@ -6,16 +6,18 @@ interface Props {
   href?: string;
   icon?: ICON;
   disabled?: boolean;
+  target?: string;
 }
 const {
   class: className = "",
   href = "/error",
   icon,
   disabled = false,
+  target = "_self",
 } = Astro.props;
 ---
 
-<a class={className} href={href} aria-disabled={disabled}>
+<a class={className} href={href} aria-disabled={disabled} target={target}>
   {
     icon ? (
       <div class="button-icon">

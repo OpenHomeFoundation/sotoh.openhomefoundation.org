@@ -79,18 +79,14 @@ import { ICONS } from "../lib/icons";
             </li>
           </ul>
         </li>
-        <li class="disabled">
-          <TextWipe href="/">Conference</TextWipe>
-        </li>
-        <li class="disabled">
-          <TextWipe href="/">Resources</TextWipe>
-        </li>
       </ul>
 
       <div class="meta-links">
-        <TextWipe href="#" class="help-link">Help & support</TextWipe>
-        <TextWipe href="#">Privacy policy</TextWipe>
-        <TextWipe href="#">Terms of use</TextWipe>
+        <TextWipe href="mailto:events@openhomefoundation.org" class="help-link"
+          >Help & support</TextWipe
+        >
+        <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
+        <TextWipe href="/terms-of-service/">Terms of use</TextWipe>
       </div>
     </div>
   </div>
@@ -123,36 +119,17 @@ import { ICONS } from "../lib/icons";
       0.3s background-color ease-in-out,
       0.3s padding ease-in-out;
 
-    overflow-x: clip;
-
     @include bp(tablet) {
       padding: 40px 0;
-    }
-
-    &:before {
-      width: 100%;
-      height: 100%;
-      content: "";
-
-      position: absolute;
-      inset: 0;
-
-      background-color: var(--header-bgc);
-      backdrop-filter: var(--blur);
-
-      transform: scaleY(0);
-      transform-origin: center top;
-      transition: 0.3s transform ease-in-out 0.3s;
-
-      pointer-events: none;
     }
 
     &.is-scrolled {
       --header-bgc: var(--header-bgc-active);
       --burger-bgc: var(--ohf-dark-blue);
 
-      &:before {
-        transform: scaleY(1);
+      .mobile-nav {
+        opacity: 1;
+        transform: translateY(calc(-100% + 80px));
       }
 
       @include bp(tablet) {
@@ -403,7 +380,9 @@ import { ICONS } from "../lib/icons";
       }
 
       .mobile-nav {
-        transform: scaleY(1);
+        transform: none;
+        border-radius: 0 0 1.5rem 1.5rem;
+        opacity: 1;
         pointer-events: all;
 
         .mobile-nav__inner > ul,
@@ -436,12 +415,14 @@ import { ICONS } from "../lib/icons";
     padding: 2rem 1rem 1rem;
     z-index: 1;
     pointer-events: none;
-    border-radius: 0 0 1.5rem 1.5rem;
-    transform: scaleY(0);
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
     transform-origin: center top;
     transition:
       0.45s transform ease-in-out,
-      0.3s background-color ease-in-out;
+      0.3s background-color ease-in-out,
+      0.3s border-radius ease-in-out,
+      0.3s opacity ease-in-out;
     backdrop-filter: var(--blur);
     display: flex;
     flex-direction: column;
@@ -527,26 +508,13 @@ import { ICONS } from "../lib/icons";
 
             :global(.text-wipe__hover) {
               color: var(--ohf-dark-blue);
+              text-decoration: underline;
             }
           }
 
           a {
             font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
             text-transform: uppercase;
-          }
-
-          &.disabled {
-            :global(.text-wipe) {
-              color: var(--ohf-dark-grey);
-
-              :global(.text-wipe__hover) {
-                color: var(--ohf-dark-grey);
-              }
-            }
-
-            a {
-              pointer-events: none;
-            }
           }
 
           ul {
@@ -594,13 +562,12 @@ import { ICONS } from "../lib/icons";
 
           :global(.text-wipe__hover) {
             color: var(--ohf-dark-blue);
+            text-decoration: underline;
           }
         }
 
         .help-link {
           font-weight: 700;
-
-          text-decoration: underline;
 
           :global(.text-wipe__hover) {
             text-decoration: underline;
@@ -633,7 +600,7 @@ import { ICONS } from "../lib/icons";
   }
 
   const menuToggle = document.querySelector<HTMLInputElement>(
-    "#site-header-burger-toggle"
+    "#site-header-burger-toggle",
   );
   if (menuToggle) {
     menuToggle.addEventListener("change", () => {
@@ -644,4 +611,33 @@ import { ICONS } from "../lib/icons";
       document.body.classList.toggle("menu-open", menuToggle.checked);
     });
   }
+
+  const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
+    '.mobile-nav a[href^="#"]',
+  );
+  anchorLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      e.preventDefault();
+
+      if (menuToggle) {
+        menuToggle.checked = false;
+        menuToggle.dispatchEvent(new Event("change"));
+      }
+
+      const smoother = ScrollSmoother.get();
+      if (smoother) {
+        smoother.scrollTo(target, true, "top top+=120");
+      } else {
+        const targetPosition =
+          target.getBoundingClientRect().top + window.scrollY - 120;
+        window.scrollTo({ top: targetPosition, behavior: "smooth" });
+      }
+    });
+  });
 </script>
