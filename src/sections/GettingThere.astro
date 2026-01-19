@@ -1,0 +1,307 @@
+---
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+import Button from "../components/Button.astro";
+
+import { MAP } from "../lib/map";
+---
+
+<Container containerClass="container--column">
+  <h2 class="h2">Getting there</h2>
+
+  <div class="getting-there">
+    <div class="getting-there__row getting-there__row-reverse">
+      <div class="card-container">
+        <div class="card">
+          <Content>
+            <h3 class="h3">Public transport</h3>
+            <p>
+              TivoliVredenburg is easily accessible by public transport. It's
+              about a 5-minute walk from Utrecht Central Station and Hoog
+              Catharijne.
+            </p>
+
+            <p>The nearest bus stops are:</p>
+            <ul>
+              <li>Vredenburg, right next to TivoliVredenburg</li>
+              <li>Utrecht Central Station, Centrumzijde, a 5-minute walk</li>
+              <li>Sint Jacobsstraat, a few minutes' walk</li>
+              <li>Neude, a 5-minute walk</li>
+            </ul>
+          </Content>
+        </div>
+        <div class="card">
+          <Content>
+            <h3 class="h3">On foot from Utrecht Central Station</h3>
+            <p>
+              From the platform, walk to the station hall and towards the Hoog
+              Catharijne shopping center. Enter Hoog Catharijne from the station
+              square (look up for the iconic domed roof) and turn left upon
+              entering. Follow the path to the right (past H&M and C&A), walk
+              straight ahead, and go down the escalator. Look out on your left
+              and you'll see TivoliVredenburg.
+            </p>
+            <p>This route can use escalators and elevators.</p>
+          </Content>
+        </div>
+      </div>
+      <div class="map">
+        <Fragment set:html={MAP["mapPortrait"]} />
+        <Fragment set:html={MAP["mapLandscape"]} />
+
+        <Button
+          href="https://www.google.com/maps/place/TivoliVredenburg/@52.0926197,5.1129775,15z/data=!4m5!3m4!1s0x0:0xcb73f73b5ccc3eb6!8m2!3d52.0926197!4d5.1129775?shorturl=1"
+          target="_blank"
+          class="get-directions button button--primary"
+          starburst={false}>Get directions</Button
+        >
+      </div>
+    </div>
+
+    <div class="getting-there__row">
+      <div class="card">
+        <Content>
+          <h3 class="h3">Cars & parking</h3>
+          <p>
+            As a visitor to TivoliVredenburg, you receive a <strong
+              >20% discount</strong
+            > when booking an electric car-sharing service from MyWheels. This allows
+            you to travel to and from TivoliVredenburg green and easily. Find out
+            how to use this discount.
+          </p>
+
+          <p>
+            You can park in one of the various Hoog Catharijne parking garages
+            (P1, P2, P3, P4, P5, and P6) near TivoliVredenburg . The Hoog
+            Catharijne parking garages are within walking distance of
+            TivoliVredenburg. Several other parking garages are also within
+            walking distance (Paardenveld, Bijenkorf/LaVie, and Springweg). If
+            you're attending a concert at TivoliVredenburg, you'll receive an
+            email a few days before your visit with the option to reserve a
+            parking space in P1, P4, or P5 at a discounted rate.
+          </p>
+
+          <p>
+            Please note: Navigation may not always work properly in the city
+            center/station area and around TivoliVredenburg. We recommend
+            turning off your navigation and following the signs.
+          </p>
+          <p>
+            <strong
+              >Here you will find a <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer "
+                >current overview of the parking garages in the city center of
+                Utrecht.</a
+              ></strong
+            >
+          </p>
+        </Content>
+      </div>
+      <div class="card">
+        <Content>
+          <h3 class="h3">Parking for visitors with disabilities</h3>
+          <p>
+            There are several parking garages near TivoliVredenburg with
+            accessible parking. The closest is the P5 Hoog Catharijne parking
+            garage, which has 16 accessible spaces and an elevator. Free parking
+            is also available in accessible spaces nearby (Varkenmarkt 16 and
+            Bergstraat 54 are a short distance from TivoliVredenburg).
+          </p>
+
+          <p>
+            With a disabled parking permit from the Municipality of Utrecht, you
+            can also park for free in paid parking spaces, except in spaces
+            marked with the "Permit Holders" sign. This parking permit is free
+            to apply for, even if you live outside of Utrecht.
+          </p>
+
+          <p>
+            <strong
+              ><a href="/" target="_blank" rel="noopener noreferrer "
+                >Click here</a
+              > for more detailed information about the accessibility of our building
+              and our halls.</strong
+            >
+          </p>
+        </Content>
+      </div>
+      <div class="card">
+        <Content>
+          <h3 class="h3">Coming by bike?</h3>
+          <p>
+            Park your bike for free, dry, and safely in one of the guarded bike
+            parking facilities nearby. U-Stal Vredenburg is the closest facility
+            and is even open 24 hours a day from Thursday to Sunday.
+          </p>
+
+          <p>
+            In case you haven't noticed: there's a guide lane for the blind next
+            to our building. Don't park your bike there!
+          </p>
+
+          <p>
+            Starting in October 2024, there will be an official ban on bicycle
+            parking in the alleys surrounding our building. The Hollandse and
+            Vlaamse Toren are being redesigned by the municipality to make them
+            safer and more livable. From this point on, incorrectly parked
+            bicycles will be actively removed.
+          </p>
+        </Content>
+      </div>
+    </div>
+  </div>
+</Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .getting-there {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__row {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      &-reverse {
+        flex-direction: column-reverse;
+      }
+
+      @include bp(tablet) {
+        flex-direction: row;
+      }
+    }
+  }
+
+  .card-container {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @include bp(tablet) {
+      width: 33%;
+    }
+
+    .card {
+      height: 100%;
+    }
+  }
+
+  .map {
+    width: 100%;
+    position: relative;
+
+    @include bp(tablet) {
+      width: 66%;
+    }
+
+    :global(svg) {
+      width: 100%;
+      height: 100%;
+
+      :global(.map--route) {
+        stroke-dasharray: 5 5;
+        animation: animateRoute 1s linear infinite;
+      }
+    }
+
+    :global(.map--portrait) {
+      display: block;
+    }
+
+    :global(.map--landscape) {
+      display: none;
+    }
+
+    :global(.get-directions) {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+    }
+
+    @include bp(tablet) {
+      :global(.map--portrait) {
+        display: none;
+      }
+
+      :global(.map--landscape) {
+        display: block;
+      }
+    }
+  }
+
+  @keyframes animateRoute {
+    to {
+      stroke-dashoffset: 20;
+    }
+  }
+
+  .h2 {
+    color: var(--text-on-light);
+  }
+
+  .card {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+
+    .h3 {
+      color: var(--text-on-light);
+      font-size: 1.5rem;
+      text-transform: none;
+      font-family: var(--typography-body-font-family);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    p,
+    ul,
+    a {
+      color: var(--ohf-dark-grey);
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 1rem;
+    }
+
+    p + ul {
+      margin-top: -1rem;
+    }
+
+    strong {
+      a {
+        font-weight: 600;
+      }
+    }
+
+    a {
+      text-decoration: none;
+
+      background-image: linear-gradient(
+        transparent calc(100% - 2px),
+        var(--ohf-dark-grey) 2px
+      );
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+
+      &:hover {
+        background-size: 0% 100%;
+      }
+    }
+  }
+</style>
