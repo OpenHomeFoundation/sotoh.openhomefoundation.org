@@ -313,4 +313,16 @@ const sluggifiedTitle = slugify(title);
   }
 </style>
 
-<script></script>
+<script define:vars={{ sluggifiedTitle }}>
+  if (typeof window !== "undefined") {
+    const hash = window.location.hash.substring(1); // Remove the '#' character
+    if (hash === sluggifiedTitle) {
+      const checkbox = document.getElementById(sluggifiedTitle);
+      if (checkbox) {
+        setTimeout(() => {
+          checkbox.checked = true;
+        }, 100);
+      }
+    }
+  }
+</script>
