@@ -69,6 +69,13 @@ import TextWipe from "../components/TextWipe.astro";
         </div>
       </div>
       <div class="footer-nav-column">
+        <div class="footer-nav-title">Legal</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="#">Privacy</TextWipe>
+          <TextWipe class="footer-nav-item" href="#">Terms of use</TextWipe>
+        </div>
+      </div>
+      <div class="footer-nav-column">
         <div class="footer-extra">
           <TextWipe href="mailto:events@openhomefoundation.org"
             >Help & support</TextWipe
@@ -140,6 +147,7 @@ import TextWipe from "../components/TextWipe.astro";
 
       span {
         font-size: 12px;
+        line-height: 1.3;
       }
     }
 
@@ -169,11 +177,13 @@ import TextWipe from "../components/TextWipe.astro";
       &-items {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
 
         :global(.footer-nav-item) {
           color: #a2aab6;
           text-decoration: none;
+          text-wrap: balance;
+          line-height: 1.2;
         }
 
         :global(.text-wipe) {
