@@ -3,9 +3,14 @@ import Button from "../components/Button.astro";
 import TextWipe from "../components/TextWipe.astro";
 
 import { ICONS } from "../lib/icons";
+
+interface Props {
+  lightMode?: boolean;
+}
+const { lightMode = false } = Astro.props;
 ---
 
-<header class="site-header">
+<header class:list={["site-header", { "light-mode": lightMode }]}>
   <div class="site-header__row">
     <a href="/" rel="home" class="logo" aria-label="State of the Open Home">
       <div class="icon-wrap">
@@ -123,18 +128,9 @@ import { ICONS } from "../lib/icons";
       padding: 40px 0;
     }
 
-    &.is-scrolled {
-      --header-bgc: var(--header-bgc-active);
+    &.is-scrolled,
+    &.light-mode {
       --burger-bgc: var(--ohf-dark-blue);
-
-      .mobile-nav {
-        opacity: 1;
-        transform: translateY(calc(-100% + 80px));
-      }
-
-      @include bp(tablet) {
-        padding: 20px 0;
-      }
 
       .logo {
         .icon-wrap {
@@ -161,6 +157,28 @@ import { ICONS } from "../lib/icons";
         :global(.button--tickets) {
           border: 2px solid var(--ohf-dark-blue);
           color: var(--ohf-dark-blue);
+        }
+      }
+    }
+
+    &.is-scrolled {
+      --header-bgc: var(--header-bgc-active);
+
+      .mobile-nav {
+        opacity: 1;
+        transform: translateY(calc(-100% + 80px));
+      }
+
+      @include bp(tablet) {
+        padding: 20px 0;
+      }
+    }
+
+    &.light-mode {
+      .logo .icon-wrap {
+        .icon-light,
+        .icon-dark {
+          transition-delay: 0ms;
         }
       }
     }

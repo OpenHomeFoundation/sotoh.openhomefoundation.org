@@ -5,6 +5,11 @@ import "../styles/_reset.scss";
 import "../styles/_global.scss";
 import "../styles/_typography.scss";
 
+interface Props {
+  bodyClass?: string;
+}
+const { bodyClass = "" } = Astro.props;
+
 // TODO: Update META, OG, Schema (validate this)
 ---
 
@@ -95,7 +100,7 @@ import "../styles/_typography.scss";
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class={bodyClass}>
     <slot name="header" />
     <div id="smooth-wrapper">
       <div id="smooth-content">
