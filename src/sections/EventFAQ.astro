@@ -1,0 +1,22 @@
+---
+import Container from "../components/Container.astro";
+import FAQ from "../components/FAQ.astro";
+import FAQItem from "../components/FAQItem.astro";
+---
+
+<Container>
+  <FAQ>
+    <FAQItem title="Question 1">
+      <Fragment slot="content">hello</Fragment>
+    </FAQItem>
+    <FAQItem title="Question 2">
+      <Fragment slot="content">hello</Fragment>
+    </FAQItem>
+    <FAQItem title="Question 3">
+      <Fragment slot="content">hello</Fragment>
+    </FAQItem>
+    <FAQItem title="Question 4">
+      <Fragment slot="content">hello</Fragment>
+    </FAQItem>
+  </FAQ>
+</Container>
