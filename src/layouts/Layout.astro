@@ -9,18 +9,22 @@ interface Props {
   title?: string;
   description?: string;
   canonical?: string;
+  includeEventSchema?: boolean;
 }
 
 const defaultTitle = "State of the Open Home - Open Home Foundation";
-const defaultDescription = "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!";
+const defaultDescription =
+  "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!";
 
 const {
   title = defaultTitle,
   description = defaultDescription,
-  canonical = "https://sotoh.openhomefoundation.org/"
+  canonical = "https://sotoh.openhomefoundation.org/",
+  includeEventSchema = true,
 } = Astro.props;
 
-const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundation`;
+const fullTitle =
+  title === defaultTitle ? title : `${title} - Open Home Foundation`;
 ---
 
 <!doctype html>
@@ -31,6 +35,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1a2744" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Open Home Foundation" />
@@ -43,8 +48,11 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
     <meta property="og:description" content={description} />
     <meta
       property="og:image"
-      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+      content="https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="State of the Open Home 2026" />
     <meta
       property="og:site_name"
       content="State of the Open Home - Open Home Foundation"
@@ -57,36 +65,40 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
     <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
-      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+      content="https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
     />
+    <meta name="twitter:image:alt" content="State of the Open Home 2026" />
 
     <!-- JSON-LD Schema -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        "name": "State of the Open Home 2026 - Open Home Foundation",
-        "description": "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!",
-        "startDate": "2026-04-08",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-        "location": {
-          "@type": "Place",
-          "name": "Utrecht",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Utrecht",
-            "addressCountry": "NL"
-          }
-        },
-        "organizer": {
-          "@type": "Organization",
-          "name": "Open Home Foundation",
-          "url": "https://www.openhomefoundation.org"
-        },
-        "image": "https://sotoh.openhomefoundation.org/og-image.jpg"
-      }
-    </script>
+    {includeEventSchema && (
+      <script type="application/ld+json" is:inline>
+        {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          "name": "State of the Open Home 2026 - Open Home Foundation",
+          "description": "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next!",
+          "url": "https://sotoh.openhomefoundation.org/",
+          "startDate": "2026-04-08",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
+          "location": {
+            "@type": "Place",
+            "name": "Utrecht",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Utrecht",
+              "addressCountry": "NL"
+            }
+          },
+          "organizer": {
+            "@type": "Organization",
+            "name": "Open Home Foundation",
+            "url": "https://www.openhomefoundation.org"
+          },
+          "image": "https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
+        }
+      </script>
+    )}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -167,7 +179,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
           });
         });
       }
-    }
+    },
   );
 
   import { initMatter } from "../lib/matter";
@@ -193,6 +205,6 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
         ScrollTrigger.refresh();
       }, 200);
     },
-    { passive: true }
+    { passive: true },
   );
 </script>

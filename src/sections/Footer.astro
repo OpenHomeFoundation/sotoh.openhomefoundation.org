@@ -1,6 +1,7 @@
 ---
 import Button from "../components/Button.astro";
 import Container from "../components/Container.astro";
+import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 ---
 
@@ -36,8 +37,6 @@ import TextWipe from "../components/TextWipe.astro";
           <TextWipe class="footer-nav-item" href="/#be-part-of-the-conversation"
             >Be part of the conversation</TextWipe
           >
-          <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
-          <TextWipe href="/terms-of-service/">Terms of use</TextWipe>
         </div>
       </div>
       <div class="footer-nav-column">
@@ -77,9 +76,7 @@ import TextWipe from "../components/TextWipe.astro";
       </div>
       <div class="footer-nav-column">
         <div class="footer-extra">
-          <TextWipe href="mailto:events@openhomefoundation.org"
-            >Help & support</TextWipe
-          >
+          <CopyEmail email="events@openhomefoundation.org" />
           <span>Copyright @ Open Home Foundation</span>
         </div>
       </div>
@@ -141,7 +138,8 @@ import TextWipe from "../components/TextWipe.astro";
       gap: 8px;
       margin-top: -4px;
 
-      :global(.text-wipe) {
+      :global(.text-wipe),
+      :global(.copy-email) {
         font-weight: 500;
       }
 
