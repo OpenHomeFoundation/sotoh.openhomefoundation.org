@@ -10,6 +10,7 @@ interface Props {
   description?: string;
   canonical?: string;
   includeEventSchema?: boolean;
+  noindex?: boolean;
 }
 
 const defaultTitle = "State of the Open Home - Open Home Foundation";
@@ -21,6 +22,7 @@ const {
   description = defaultDescription,
   canonical = "https://sotoh.openhomefoundation.org/",
   includeEventSchema = true,
+  noindex = false,
 } = Astro.props;
 
 const fullTitle =
@@ -39,6 +41,7 @@ const fullTitle =
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Open Home Foundation" />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
