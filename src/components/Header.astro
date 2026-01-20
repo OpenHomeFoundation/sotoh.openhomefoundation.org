@@ -609,34 +609,25 @@ import { ICONS } from "../lib/icons";
       }
       document.body.classList.toggle("menu-open", menuToggle.checked);
     });
-  }
 
-  const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
-    '.mobile-nav a[href^="#"]',
-  );
-  anchorLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const href = link.getAttribute("href");
-      if (!href || href === "#") return;
-
-      const target = document.querySelector(href);
-      if (!target) return;
-
-      e.preventDefault();
-
-      if (menuToggle) {
+    // Close menu on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menuToggle.checked) {
         menuToggle.checked = false;
         menuToggle.dispatchEvent(new Event("change"));
       }
+    });
 
-      const smoother = ScrollSmoother.get();
-      if (smoother) {
-        smoother.scrollTo(target, true, "top top+=120");
-      } else {
-        const targetPosition =
-          target.getBoundingClientRect().top + window.scrollY - 120;
-        window.scrollTo({ top: targetPosition, behavior: "smooth" });
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!menuToggle.checked) return;
+      const target = e.target as HTMLElement;
+      const header = document.querySelector(".site-header");
+      if (header && !header.contains(target)) {
+        menuToggle.checked = false;
+        menuToggle.dispatchEvent(new Event("change"));
       }
     });
-  });
+  }
+
 </script>
