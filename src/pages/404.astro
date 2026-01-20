@@ -1,0 +1,41 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+import Button from "../components/Button.astro";
+import Footer from "../sections/Footer.astro";
+---
+
+<Layout title="Page not found">
+  <Header slot="header" />
+  <Container containerClass="container--column">
+    <Content>
+      <div class="not-found">
+        <h1 class="h1">Error 404</h1>
+        <p>
+          Sorry, the page you were looking for was not found. Use the website
+          navigation to get back on track.
+        </p>
+        <Button href="/" class="button button--primary">Back to home</Button>
+      </div>
+    </Content>
+  </Container>
+  <Footer />
+</Layout>
+
+<style lang="scss">
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+
+    p {
+      max-width: 600px;
+    }
+  }
+</style>
