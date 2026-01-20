@@ -1,5 +1,6 @@
 ---
 import Button from "../components/Button.astro";
+import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 
 import { ICONS } from "../lib/icons";
@@ -82,9 +83,7 @@ import { ICONS } from "../lib/icons";
       </ul>
 
       <div class="meta-links">
-        <TextWipe href="mailto:events@openhomefoundation.org" class="help-link"
-          >Help & support</TextWipe
-        >
+        <CopyEmail email="events@openhomefoundation.org" class="help-link" />
       </div>
     </div>
   </div>
@@ -564,10 +563,12 @@ import { ICONS } from "../lib/icons";
           }
         }
 
-        .help-link {
+        :global(.help-link) {
           font-weight: 700;
+          color: var(--ohf-dark-blue);
 
-          :global(.text-wipe__hover) {
+          :global(.copy-email__hover) {
+            color: var(--ohf-dark-blue);
             text-decoration: underline;
           }
 
