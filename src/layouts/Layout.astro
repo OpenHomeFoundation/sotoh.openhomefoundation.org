@@ -213,4 +213,40 @@ const fullTitle =
     },
     { passive: true },
   );
+
+  // Handle all anchor links with smooth scroll and header offset
+  const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
+    'a[href^="#"], a[href^="/#"]',
+  );
+  anchorLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (!href || href === "#") return;
+
+      // Extract the hash part (handles both "#section" and "/#section")
+      const hash = href.startsWith("/#") ? href.slice(1) : href;
+      const target = document.querySelector(hash);
+      if (!target) return;
+
+      e.preventDefault();
+
+      // Close mobile menu if open
+      const menuToggle = document.querySelector<HTMLInputElement>(
+        "#site-header-burger-toggle",
+      );
+      if (menuToggle?.checked) {
+        menuToggle.checked = false;
+        menuToggle.dispatchEvent(new Event("change"));
+      }
+
+      const smoother = ScrollSmoother.get();
+      if (smoother) {
+        smoother.scrollTo(target, true, "top top+=120");
+      } else {
+        const targetPosition =
+          target.getBoundingClientRect().top + window.scrollY - 120;
+        window.scrollTo({ top: targetPosition, behavior: "smooth" });
+      }
+    });
+  });
 </script>
