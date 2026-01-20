@@ -114,7 +114,10 @@ const fullTitle =
     <slot name="header" />
     <div id="smooth-wrapper">
       <div id="smooth-content">
-        <slot />
+        <main>
+          <slot />
+        </main>
+        <slot name="footer" />
       </div>
     </div>
   </body>
