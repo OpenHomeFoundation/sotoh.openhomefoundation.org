@@ -12,15 +12,17 @@ interface Props {
 }
 
 const defaultTitle = "State of the Open Home - Open Home Foundation";
-const defaultDescription = "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!";
+const defaultDescription =
+  "Join us in Utrecht on April 8 for State of the Open Home 2026. Your chance to celebrate, connect, and discover what's next - visit our site to learn more!";
 
 const {
   title = defaultTitle,
   description = defaultDescription,
-  canonical = "https://sotoh.openhomefoundation.org/"
+  canonical = "https://sotoh.openhomefoundation.org/",
 } = Astro.props;
 
-const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundation`;
+const fullTitle =
+  title === defaultTitle ? title : `${title} - Open Home Foundation`;
 ---
 
 <!doctype html>
@@ -43,7 +45,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
     <meta property="og:description" content={description} />
     <meta
       property="og:image"
-      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+      content="https://sotoh.openhomefoundation.org/sotoh-share-image.jpg"
     />
     <meta
       property="og:site_name"
@@ -57,7 +59,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
     <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
-      content="https://sotoh.openhomefoundation.org/og-image.jpg"
+      content="https://sotoh.openhomefoundation.org/sotoh-share-image.jpg"
     />
 
     <!-- JSON-LD Schema -->
@@ -84,7 +86,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
           "name": "Open Home Foundation",
           "url": "https://www.openhomefoundation.org"
         },
-        "image": "https://sotoh.openhomefoundation.org/og-image.jpg"
+        "image": "https://sotoh.openhomefoundation.org/sotoh-share-image.jpg"
       }
     </script>
 
@@ -167,7 +169,7 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
           });
         });
       }
-    }
+    },
   );
 
   import { initMatter } from "../lib/matter";
@@ -193,6 +195,6 @@ const fullTitle = title === defaultTitle ? title : `${title} - Open Home Foundat
         ScrollTrigger.refresh();
       }, 200);
     },
-    { passive: true }
+    { passive: true },
   );
 </script>
