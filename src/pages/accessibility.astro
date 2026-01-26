@@ -7,18 +7,21 @@ import Tivolivredenburg from "../sections/Tivolivredenburg.astro";
 import EventFAQ from "../sections/EventFAQ.astro";
 import Tabs from "../components/Tabs.astro";
 import Tab from "../components/Tab.astro";
-import TicketInclusionsFAQ from "../sections/TicketInclusionsFAQ.astro";
+import AccessibilityFAQ from "../sections/AccessibilityFAQ.astro";
 import GettingThere from "../sections/GettingThere.astro";
 import Container from "../components/Container.astro";
 ---
 
-<Layout bodyClass="page-resources">
+<Layout bodyClass="page-accessibility">
   <Header slot="header" lightMode />
-  <section class="block block-be-part">
+  <section class="block block-accessibility-guide">
     <Tivolivredenburg />
   </section>
-  <section class="block block-getting-there">
-    <GettingThere />
+  <section class="block block-accessibility-faq">
+    <Container containerClass="container--column">
+      <h2 class="h2 text-dark text-center">Got some questions?</h2>
+      <AccessibilityFAQ />
+    </Container>
   </section>
   <section class="block block-tickertape">
     <Tickertape theme="yellow" class="full-width" fullWidth={true} />
@@ -27,16 +30,8 @@ import Container from "../components/Container.astro";
 
   <style lang="scss">
     .block {
-      &-getting-there {
+      &-accessibility-faq {
         padding: 4.5rem 0;
-      }
-
-      &-event-faq {
-        padding: 0 0 4.5rem;
-
-        .h2 {
-          margin-bottom: 4rem;
-        }
       }
     }
   </style>
