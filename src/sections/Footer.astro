@@ -1,6 +1,7 @@
 ---
 import Button from "../components/Button.astro";
 import Container from "../components/Container.astro";
+import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 ---
 
@@ -34,14 +35,12 @@ import TextWipe from "../components/TextWipe.astro";
           >
           <TextWipe
             class="footer-nav-item"
-            href="/#why-were-building-in-the-open"
+            href="/#why-we-are-building-in-the-open"
             >Why we're building in the open</TextWipe
           >
           <TextWipe class="footer-nav-item" href="/#be-part-of-the-conversation"
             >Be part of the conversation</TextWipe
           >
-          <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
-          <TextWipe href="/terms-of-service/">Terms of use</TextWipe>
         </div>
       </div>
       <div class="footer-nav-column">
@@ -189,11 +188,13 @@ import TextWipe from "../components/TextWipe.astro";
       &-items {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
 
         :global(.footer-nav-item) {
           color: #a2aab6;
           text-decoration: none;
+          text-wrap: balance;
+          line-height: 1.2;
         }
 
         :global(.text-wipe) {

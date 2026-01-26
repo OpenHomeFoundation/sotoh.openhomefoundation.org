@@ -1,0 +1,84 @@
+---
+import Layout from "./Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../sections/Footer.astro";
+import Container from "../components/Container.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = `https://sotoh.openhomefoundation.org${Astro.url.pathname}`;
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <Header slot="header" />
+  <div class="text-page">
+    <Container containerClass="container--column">
+      <div class="text-content">
+        <h1 class="h1">{title}</h1>
+        <slot />
+      </div>
+    </Container>
+  </div>
+  <Footer slot="footer" />
+</Layout>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .text-page {
+    padding: 4rem 0;
+
+    @include bp(tablet) {
+      padding: 6rem 0;
+    }
+  }
+
+  .text-content {
+    max-width: 800px;
+    width: 100%;
+
+    :global(h1) {
+      margin-bottom: 2rem;
+    }
+
+    :global(h2) {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    :global(h3) {
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    :global(p) {
+      margin-bottom: 1rem;
+      line-height: 1.7;
+      text-wrap: auto;
+    }
+
+    :global(ul),
+    :global(ol) {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+
+      li {
+        margin-bottom: 0.5rem;
+        line-height: 1.7;
+      }
+    }
+
+    :global(a) {
+      color: var(--ohf-blue);
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+</style>

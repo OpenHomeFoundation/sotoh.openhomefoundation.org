@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sotoh.openhomefoundation.org/sitemap-index.xml
