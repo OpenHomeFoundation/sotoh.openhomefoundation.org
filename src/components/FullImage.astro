@@ -103,7 +103,6 @@ const { image, hasScrollEntry = true, imageCopyright } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    color: var(--text-on-dark);
     padding-bottom: 3rem;
 
     @include bp(desktop) {
@@ -190,6 +189,16 @@ const { image, hasScrollEntry = true, imageCopyright } = Astro.props;
 
       @include bp(tablet) {
         gap: 3rem;
+      }
+
+      :global(*) {
+        color: var(--text-on-light);
+      }
+
+      @include bp(desktop) {
+        :global(*) {
+          color: var(--text-on-dark);
+        }
       }
     }
 
