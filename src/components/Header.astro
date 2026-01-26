@@ -156,7 +156,11 @@ const { lightMode = false } = Astro.props;
 
       .mobile-nav {
         opacity: 1;
-        transform: translateY(calc(-100% + 86px));
+        transform: translateY(calc(-100% + 72px));
+
+        @include bp(large-mobile) {
+          transform: translateY(calc(-100% + 86px));
+        }
       }
 
       @include bp(tablet) {
