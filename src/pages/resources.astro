@@ -7,7 +7,7 @@ import Tivolivredenburg from "../sections/Tivolivredenburg.astro";
 import EventFAQ from "../sections/EventFAQ.astro";
 import Tabs from "../components/Tabs.astro";
 import Tab from "../components/Tab.astro";
-import TicketInclusioonsFAQ from "../sections/TicketInclusioonsFAQ.astro";
+import TicketInclusionsFAQ from "../sections/TicketInclusionsFAQ.astro";
 import GettingThere from "../sections/GettingThere.astro";
 import Container from "../components/Container.astro";
 ---
@@ -19,19 +19,6 @@ import Container from "../components/Container.astro";
   </section>
   <section class="block block-getting-there">
     <GettingThere />
-  </section>
-  <section class="block block-event-faq">
-    <Container containerClass="container--column">
-      <h2 class="h2 text-dark text-center">Got some questions?</h2>
-      <Tabs>
-        <Tab group="resources" title="The Event" isActive={true}>
-          <EventFAQ />
-        </Tab>
-        <Tab group="resources" title="Ticket and Inclusions">
-          <TicketInclusioonsFAQ />
-        </Tab>
-      </Tabs>
-    </Container>
   </section>
   <section class="block block-tickertape">
     <Tickertape theme="yellow" class="full-width" fullWidth={true} />

@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Tickertape from "../components/Tickertape.astro";
+import Footer from "../sections/Footer.astro";
+import AccessibilityGuide from "../sections/AccessibilityGuide.astro";
+import AccessibilityFAQ from "../sections/AccessibilityFAQ.astro";
+import Container from "../components/Container.astro";
+---
+
+<Layout bodyClass="page-accessibility">
+  <Header slot="header" lightMode />
+  <section class="block block-accessibility-guide">
+    <AccessibilityGuide />
+  </section>
+  <section class="block block-accessibility-faq">
+    <Container containerClass="container--column">
+      <h2 class="h2 text-dark text-center">Got some questions?</h2>
+      <AccessibilityFAQ />
+    </Container>
+  </section>
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" class="full-width" fullWidth={true} />
+  </section>
+  <Footer />
+
+  <style lang="scss">
+    .block {
+      &-accessibility-faq {
+        padding: 4.5rem 0;
+      }
+    }
+  </style>
+</Layout>
