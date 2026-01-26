@@ -15,13 +15,14 @@ body {
   font-weight: var(--typography-heading-font-weight);
   text-wrap: balance;
   color: var(--text-on-dark);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   line-height: 1;
   text-align: center;
 
   @include bp(tablet) {
     text-align: left;
+    margin-bottom: 2rem;
   }
 
   &:last-child {
@@ -52,6 +53,10 @@ p,
     line-height: 1.16;
   }
 
+  &--small {
+    font-size: 0.75rem;
+  }
+
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
@@ -64,6 +69,10 @@ strong a {
 
 .text-center {
   text-align: center;
+}
+
+.align-right {
+  text-align: right;
 }
 
 .text-dark {

@@ -1,0 +1,81 @@
+---
+import Container from "./Container.astro";
+---
+
+<Container>
+  <div class="keeping-safe-container">
+    <div class="item">
+      <p>
+        Everyone is welcome to be who they are and express themselves as they
+        wish – as long as this is respectful to others.
+      </p>
+    </div>
+    <div class="item">
+      <p>
+        Take good care of each other and treat the people in the venue and
+        everything within it with respect.
+      </p>
+    </div>
+    <div class="item">
+      <p>
+        Hate, violence, racism, sexism, ableism, body shaming, and queerphobia
+        are not welcome here. Transgressive behavior, intimidation, or (sexual)
+        violence in any form is taken seriously and will not be tolerated in any
+        way.
+      </p>
+    </div>
+    <div class="item">
+      <p>Consent is essential. Mutual consent is always necessary. Always.</p>
+    </div>
+    <div class="item">
+      <p>
+        Know your limits. Drug use or excessive alcohol consumption is not
+        permitted. Smoking or vaping indoors is also prohibited. Public
+        transport
+      </p>
+    </div>
+    <div class="item">
+      <p>
+        Please also consider the residents when entering and leaving the
+        building.
+      </p>
+    </div>
+  </div>
+</Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .keeping-safe-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .item {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background-color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @include bp(tablet) {
+      flex-basis: calc(50% - 0.25rem);
+    }
+
+    @include bp(desktop) {
+      flex-basis: calc(33% - 0.25rem);
+    }
+
+    p {
+      color: var(--ohf-dark-grey);
+    }
+  }
+</style>

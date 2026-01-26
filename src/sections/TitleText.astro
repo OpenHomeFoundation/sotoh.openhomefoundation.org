@@ -1,0 +1,64 @@
+---
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+---
+
+<Container containerClass="block-title-text">
+  <div class="title-container">
+    <slot name="title" />
+  </div>
+  <Content>
+    <div class="content-container">
+      <slot />
+    </div>
+  </Content>
+</Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  :global(.block-title-text.container) {
+    align-items: flex-start;
+    gap: 1.5rem;
+
+    @include bp(desktop) {
+      gap: 3rem;
+    }
+  }
+
+  :global(.block-title-text) {
+    :global(.h2) {
+      color: var(--text-on-light);
+      margin-bottom: 0;
+      text-align: left;
+    }
+  }
+
+  .title-container {
+    @include bp(tablet) {
+      width: 44%;
+    }
+
+    @include bp(desktop) {
+      width: 33%;
+    }
+  }
+
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @include bp(tablet) {
+      width: 56%;
+    }
+
+    @include bp(desktop) {
+      width: 66%;
+    }
+
+    :global(p) {
+      color: var(--ohf-dark-grey);
+    }
+  }
+</style>
