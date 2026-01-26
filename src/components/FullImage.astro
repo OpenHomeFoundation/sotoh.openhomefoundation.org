@@ -5,9 +5,10 @@ import Container from "./Container.astro";
 interface Props {
   image: Image;
   hasScrollEntry?: boolean;
+  imageCopyright?: string;
 }
 
-const { image, hasScrollEntry = true } = Astro.props;
+const { image, hasScrollEntry = true, imageCopyright } = Astro.props;
 ---
 
 <div class="full-image" data-has-scroll-entry={hasScrollEntry}>
@@ -17,6 +18,8 @@ const { image, hasScrollEntry = true } = Astro.props;
       src={image}
       alt=""
     />
+
+    {imageCopyright && <Fragment set:html={imageCopyright} />}
   </div>
   <div class="full-image-content">
     <Container>

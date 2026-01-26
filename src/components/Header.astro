@@ -49,8 +49,8 @@ const { lightMode = false } = Astro.props;
     </a>
 
     <div class="site-header__ctas">
-      <Button href="/" class="button button--hollow button--tickets" disabled>
-        Tickets coming soon
+      <Button href="/" class="button button--primary button--tickets">
+        Buy tickets
       </Button>
     </div>
 
@@ -149,13 +149,6 @@ const { lightMode = false } = Astro.props;
           transform: translate3d(0, 100%, 0);
         }
       }
-
-      .site-header__ctas {
-        :global(.button--tickets) {
-          border: 2px solid var(--ohf-dark-blue);
-          color: var(--ohf-dark-blue);
-        }
-      }
     }
 
     &.is-scrolled {
@@ -163,7 +156,7 @@ const { lightMode = false } = Astro.props;
 
       .mobile-nav {
         opacity: 1;
-        transform: translateY(calc(-100% + 80px));
+        transform: translateY(calc(-100% + 86px));
       }
 
       @include bp(tablet) {
@@ -379,13 +372,6 @@ const { lightMode = false } = Astro.props;
 
         .icon-dark {
           transform: translate3d(0, 100%, 0);
-        }
-      }
-
-      .site-header__ctas {
-        :global(.button--tickets) {
-          border: 2px solid var(--ohf-dark-blue);
-          color: var(--ohf-dark-blue);
         }
       }
 
@@ -647,5 +633,4 @@ const { lightMode = false } = Astro.props;
       }
     });
   }
-
 </script>
