@@ -54,7 +54,7 @@ const {
   gsap.registerPlugin(ScrollTrigger);
 
   const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
+    "(prefers-reduced-motion: reduce)",
   ).matches;
 
   if (!prefersReducedMotion) {
@@ -64,7 +64,7 @@ const {
         tickertape.setAttribute("data-initialized", "");
 
         const track = tickertape.querySelector(
-          ".tickertape-track"
+          ".tickertape-track",
         ) as HTMLElement;
         const speed = parseFloat(tickertape.getAttribute("data-speed") || "1");
         const baseDuration = 15;
@@ -129,9 +129,8 @@ const {
     overflow: hidden;
     position: relative;
 
-    @media (max-width: 1700px) {
+    @media (max-width: 1400px) {
       margin-inline: calc(var(--overhang) * -1);
-      border-radius: 0;
     }
 
     :global(svg) {
