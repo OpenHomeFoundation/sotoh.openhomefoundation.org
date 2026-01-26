@@ -3,19 +3,15 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Tickertape from "../components/Tickertape.astro";
 import Footer from "../sections/Footer.astro";
-import Tivolivredenburg from "../sections/Tivolivredenburg.astro";
-import EventFAQ from "../sections/EventFAQ.astro";
-import Tabs from "../components/Tabs.astro";
-import Tab from "../components/Tab.astro";
+import AccessibilityGuide from "../sections/AccessibilityGuide.astro";
 import AccessibilityFAQ from "../sections/AccessibilityFAQ.astro";
-import GettingThere from "../sections/GettingThere.astro";
 import Container from "../components/Container.astro";
 ---
 
 <Layout bodyClass="page-accessibility">
   <Header slot="header" lightMode />
   <section class="block block-accessibility-guide">
-    <Tivolivredenburg />
+    <AccessibilityGuide />
   </section>
   <section class="block block-accessibility-faq">
     <Container containerClass="container--column">
