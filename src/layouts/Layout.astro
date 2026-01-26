@@ -11,7 +11,9 @@ interface Props {
   canonical?: string;
   includeEventSchema?: boolean;
   noindex?: boolean;
+  bodyClass?: string;
 }
+const { bodyClass = "" } = Astro.props;
 
 const defaultTitle = "State of the Open Home - Open Home Foundation";
 const defaultDescription =
