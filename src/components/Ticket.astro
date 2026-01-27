@@ -75,6 +75,21 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     transform: scale(1.03);
   }
 
+  @media (max-width: 768px) {
+    .holo-group {
+      perspective: none;
+    }
+    .holo-card {
+      transform-style: flat;
+    }
+    .holo-overlay {
+      opacity: 0.4;
+    }
+    .holo-group:hover {
+      transform: none;
+    }
+  }
+
   .holo-bg {
     position: absolute;
     inset: 0;
@@ -166,6 +181,8 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
   import gsap from "gsap";
   import type { Ticket } from "../lib/tickets";
 
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
   // Initialize tickets with random selection
   document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
     const ticketsData = JSON.parse(group.dataset.tickets || "[]") as Ticket[];
@@ -187,6 +204,16 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
       ticketImg.src = ticket.image;
     }
   });
+
+  // Collect all gradient quickTo functions for gyro control
+  const allGradientControls: Array<{
+    grad1XTo: gsap.QuickToFunc;
+    grad1YTo: gsap.QuickToFunc;
+    grad2XTo: gsap.QuickToFunc;
+    grad2YTo: gsap.QuickToFunc;
+    xTo: gsap.QuickToFunc;
+    yTo: gsap.QuickToFunc;
+  }> = [];
 
   // Mouse-follow using GSAP quickTo for optimal performance
   document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
@@ -227,47 +254,116 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     // Set initial centered position
     gsap.set(radial, { xPercent: -50, yPercent: -50 });
 
-    const maxTilt = 6; // degrees
-
-    group.addEventListener("pointermove", (e: PointerEvent) => {
-      const rect = group.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      // Radial highlight
-      xTo(x);
-      yTo(y);
-
-      // Parallax tilt (normalized -1 to 1)
-      const normalizedX = x / (rect.width / 2);
-      const normalizedY = y / (rect.height / 2);
-
-      gsap.to(card, {
-        rotateY: normalizedX * maxTilt,
-        rotateX: -normalizedY * maxTilt,
-        duration: 0.75,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-
-      // Gradient shift for holographic rainbow effect
-      grad1XTo(normalizedX * 80);
-      grad1YTo(normalizedY * 50);
-      grad2XTo(-normalizedX * 60);
-      grad2YTo(-normalizedY * 40);
+    // Store controls for gyro
+    allGradientControls.push({
+      grad1XTo,
+      grad1YTo,
+      grad2XTo,
+      grad2YTo,
+      xTo,
+      yTo,
     });
 
-    group.addEventListener("pointerleave", () => {
-      gsap.to(card, {
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.75,
-        ease: "power2.out",
+    // Desktop: mouse-follow
+    if (!isMobile) {
+      const maxTilt = 6; // degrees
+
+      group.addEventListener("pointermove", (e: PointerEvent) => {
+        const rect = group.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        // Radial highlight
+        xTo(x);
+        yTo(y);
+
+        // Parallax tilt (normalized -1 to 1)
+        const normalizedX = x / (rect.width / 2);
+        const normalizedY = y / (rect.height / 2);
+
+        gsap.to(card, {
+          rotateY: normalizedX * maxTilt,
+          rotateX: -normalizedY * maxTilt,
+          duration: 0.75,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+
+        // Gradient shift for holographic rainbow effect
+        grad1XTo(normalizedX * 80);
+        grad1YTo(normalizedY * 50);
+        grad2XTo(-normalizedX * 60);
+        grad2YTo(-normalizedY * 40);
       });
-      grad1XTo(0);
-      grad1YTo(0);
-      grad2XTo(0);
-      grad2YTo(0);
-    });
+
+      group.addEventListener("pointerleave", () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.75,
+          ease: "power2.out",
+        });
+        grad1XTo(0);
+        grad1YTo(0);
+        grad2XTo(0);
+        grad2YTo(0);
+      });
+    }
   });
+
+  // Mobile: gyroscope control
+  if (isMobile && window.DeviceOrientationEvent) {
+    let initialBeta: number | null = null;
+    let initialGamma: number | null = null;
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta === null || e.gamma === null) return;
+
+      // Capture initial position on first reading
+      if (initialBeta === null) initialBeta = e.beta;
+      if (initialGamma === null) initialGamma = e.gamma;
+
+      // Calculate relative movement from initial position
+      const beta = e.beta - initialBeta; // front-to-back tilt (-180 to 180)
+      const gamma = e.gamma - initialGamma; // left-to-right tilt (-90 to 90)
+
+      // Normalize to -1 to 1 range (using reasonable tilt ranges)
+      const normalizedX = Math.max(-1, Math.min(1, gamma / 20));
+      const normalizedY = Math.max(-1, Math.min(1, beta / 20));
+
+      // Apply to all ticket gradients
+      allGradientControls.forEach((controls) => {
+        controls.grad1XTo(normalizedX * 120);
+        controls.grad1YTo(normalizedY * 75);
+        controls.grad2XTo(-normalizedX * 90);
+        controls.grad2YTo(-normalizedY * 60);
+        controls.xTo(normalizedX * 150);
+        controls.yTo(normalizedY * 75);
+      });
+    };
+
+    // Request permission on iOS 13+
+    if (
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+    ) {
+      // Add a one-time touch handler to request permission
+      document.addEventListener(
+        "touchstart",
+        () => {
+          (DeviceOrientationEvent as any)
+            .requestPermission()
+            .then((response: string) => {
+              if (response === "granted") {
+                window.addEventListener("deviceorientation", handleOrientation);
+              }
+            })
+            .catch(console.error);
+        },
+        { once: true }
+      );
+    } else {
+      // Non-iOS or older iOS
+      window.addEventListener("deviceorientation", handleOrientation);
+    }
+  }
 </script>
