@@ -33,14 +33,14 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
 
 <style lang="scss">
   .holo-group {
-    width: 996px;
-    height: 315px;
+    width: 100%;
+    max-width: 996px;
+    aspect-ratio: 996 / 315;
 
     perspective: 1500px;
     user-select: none;
-    z-index: 10;
     margin: 24px auto;
-
+    // padding: 0 1.5rem;
     border-radius: 24px;
 
     display: flex;
@@ -254,14 +254,34 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     // Set initial centered position
     gsap.set(radial, { xPercent: -50, yPercent: -50 });
 
-    // Store controls for gyro
-    allGradientControls.push({
-      grad1XTo,
-      grad1YTo,
-      grad2XTo,
-      grad2YTo,
-      xTo,
-      yTo,
+    const maxTilt = 6; // degrees
+
+    group.addEventListener("pointermove", (e: PointerEvent) => {
+      const rect = group.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      // Radial highlight
+      xTo(x);
+      yTo(y);
+
+      // Parallax tilt (normalized -1 to 1)
+      const normalizedX = x / (rect.width / 2);
+      const normalizedY = y / (rect.height / 2);
+
+      gsap.to(card, {
+        rotateY: normalizedX * maxTilt,
+        rotateX: -normalizedY * maxTilt,
+        duration: 0.75,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      // Gradient shift for holographic rainbow effect
+      grad1XTo(normalizedX * 160);
+      grad1YTo(normalizedY * 100);
+      grad2XTo(-normalizedX * 120);
+      grad2YTo(-normalizedY * 80);
     });
 
     // Desktop: mouse-follow
@@ -359,7 +379,7 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
             })
             .catch(console.error);
         },
-        { once: true }
+        { once: true },
       );
     } else {
       // Non-iOS or older iOS
