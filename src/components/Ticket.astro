@@ -126,6 +126,13 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     height: 160%;
     width: 160%;
     transform: translate(-50%, -50%);
+
+    @media (max-width: 768px) {
+      transform: translate(
+        calc(-50% + var(--gyro-x, 0) * 1px),
+        -50%
+      );
+    }
   }
 
   .holo-gradient1 {
@@ -234,67 +241,46 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     }
   });
 
-  // Collect all gradient quickTo functions for gyro control
-  const allGradientControls: Array<{
-    grad1XTo: gsap.QuickToFunc;
-    grad1YTo: gsap.QuickToFunc;
-    grad2XTo: gsap.QuickToFunc;
-    grad2YTo: gsap.QuickToFunc;
-    xTo: gsap.QuickToFunc;
-    yTo: gsap.QuickToFunc;
-  }> = [];
+  // Desktop: mouse-follow using GSAP quickTo for optimal performance
+  if (!isMobile) {
+    document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
+      const radial = group.querySelector(".holo-radial") as HTMLElement;
+      const card = group.querySelector(".holo-card") as HTMLElement;
+      const gradient1 = group.querySelector(".holo-gradient1") as HTMLElement;
+      const gradient2 = group.querySelector(".holo-gradient2") as HTMLElement;
+      if (!radial || !card) return;
 
-  // Mouse-follow using GSAP quickTo for optimal performance
-  document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
-    const radial = group.querySelector(".holo-radial") as HTMLElement;
-    const card = group.querySelector(".holo-card") as HTMLElement;
-    const gradient1 = group.querySelector(".holo-gradient1") as HTMLElement;
-    const gradient2 = group.querySelector(".holo-gradient2") as HTMLElement;
-    if (!radial || !card) return;
+      // Gradient shift (quickTo for smooth rainbow movement)
+      const grad1XTo = gsap.quickTo(gradient1, "x", {
+        duration: 0.5,
+        ease: "power2.out",
+      });
+      const grad1YTo = gsap.quickTo(gradient1, "y", {
+        duration: 0.5,
+        ease: "power2.out",
+      });
+      const grad2XTo = gsap.quickTo(gradient2, "x", {
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      const grad2YTo = gsap.quickTo(gradient2, "y", {
+        duration: 0.6,
+        ease: "power2.out",
+      });
 
-    // Gradient shift (quickTo for smooth rainbow movement)
-    const grad1XTo = gsap.quickTo(gradient1, "x", {
-      duration: 0.5,
-      ease: "power2.out",
-    });
-    const grad1YTo = gsap.quickTo(gradient1, "y", {
-      duration: 0.5,
-      ease: "power2.out",
-    });
-    const grad2XTo = gsap.quickTo(gradient2, "x", {
-      duration: 0.6,
-      ease: "power2.out",
-    });
-    const grad2YTo = gsap.quickTo(gradient2, "y", {
-      duration: 0.6,
-      ease: "power2.out",
-    });
+      // Radial highlight follow (quickTo for high-frequency x/y)
+      const xTo = gsap.quickTo(radial, "x", {
+        duration: 0.3,
+        ease: "power2.out",
+      });
+      const yTo = gsap.quickTo(radial, "y", {
+        duration: 0.3,
+        ease: "power2.out",
+      });
 
-    // Radial highlight follow (quickTo for high-frequency x/y)
-    const xTo = gsap.quickTo(radial, "x", {
-      duration: 0.3,
-      ease: "power2.out",
-    });
-    const yTo = gsap.quickTo(radial, "y", {
-      duration: 0.3,
-      ease: "power2.out",
-    });
+      // Set initial centered position
+      gsap.set(radial, { xPercent: -50, yPercent: -50 });
 
-    // Set initial centered position
-    gsap.set(radial, { xPercent: -50, yPercent: -50 });
-
-    // Store controls for gyro access
-    allGradientControls.push({
-      grad1XTo,
-      grad1YTo,
-      grad2XTo,
-      grad2YTo,
-      xTo,
-      yTo,
-    });
-
-    // Desktop: mouse-follow
-    if (!isMobile) {
       const maxTilt = 6; // degrees
 
       group.addEventListener("pointermove", (e: PointerEvent) => {
@@ -337,37 +323,21 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
         grad2XTo(0);
         grad2YTo(0);
       });
-    }
-  });
+    });
+  }
 
-  // Mobile: gyroscope control
+  // Mobile: gyroscope control via CSS custom properties
   if (isMobile && window.DeviceOrientationEvent) {
-    let initialBeta: number | null = null;
-    let initialGamma: number | null = null;
+    const overlays = document.querySelectorAll<HTMLElement>(".holo-overlay");
 
     const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (e.beta === null || e.gamma === null) return;
+      if (e.gamma === null) return;
 
-      // Capture initial position on first reading
-      if (initialBeta === null) initialBeta = e.beta;
-      if (initialGamma === null) initialGamma = e.gamma;
+      // gamma: left-right tilt (roll axis, -90 to 90)
+      const x = Math.max(-45, Math.min(45, e.gamma)) * 2;
 
-      // Calculate relative movement from initial position
-      const beta = e.beta - initialBeta; // front-to-back tilt (-180 to 180)
-      const gamma = e.gamma - initialGamma; // left-to-right tilt (-90 to 90)
-
-      // Normalize to -1 to 1 range (using reasonable tilt ranges)
-      const normalizedX = Math.max(-1, Math.min(1, gamma / 20));
-      const normalizedY = Math.max(-1, Math.min(1, beta / 20));
-
-      // Apply to all ticket gradients
-      allGradientControls.forEach((controls) => {
-        controls.grad1XTo(normalizedX * 120);
-        controls.grad1YTo(normalizedY * 75);
-        controls.grad2XTo(-normalizedX * 90);
-        controls.grad2YTo(-normalizedY * 60);
-        controls.xTo(normalizedX * 150);
-        controls.yTo(normalizedY * 75);
+      overlays.forEach((overlay) => {
+        overlay.style.setProperty("--gyro-x", String(x));
       });
     };
 
@@ -375,7 +345,6 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     if (
       typeof (DeviceOrientationEvent as any).requestPermission === "function"
     ) {
-      // Add a one-time touch handler to request permission
       document.addEventListener(
         "touchstart",
         () => {
@@ -388,10 +357,9 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
             })
             .catch(console.error);
         },
-        { once: true },
+        { once: true }
       );
     } else {
-      // Non-iOS or older iOS
       window.addEventListener("deviceorientation", handleOrientation);
     }
   }
