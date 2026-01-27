@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import ticket from "../images/ha-ticket.png";
+import ticketv2 from "../images/ha-ticket-2.svg";
 
 import v1 from "../images/v1.png";
 import v2 from "../images/v2.png";
@@ -8,6 +9,27 @@ import v3 from "../images/v3.png";
 
 import ticketSVG from "../images/ticket-v1.svg";
 ---
+
+<div class="holo-group">
+  <div class="holo-card">
+    <div class="holo-overlay">
+      <div class="holo-bg" style={`background-image: url('${v1.src}')`}></div>
+      <div class="holo-gradient1"></div>
+      <div class="holo-gradient2"></div>
+      <div class="holo-radial"></div>
+    </div>
+    <div class="holo-img-wrap">
+      <!-- <img
+        src="/images/ha-ticket.png"
+        width="800"
+        height="280"
+        alt="Remix Jam 2025 Event Ticket"
+        class="holo-img"
+      /> -->
+      <Image width="996" height="315" src={ticketv2} alt="Ticket" />
+    </div>
+  </div>
+</div>
 
 <div class="holo-group">
   <div class="holo-card">
