@@ -254,34 +254,14 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     // Set initial centered position
     gsap.set(radial, { xPercent: -50, yPercent: -50 });
 
-    const maxTilt = 6; // degrees
-
-    group.addEventListener("pointermove", (e: PointerEvent) => {
-      const rect = group.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      // Radial highlight
-      xTo(x);
-      yTo(y);
-
-      // Parallax tilt (normalized -1 to 1)
-      const normalizedX = x / (rect.width / 2);
-      const normalizedY = y / (rect.height / 2);
-
-      gsap.to(card, {
-        rotateY: normalizedX * maxTilt,
-        rotateX: -normalizedY * maxTilt,
-        duration: 0.75,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-
-      // Gradient shift for holographic rainbow effect
-      grad1XTo(normalizedX * 160);
-      grad1YTo(normalizedY * 100);
-      grad2XTo(-normalizedX * 120);
-      grad2YTo(-normalizedY * 80);
+    // Store controls for gyro access
+    allGradientControls.push({
+      grad1XTo,
+      grad1YTo,
+      grad2XTo,
+      grad2YTo,
+      xTo,
+      yTo,
     });
 
     // Desktop: mouse-follow
