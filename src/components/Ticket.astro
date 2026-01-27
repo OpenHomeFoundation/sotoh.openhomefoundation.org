@@ -14,6 +14,7 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
 <div class="holo-group" data-tickets={JSON.stringify(ticketData)}>
   <div class="holo-card">
     <div class="holo-overlay">
+      <div class="holo-text"></div>
       <div class="holo-bg"></div>
       <div class="holo-gradient1"></div>
       <div class="holo-gradient2"></div>
@@ -88,6 +89,15 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     .holo-group:hover {
       transform: none;
     }
+  }
+
+  .holo-text {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    z-index: 1;
   }
 
   .holo-bg {
@@ -193,6 +203,7 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
   document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
     const ticketsData = JSON.parse(group.dataset.tickets || "[]") as Ticket[];
     const ticket = ticketsData[Math.floor(Math.random() * ticketsData.length)];
+    const ticketText = group.querySelector<HTMLElement>(".holo-text");
 
     const holoBg = group.querySelector<HTMLElement>(".holo-bg");
     const ticketImg = group.querySelector<HTMLImageElement>(".holo-img");
@@ -200,6 +211,9 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     if (ticket && holoBg && ticketImg) {
       // Set overlay background
       holoBg.style.backgroundImage = `url('${ticket.overlay}')`;
+
+      // Set text background based on theme
+      ticketText!.style.backgroundImage = `url('${ticket.text}')`;
 
       // Apply invert filter for light theme tickets
       if (ticket.theme === "light") {
