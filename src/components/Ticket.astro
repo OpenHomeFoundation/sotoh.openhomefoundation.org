@@ -33,6 +33,8 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
 </div>
 
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .holo-group {
     width: 100%;
     max-width: 996px;
@@ -41,8 +43,6 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     perspective: 1500px;
     user-select: none;
     margin: 24px auto;
-    // padding: 0 1.5rem;
-    border-radius: 24px;
 
     display: flex;
     flex-direction: column;
@@ -55,9 +55,13 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     isolation: isolate;
     z-index: 10;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 8px;
     transform-style: preserve-3d;
     will-change: transform;
+
+    @include bp(desktop) {
+      border-radius: 12px;
+    }
   }
 
   .holo-overlay {
