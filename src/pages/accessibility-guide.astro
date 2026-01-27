@@ -7,9 +7,18 @@ import AccessibilityGuideHero from "../sections/AccessibilityGuideHero.astro";
 import AccessibilityFAQ from "../sections/AccessibilityFAQ.astro";
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
+
+const title = "Accessibility - State of the Open Home";
+const description =
+  "Building an open and inclusive event means ensuring everyone can participate and have a positive experience. Read our accessibility guide for State of the Open Home 2026.";
 ---
 
-<Layout bodyClass="page-accessibility">
+<Layout
+  bodyClass="page-accessibility"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
   <Header slot="header" lightMode />
   <section class="block block-accessibility-guide">
     <AccessibilityGuideHero />

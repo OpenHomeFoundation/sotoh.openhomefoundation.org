@@ -161,9 +161,7 @@ const {
       }
 
       &__default {
-        transition:
-          color 0.3s ease-in-out,
-          transform 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
       }
 
       &__hover {
@@ -205,6 +203,7 @@ const {
       background-color: var(--sotoh-yellow);
       color: var(--ohf-dark-blue);
       transition: background-color 0.3s ease-in-out;
+      will-change: background-color;
 
       .button-text__hover {
         color: var(--sotoh-yellow);

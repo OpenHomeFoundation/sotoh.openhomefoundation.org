@@ -6,9 +6,20 @@ import Tabs from "../components/Tabs.astro";
 import Tab from "../components/Tab.astro";
 import EventFAQ from "../sections/EventFAQ.astro";
 import TicketInclusionsFAQ from "../sections/TicketInclusionsFAQ.astro";
+import Tickertape from "../components/Tickertape.astro";
+import Footer from "../sections/Footer.astro";
+
+const title = "FAQs - State of the Open Home";
+const description =
+  "Got some questions? Find out answers to some frequently asked questions for State of the Open Home 2026.";
 ---
 
-<Layout bodyClass="page-faq">
+<Layout
+  bodyClass="page-faq"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
   <Header slot="header" lightMode />
   <section class="block block-event-faq">
     <Container containerClass="container--column">
@@ -23,4 +34,14 @@ import TicketInclusionsFAQ from "../sections/TicketInclusionsFAQ.astro";
       </Tabs>
     </Container>
   </section>
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" class="full-width" fullWidth={true} />
+  </section>
+  <Footer />
 </Layout>
+
+<style lang="scss">
+  .block-tickertape {
+    margin-top: 4rem;
+  }
+</style>

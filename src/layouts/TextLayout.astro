@@ -13,8 +13,13 @@ const { title, description } = Astro.props;
 const canonical = `https://sotoh.openhomefoundation.org${Astro.url.pathname}`;
 ---
 
-<Layout title={title} description={description} canonical={canonical}>
-  <Header slot="header" />
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  includeEventSchema={false}
+>
+  <Header slot="header" lightMode />
   <div class="text-page">
     <Container containerClass="container--column">
       <div class="text-content">
@@ -40,45 +45,14 @@ const canonical = `https://sotoh.openhomefoundation.org${Astro.url.pathname}`;
   .text-content {
     max-width: 800px;
     width: 100%;
+    color: var(--text-on-light);
+
+    h1 {
+      color: var(--text-on-light);
+    }
 
     :global(h1) {
       margin-bottom: 2rem;
-    }
-
-    :global(h2) {
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    :global(h3) {
-      margin-top: 2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    :global(p) {
-      margin-bottom: 1rem;
-      line-height: 1.7;
-      text-wrap: auto;
-    }
-
-    :global(ul),
-    :global(ol) {
-      margin-bottom: 1rem;
-      padding-left: 1.5rem;
-
-      li {
-        margin-bottom: 0.5rem;
-        line-height: 1.7;
-      }
-    }
-
-    :global(a) {
-      color: var(--ohf-blue);
-      text-decoration: underline;
-
-      &:hover {
-        text-decoration: none;
-      }
     }
   }
 </style>
