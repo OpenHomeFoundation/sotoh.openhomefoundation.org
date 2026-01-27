@@ -46,6 +46,8 @@ import Footer from "../sections/Footer.astro";
 </Layout>
 
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .block {
     &-hero {
       margin-bottom: 2rem;
@@ -55,8 +57,14 @@ import Footer from "../sections/Footer.astro";
       margin-bottom: 6rem;
     }
 
-    &-tickertape-group {
-      overflow: hidden;
+    &-ticket {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+
+      @include bp(tablet) {
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+      }
     }
 
     &-image-carousel {
