@@ -1,116 +1,32 @@
 ---
-import { Image } from "astro:assets";
-import ticket from "../images/ha-ticket.png";
-import ticketv2 from "../images/ha-ticket-2.svg";
+import { tickets } from "../lib/tickets";
 
-import v1 from "../images/v1.png";
-import v2 from "../images/v2.png";
-import v3 from "../images/v3.png";
+interface Props {
+  ticketId?: number;
+}
 
-import ticketSVG from "../images/ticket-v1.svg";
+const { ticketId } = Astro.props;
+
+const specificTicket = ticketId ? tickets.find((t) => t.id === ticketId) : null;
+const ticketData = specificTicket ? [specificTicket] : tickets;
 ---
 
-<div class="holo-group">
+<div class="holo-group" data-tickets={JSON.stringify(ticketData)}>
   <div class="holo-card">
     <div class="holo-overlay">
-      <div class="holo-bg" style={`background-image: url('${v1.src}')`}></div>
+      <div class="holo-bg"></div>
       <div class="holo-gradient1"></div>
       <div class="holo-gradient2"></div>
       <div class="holo-radial"></div>
     </div>
     <div class="holo-img-wrap">
-      <!-- <img
-        src="/images/ha-ticket.png"
-        width="800"
-        height="280"
-        alt="Remix Jam 2025 Event Ticket"
+      <img
         class="holo-img"
-      /> -->
-      <Image width="996" height="315" src={ticketv2} alt="Ticket" />
-    </div>
-  </div>
-</div>
-
-<div class="holo-group">
-  <div class="holo-card">
-    <div class="holo-overlay">
-      <div class="holo-bg" style={`background-image: url('${v1.src}')`}></div>
-      <div class="holo-gradient1"></div>
-      <div class="holo-gradient2"></div>
-      <div class="holo-radial"></div>
-    </div>
-    <div class="holo-img-wrap">
-      <!-- <img
-        src="/images/ha-ticket.png"
-        width="800"
-        height="280"
-        alt="Remix Jam 2025 Event Ticket"
-        class="holo-img"
-      /> -->
-      <Image width="996" height="315" src={ticketSVG} alt="Ticket" />
-    </div>
-  </div>
-</div>
-
-<div class="holo-group">
-  <div class="holo-card">
-    <div class="holo-overlay">
-      <div class="holo-bg" style={`background-image: url('${v1.src}')`}></div>
-      <div class="holo-gradient1"></div>
-      <div class="holo-gradient2"></div>
-      <div class="holo-radial"></div>
-    </div>
-    <div class="holo-img-wrap">
-      <!-- <img
-        src="/images/ha-ticket.png"
-        width="800"
-        height="280"
-        alt="Remix Jam 2025 Event Ticket"
-        class="holo-img"
-      /> -->
-      <Image width="996" height="315" src={ticket} alt="Ticket" />
-    </div>
-  </div>
-</div>
-
-<div class="holo-group">
-  <div class="holo-card">
-    <div class="holo-overlay">
-      <div class="holo-bg" style={`background-image: url('${v2.src}')`}></div>
-      <div class="holo-gradient1"></div>
-      <div class="holo-gradient2"></div>
-      <div class="holo-radial"></div>
-    </div>
-    <div class="holo-img-wrap">
-      <!-- <img
-        src="/images/ha-ticket.png"
-        width="800"
-        height="280"
-        alt="Remix Jam 2025 Event Ticket"
-        class="holo-img"
-      /> -->
-      <Image width="996" height="315" src={ticket} alt="Ticket" />
-    </div>
-  </div>
-</div>
-
-<div class="holo-group">
-  <div class="holo-card">
-    <div class="holo-overlay">
-      <div class="holo-bg" style={`background-image: url('${v3.src}')`}></div>
-      <div class="holo-gradient1"></div>
-      <div class="holo-gradient2"></div>
-      <div class="holo-radial"></div>
-    </div>
-    <div class="holo-img-wrap">
-      <!-- <img
-        src="/images/ha-ticket.png"
-        width="800"
-        height="280"
-        alt="Remix Jam 2025 Event Ticket"
-        class="holo-img"
-      /> -->
-      <Image width="996" height="315" src={ticket} alt="Ticket" />
+        width="996"
+        height="315"
+        alt="Ticket"
+        loading="eager"
+      />
     </div>
   </div>
 </div>
@@ -258,9 +174,6 @@ import ticketSVG from "../images/ticket-v1.svg";
     will-change: transform;
   }
 
-  .holo-img-wrap {
-    contrast: 1.05;
-  }
   .holo-img {
     position: relative;
     width: 100%;
@@ -271,6 +184,29 @@ import ticketSVG from "../images/ticket-v1.svg";
 
 <script>
   import gsap from "gsap";
+  import type { Ticket } from "../lib/tickets";
+
+  // Initialize tickets with random selection
+  document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
+    const ticketsData = JSON.parse(group.dataset.tickets || "[]") as Ticket[];
+    const ticket = ticketsData[Math.floor(Math.random() * ticketsData.length)];
+
+    const holoBg = group.querySelector<HTMLElement>(".holo-bg");
+    const ticketImg = group.querySelector<HTMLImageElement>(".holo-img");
+
+    if (ticket && holoBg && ticketImg) {
+      // Set overlay background
+      holoBg.style.backgroundImage = `url('${ticket.overlay}')`;
+
+      // Apply invert filter for light theme tickets
+      if (ticket.theme === "light") {
+        holoBg.style.filter = "invert(1)";
+      }
+
+      // Set ticket image
+      ticketImg.src = ticket.image;
+    }
+  });
 
   // Mouse-follow using GSAP quickTo for optimal performance
   document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
