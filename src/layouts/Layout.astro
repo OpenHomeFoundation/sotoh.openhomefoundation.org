@@ -251,4 +251,22 @@ const fullTitle =
       }
     });
   });
+
+  // Handle hash in URL on page load
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      // Small delay to ensure ScrollSmoother is ready
+      requestAnimationFrame(() => {
+        const smoother = ScrollSmoother.get();
+        if (smoother) {
+          smoother.scrollTo(target, true, "top top+=120");
+        } else {
+          const targetPosition =
+            target.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top: targetPosition, behavior: "smooth" });
+        }
+      });
+    }
+  }
 </script>

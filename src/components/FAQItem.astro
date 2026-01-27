@@ -262,16 +262,18 @@ const sluggifiedTitle = slugify(title);
         transition: none;
       }
 
-      :global(p, ul) {
+      :global(p),
+      :global(ul) {
         color: var(--ohf-dark-grey);
         font-size: 16px;
         line-height: 1.5;
         margin: 0;
         text-wrap: initial;
+      }
 
-        &:not(:last-child) {
-          margin-bottom: 1rem;
-        }
+      :global(p&:not(:last-child)),
+      :global(ul&:not(:last-child)) {
+        margin-bottom: 1rem;
       }
 
       &-animation {

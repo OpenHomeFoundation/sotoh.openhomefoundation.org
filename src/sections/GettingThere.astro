@@ -12,16 +12,14 @@ import { MAP } from "../lib/map";
   <div class="getting-there">
     <div class="getting-there__row getting-there__row-reverse">
       <div class="card-container">
-        <div class="card">
+        <div class="card animate--fade-up">
           <Content>
             <h3 class="h3">Public transport</h3>
             <p>
-              TivoliVredenburg is easily accessible by public transport. It's
-              about a 5-minute walk from Utrecht Central Station and Hoog
-              Catharijne.
+              As well as being close to Utrecht Central Station and the Hoog
+              Catharijne shopping center, TivoliVredenburg is served by several
+              bus stops:
             </p>
-
-            <p>The nearest bus stops are:</p>
             <ul>
               <li>Vredenburg, right next to TivoliVredenburg</li>
               <li>Utrecht Central Station, Centrumzijde, a 5-minute walk</li>
@@ -30,22 +28,22 @@ import { MAP } from "../lib/map";
             </ul>
           </Content>
         </div>
-        <div class="card">
+        <div class="card animate--fade-up">
           <Content>
             <h3 class="h3">On foot from Utrecht Central Station</h3>
             <p>
-              From the platform, walk to the station hall and towards the Hoog
+              From the platform, walk to the station hall towards the Hoog
               Catharijne shopping center. Enter Hoog Catharijne from the station
               square (look up for the iconic domed roof) and turn left upon
               entering. Follow the path to the right (past H&M and C&A), walk
-              straight ahead, and go down the escalator. Look out on your left
-              and you'll see TivoliVredenburg.
+              straight ahead, and down the escalator. You’ll see
+              TivoliVredenburg on your left.
             </p>
-            <p>This route can use escalators and elevators.</p>
+            <p><strong>This route can use escalators and elevators.</strong></p>
           </Content>
         </div>
       </div>
-      <div class="map">
+      <div class="map animate--fade-up">
         <Fragment set:html={MAP["mapPortrait"]} />
         <Fragment set:html={MAP["mapLandscape"]} />
 
@@ -59,94 +57,67 @@ import { MAP } from "../lib/map";
     </div>
 
     <div class="getting-there__row">
-      <div class="card">
+      <div class="card animate--fade-up">
         <Content>
           <h3 class="h3">Cars & parking</h3>
           <p>
-            As a visitor to TivoliVredenburg, you receive a <strong
-              >20% discount</strong
-            > when booking an electric car-sharing service from MyWheels. This allows
-            you to travel to and from TivoliVredenburg green and easily. Find out
-            how to use this discount.
+            Visitors to TivoliVredenburg, get 20% off when booking an electric
+            car-sharing service via MyWheels: an easy, greener option if you’re
+            not able to walk, cycle or travel to the venue via public transport.
+            There are plenty of parking options in Utrecht. The nearest to
+            TivoliVredenburg are the Hoog Catharijne parking areas (P1, P2, P3,
+            P4, P5, or P6). Paardenveld, Bijenkorf/LaVie, and Springweg parking
+            are also within walking distance. If you have a State of the Open
+            Home ticket, TivoliVredenburg will email you a few days before the
+            event to offer reserved parking in P1, P4, or P5 at a discounted
+            rate.
           </p>
 
           <p>
-            You can park in one of the various Hoog Catharijne parking garages
-            (P1, P2, P3, P4, P5, and P6) near TivoliVredenburg . The Hoog
-            Catharijne parking garages are within walking distance of
-            TivoliVredenburg. Several other parking garages are also within
-            walking distance (Paardenveld, Bijenkorf/LaVie, and Springweg). If
-            you're attending a concert at TivoliVredenburg, you'll receive an
-            email a few days before your visit with the option to reserve a
-            parking space in P1, P4, or P5 at a discounted rate.
-          </p>
-
-          <p>
-            Please note: Navigation may not always work properly in the city
-            center/station area and around TivoliVredenburg. We recommend
-            turning off your navigation and following the signs.
-          </p>
-          <p>
-            <strong
-              >Here you will find a <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer "
-                >current overview of the parking garages in the city center of
-                Utrecht.</a
-              ></strong
+            <strong>
+              Please note: Satnav can be unreliable in the city center, so
+              familiarize yourself with the route beforehand and stay alert for
+              signs!</strong
             >
           </p>
         </Content>
       </div>
-      <div class="card">
+      <div class="card animate--fade-up animate--fade-up">
+        <Content>
+          <h3 class="h3">By bike?</h3>
+          <p>
+            Utrecht was ranked as the <a
+              href="https://copenhagenizeindex.eu/"
+              target="_blank"
+              rel="noreferrer noopener">most bike-friendly city in Europe</a
+            > (and indeed the world!) last year, so it’s a great way to get around,
+            whether you bring your own ride or rent one. You can park your bike undercover
+            in one of the free, guarded bike parking facilities nearby – <a
+              href="https://www.tivolivredenburg.nl/bezoek/route/#section_4"
+              target="_blank"
+              rel="noreferrer noopener">U-Stal Vredenburg</a
+            > is the closest. Bikes parked in restricted zones may be removed by the
+            authorities, so please stick to designated areas.
+          </p>
+        </Content>
+      </div>
+      <div class="card animate--fade-up">
         <Content>
           <h3 class="h3">Parking for visitors with disabilities</h3>
           <p>
-            There are several parking garages near TivoliVredenburg with
-            accessible parking. The closest is the P5 Hoog Catharijne parking
-            garage, which has 16 accessible spaces and an elevator. Free parking
-            is also available in accessible spaces nearby (Varkenmarkt 16 and
-            Bergstraat 54 are a short distance from TivoliVredenburg).
-          </p>
-
-          <p>
-            With a disabled parking permit from the Municipality of Utrecht, you
-            can also park for free in paid parking spaces, except in spaces
-            marked with the "Permit Holders" sign. This parking permit is free
-            to apply for, even if you live outside of Utrecht.
-          </p>
-
-          <p>
-            <strong
-              ><a href="/" target="_blank" rel="noopener noreferrer "
-                >Click here</a
-              > for more detailed information about the accessibility of our building
-              and our halls.</strong
-            >
-          </p>
-        </Content>
-      </div>
-      <div class="card">
-        <Content>
-          <h3 class="h3">Coming by bike?</h3>
-          <p>
-            Park your bike for free, dry, and safely in one of the guarded bike
-            parking facilities nearby. U-Stal Vredenburg is the closest facility
-            and is even open 24 hours a day from Thursday to Sunday.
-          </p>
-
-          <p>
-            In case you haven't noticed: there's a guide lane for the blind next
-            to our building. Don't park your bike there!
-          </p>
-
-          <p>
-            Starting in October 2024, there will be an official ban on bicycle
-            parking in the alleys surrounding our building. The Hollandse and
-            Vlaamse Toren are being redesigned by the municipality to make them
-            safer and more livable. From this point on, incorrectly parked
-            bicycles will be actively removed.
+            The closest accessible parking is the P5 Hoog Catharijne, which has
+            16 accessible spaces and an elevator. Free accessible parking spaces
+            are also available nearby at Varkenmarkt 16 and Bergstraat 54. If
+            you have a <a
+              href="https://www.tivolivredenburg.nl/bezoek/route/#section_7"
+              target="_blank"
+              rel="noreferrer noopener"
+              >disabled parking permit from the Municipality of Utrecht</a
+            >, you can also park for free in paid spaces, except those marked
+            with the “Permit Holders” sign. This permit is free to apply for,
+            even if you live outside of the city. Please consult our <a
+              href="/accessibility-guide/">Accessibility Guide</a
+            > for more information about the venue and event itself.
           </p>
         </Content>
       </div>

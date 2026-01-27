@@ -74,7 +74,6 @@ const { lightMode = false } = Astro.props;
               >
             </li>
             <li>
-              '
               <TextWipe href="/#why-we-are-building-in-the-open"
                 >Why we’re building in the open</TextWipe
               >
@@ -86,10 +85,35 @@ const { lightMode = false } = Astro.props;
             </li>
           </ul>
         </li>
+        <li>
+          <TextWipe href="#" disabled={true}>Resources</TextWipe>
+          <ul>
+            <li>
+              <TextWipe class="footer-nav-item" href="/the-venue/"
+                >The venue</TextWipe
+              >
+            </li>
+            <li>
+              <TextWipe class="footer-nav-item" href="/faq/">FAQ</TextWipe>
+            </li>
+            <li>
+              <TextWipe class="footer-nav-item" href="/accessibility-guide/"
+                >Accessibility guide</TextWipe
+              >
+            </li>
+          </ul>
+        </li>
       </ul>
 
       <div class="meta-links">
         <CopyEmail email="events@openhomefoundation.org" class="help-link" />
+
+        <TextWipe href="/privacy-policy/"
+          >Privacy policy</TextWipe
+        >
+        <TextWipe href="/terms-and-conditions/"
+          >Terms and conditions</TextWipe
+        >
       </div>
     </div>
   </div>

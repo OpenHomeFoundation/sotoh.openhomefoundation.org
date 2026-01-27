@@ -12,12 +12,18 @@ import KeepingSafe from "../components/KeepingSafe.astro";
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
 import CopyEmail from "../components/CopyEmail.astro";
-import TextWipe from "../components/TextWipe.astro";
 
-const title = "The Venue - State of the Open Home - Open Home Foundation";
+const title = "The Venue - State of the Open Home";
+const description =
+  "Join us for the State of the Open Home 2026, at the Tivolivredenburg, Utrecht.";
 ---
 
-<Layout bodyClass="page-resources" includeEventSchema={false} title={title}>
+<Layout
+  bodyClass="page-the-venue"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
   <Header slot="header" lightMode />
   <section class="block block-be-part">
     <Tivolivredenburg />
@@ -38,9 +44,9 @@ const title = "The Venue - State of the Open Home - Open Home Foundation";
         there will be plenty of refreshment available at the event itself!).
       </p>
       <Button
-        href="https://www.google.com/maps/place/TivoliVredenburg/@52.0926197,5.1129775,15z/data=!4m5!3m4!1s0x0:0xcb73f73b5ccc3eb6!8m2!3d52.0926197!4d5.1129775?shorturl=1"
+        href="https://www.tivolivredenburg.nl/english/house-rules/"
         target="_blank"
-        class="get-directions button button--primary"
+        class="button button--primary"
         starburst={false}>View venue rules</Button
       >
     </TitleText>
@@ -94,7 +100,7 @@ const title = "The Venue - State of the Open Home - Open Home Foundation";
         specific needs you may have.
       </p>
       <Button
-        href="/accessibility"
+        href="/accessibility-guide/"
         class="get-directions button button--primary"
         starburst={false}>go to accessibility guide</Button
       >
