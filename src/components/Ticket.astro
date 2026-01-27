@@ -104,6 +104,10 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
     background-size: cover;
     background-position: center;
     opacity: 0.2;
+
+    &.light {
+      filter: invert(1);
+    }
   }
 
   .holo-bg-repeat {
@@ -215,7 +219,7 @@ const ticketData = specificTicket ? [specificTicket] : tickets;
 
       // Apply invert filter for light theme tickets
       if (ticket.theme === "light") {
-        holoBg.style.filter = "invert(1)";
+        holoBg.classList.add("light");
       }
 
       // Set ticket image and fade in once loaded
