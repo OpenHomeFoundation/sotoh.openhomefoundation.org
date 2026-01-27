@@ -1,138 +1,310 @@
 ---
+import { Image } from "astro:assets";
+import ticket from "../images/ha-ticket.png";
 
+import v1 from "../images/v1.png";
+import v2 from "../images/v2.png";
+import v3 from "../images/v3.png";
 ---
 
-<div class="ticket-wrapper">
-  <div class="ticket">
-    <div class="glass"></div>
-    <div class="glass"></div>
+<div class="holo-group">
+  <div class="holo-card">
+    <div class="holo-overlay">
+      <div class="holo-bg" style={`background-image: url('${v1.src}')`}></div>
+      <div class="holo-gradient1"></div>
+      <div class="holo-gradient2"></div>
+      <div class="holo-radial"></div>
+    </div>
+    <div class="holo-img-wrap">
+      <!-- <img
+        src="/images/ha-ticket.png"
+        width="800"
+        height="280"
+        alt="Remix Jam 2025 Event Ticket"
+        class="holo-img"
+      /> -->
+      <Image width="996" height="315" src={ticket} alt="Ticket" />
+    </div>
   </div>
 </div>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="0"
-  height="0"
-  style="position:absolute; overflow:hidden"
->
-  <defs>
-    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence
-        type="fractalNoise"
-        baseFrequency="0.008 0.008"
-        numOctaves="2"
-        seed="92"
-        result="noise"></feTurbulence>
-      <feGaussianBlur in="noise" stdDeviation="2" result="blurred"
-      ></feGaussianBlur>
-      <feDisplacementMap
-        in="SourceGraphic"
-        in2="blurred"
-        scale="20"
-        xChannelSelector="R"
-        yChannelSelector="G"></feDisplacementMap>
-    </filter>
-  </defs>
-</svg>
+<div class="holo-group">
+  <div class="holo-card">
+    <div class="holo-overlay">
+      <div class="holo-bg" style={`background-image: url('${v2.src}')`}></div>
+      <div class="holo-gradient1"></div>
+      <div class="holo-gradient2"></div>
+      <div class="holo-radial"></div>
+    </div>
+    <div class="holo-img-wrap">
+      <!-- <img
+        src="/images/ha-ticket.png"
+        width="800"
+        height="280"
+        alt="Remix Jam 2025 Event Ticket"
+        class="holo-img"
+      /> -->
+      <Image width="996" height="315" src={ticket} alt="Ticket" />
+    </div>
+  </div>
+</div>
+
+<div class="holo-group">
+  <div class="holo-card">
+    <div class="holo-overlay">
+      <div class="holo-bg" style={`background-image: url('${v3.src}')`}></div>
+      <div class="holo-gradient1"></div>
+      <div class="holo-gradient2"></div>
+      <div class="holo-radial"></div>
+    </div>
+    <div class="holo-img-wrap">
+      <!-- <img
+        src="/images/ha-ticket.png"
+        width="800"
+        height="280"
+        alt="Remix Jam 2025 Event Ticket"
+        class="holo-img"
+      /> -->
+      <Image width="996" height="315" src={ticket} alt="Ticket" />
+    </div>
+  </div>
+</div>
+
 <style lang="scss">
-  @use "../styles/mixins/breakpoint.scss" as *;
+  :root {
+    --card-scale: 1;
+    --card-aspect: 0;
+    --card-radius: 4.55% / 3.5%;
+    --card-edge: hsl(47, 100%, 78%);
+    --card-back: hsl(205, 100%, 25%);
+    --card-glow: hsl(175, 100%, 90%);
 
-  .ticket {
-    --glass-drop-shadow-blur: 24px;
-    --glass-frost: 8px;
-    --glass-shadow-blur: 2px;
-    --glass-shadow-color: #ffffff;
-    --glass-shadow-offset: 0;
-    --glass-shadow-spread: 0px;
-    --glass-tint-color: 255, 255, 255;
-    --glass-tint-opacity: 0.2;
-    --radius: 10px;
+    --sunpillar-1: hsl(2, 100%, 73%);
+    --sunpillar-2: hsl(53, 100%, 69%);
+    --sunpillar-3: hsl(93, 100%, 69%);
+    --sunpillar-4: hsl(176, 100%, 76%);
+    --sunpillar-5: hsl(228, 100%, 74%);
+    --sunpillar-6: hsl(283, 100%, 73%);
 
-    @include bp(desktop) {
-      --radius: 16px;
-    }
+    --sunpillar-clr-1: var(--sunpillar-1);
+    --sunpillar-clr-2: var(--sunpillar-2);
+    --sunpillar-clr-3: var(--sunpillar-3);
+    --sunpillar-clr-4: var(--sunpillar-4);
+    --sunpillar-clr-5: var(--sunpillar-5);
+    --sunpillar-clr-6: var(--sunpillar-6);
+  }
+
+  .holo-group {
+    width: 996px;
+    height: 315px;
+
+    perspective: 1500px;
+    user-select: none;
+    z-index: 10;
+    margin: 24px auto;
+
+    border-radius: 24px;
 
     display: flex;
-    gap: 6px;
+    flex-direction: column;
+  }
+
+  .holo-card {
+    position: relative;
+    isolation: isolate;
+    z-index: 10;
+    overflow: hidden;
+    border-radius: 12px;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .holo-overlay {
+    position: absolute;
+    inset: 0;
+    transition: opacity 300ms ease-in-out;
+    z-index: 10;
+    mix-blend-mode: color-dodge;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .holo-group:hover .holo-overlay {
+    opacity: 0.5;
+  }
+
+  .holo-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+  }
+
+  .holo-bg-repeat {
+    background-size: contain;
+  }
+
+  .holo-gradient1,
+  .holo-gradient2 {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-10%);
-    width: 90%;
-    aspect-ratio: 2.83858268/1;
-    max-width: 600px;
+    height: 160%;
+    width: 160%;
+    transform: translate(-50%, -50%);
   }
 
-  .ticket-wrapper {
-    animation: subtle-rotate 8s ease-in-out infinite;
+  .holo-gradient1 {
+    opacity: 0.25;
+    mix-blend-mode: hue;
+    background: linear-gradient(
+      135deg,
+      rgb(255, 119, 115) 2%,
+      rgb(255, 237, 95) 12.9661%,
+      rgb(168, 255, 95) 23.5922%,
+      rgb(131, 255, 247) 39.1029%,
+      rgb(119, 221, 223) 48.545%,
+      rgb(120, 148, 255) 59.1618%,
+      rgb(209, 124, 242) 62.9954%,
+      rgb(255, 119, 115) 76.7431%
+    );
   }
 
-  svg filter feDisplacementMap {
-    scale: 100;
+  .holo-gradient2 {
+    opacity: 0.5;
+    mix-blend-mode: plus-lighter;
+    background: linear-gradient(
+      315deg,
+      rgb(19, 20, 21) 0%,
+      rgb(143, 163, 163) 6.03181%,
+      rgb(162, 163, 163) 9.74451%,
+      rgb(20, 20, 20) 25.0721%,
+      rgb(143, 163, 163) 33.5357%,
+      rgb(164, 166, 166) 35.2988%,
+      rgb(37, 37, 38) 41.503%,
+      rgb(161, 161, 161) 52.393%,
+      rgb(124, 125, 125) 61.1346%,
+      rgb(19, 20, 21) 66.269%,
+      rgb(166, 166, 166) 74.4633%,
+      rgb(163, 163, 163) 79.8987%,
+      rgb(19, 20, 21) 85.7299%,
+      rgb(161, 161, 161) 89.8948%,
+      rgb(19, 20, 21) 100%
+    );
   }
 
-  @-moz-document url-prefix() {
-    .glass {
-      backdrop-filter: blur(10px);
-    }
-  }
-
-  .glass {
-    border-radius: var(--radius);
-    box-shadow: 0px 20px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.1);
-    position: relative;
-    transition: transform 0.2s ease-out;
-    z-index: 1;
-    overflow: hidden;
-    width: 100%;
-
-    &:nth-child(1) {
-      flex-basis: 22%;
-    }
-    &:nth-child(2) {
-      flex-basis: 78%;
-    }
-
-    &:before {
-      background-color: rgba(
-        var(--glass-tint-color),
-        var(--glass-tint-opacity)
-      );
-      border-radius: var(--radius);
-      box-shadow: inset var(--glass-shadow-offset) var(--glass-shadow-offset)
-        var(--glass-shadow-blur) var(--glass-shadow-spread)
-        var(--glass-shadow-color);
-      content: "";
-      inset: 0;
-      position: absolute;
-    }
-
-    &:after {
-      backdrop-filter: blur(var(--glass-frost));
-      content: "";
-      filter: url("#glass-distortion");
-      inset: 0;
-      position: absolute;
-      z-index: -1;
-    }
-  }
-
-  img {
-    height: 100%;
-    inset: 0;
-    object-fit: cover;
+  .holo-radial {
     position: absolute;
-    width: 100%;
-    z-index: -1;
+    inset: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: overlay;
+    filter: blur(24px);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgb(255, 255, 255) 0%,
+      rgba(255, 255, 255, 0.5) 43.6638%,
+      rgba(255, 255, 255, 0.11) 80.5409%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    will-change: transform;
   }
 
-  @keyframes subtle-rotate {
-    0%,
-    100% {
-      transform: rotate(2deg);
-    }
-    50% {
-      transform: rotate(5deg);
-    }
+  .holo-img-wrap {
+    contrast: 1.05;
+  }
+  .holo-img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
   }
 </style>
+
+<script>
+  import gsap from "gsap";
+
+  // Mouse-follow using GSAP quickTo for optimal performance
+  document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
+    const radial = group.querySelector(".holo-radial") as HTMLElement;
+    const card = group.querySelector(".holo-card") as HTMLElement;
+    const gradient1 = group.querySelector(".holo-gradient1") as HTMLElement;
+    const gradient2 = group.querySelector(".holo-gradient2") as HTMLElement;
+    if (!radial || !card) return;
+
+    // Gradient shift (quickTo for smooth rainbow movement)
+    const grad1XTo = gsap.quickTo(gradient1, "x", {
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    const grad1YTo = gsap.quickTo(gradient1, "y", {
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    const grad2XTo = gsap.quickTo(gradient2, "x", {
+      duration: 0.6,
+      ease: "power2.out",
+    });
+    const grad2YTo = gsap.quickTo(gradient2, "y", {
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
+    // Radial highlight follow (quickTo for high-frequency x/y)
+    const xTo = gsap.quickTo(radial, "x", {
+      duration: 0.3,
+      ease: "power2.out",
+    });
+    const yTo = gsap.quickTo(radial, "y", {
+      duration: 0.3,
+      ease: "power2.out",
+    });
+
+    // Set initial centered position
+    gsap.set(radial, { xPercent: -50, yPercent: -50 });
+
+    const maxTilt = 6; // degrees
+
+    group.addEventListener("pointermove", (e: PointerEvent) => {
+      const rect = group.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      // Radial highlight
+      xTo(x);
+      yTo(y);
+
+      // Parallax tilt (normalized -1 to 1)
+      const normalizedX = x / (rect.width / 2);
+      const normalizedY = y / (rect.height / 2);
+
+      gsap.to(card, {
+        rotateY: normalizedX * maxTilt,
+        rotateX: -normalizedY * maxTilt,
+        duration: 0.4,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      // Gradient shift for holographic rainbow effect
+      grad1XTo(normalizedX * 80);
+      grad1YTo(normalizedY * 50);
+      grad2XTo(-normalizedX * 60);
+      grad2YTo(-normalizedY * 40);
+    });
+
+    group.addEventListener("pointerleave", () => {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+      grad1XTo(0);
+      grad1YTo(0);
+      grad2XTo(0);
+      grad2YTo(0);
+    });
+  });
+</script>
