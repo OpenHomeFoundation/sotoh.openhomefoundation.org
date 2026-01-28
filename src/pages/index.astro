@@ -21,11 +21,11 @@ import Footer from "../sections/Footer.astro";
   <section class="block block-countdown">
     <Countdown />
   </section>
-  <section class="block block-building">
-    <Building />
-  </section>
   <section class="block block-ticket">
     <Ticket />
+  </section>
+  <section class="block block-building">
+    <Building />
   </section>
   <section class="block block-what-is" id="what-is-state-of-the-open-home">
     <WhatIs />
@@ -53,32 +53,36 @@ import Footer from "../sections/Footer.astro";
       margin-bottom: 2rem;
     }
 
-    &-countdown {
-      margin-bottom: 6rem;
-    }
-
     &-ticket {
-      padding: 2rem 1rem;
+      padding: 3.5rem 1rem;
 
       @include bp(tablet) {
-        padding: 4rem 1rem;
+        padding: 5rem 1rem;
       }
 
       @include bp(desktop) {
-        padding: 8rem 0;
+        padding: 7rem 0;
+      }
+    }
+
+    &-building {
+      padding-bottom: 4rem;
+
+      @include bp(tablet) {
+        padding-bottom: 6rem;
       }
     }
 
     &-image-carousel {
       padding-top: 2rem;
+      margin-bottom: 5rem;
 
       @include bp(desktop) {
-        padding-top: 5rem;
+        padding-top: 4rem;
       }
     }
 
     &-what-is,
-    &-image-carousel,
     &-why {
       margin-bottom: 5rem;
     }

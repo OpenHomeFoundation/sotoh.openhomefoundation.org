@@ -608,6 +608,22 @@ const { lightMode = false } = Astro.props;
       }
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .site-header .logo .icon-wrap .icon-light,
+    .site-header .logo .icon-wrap .icon-dark,
+    .site-header-burger,
+    .site-header-burger-icon,
+    .site-header-burger-icon::before,
+    .site-header-burger-icon::after,
+    .mobile-nav,
+    .mobile-nav__inner > ul,
+    .mobile-nav__inner > .meta-links,
+    .mobile-nav__inner::-webkit-scrollbar-thumb {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
