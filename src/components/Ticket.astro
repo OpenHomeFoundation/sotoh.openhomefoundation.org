@@ -1,3 +1,8 @@
+---
+import Container from "./Container.astro";
+import Button from "./Button.astro";
+---
+
 <div class="holo-group">
   <div class="holo-card">
     <div class="holo-text"></div>
@@ -19,6 +24,18 @@
   </div>
 </div>
 
+<Container containerClass="container--column">
+  <Button
+    href="https://events.openhomefoundation.org/sotoh26/"
+    class="button button--primary button--tickets"
+    target="_blank"
+    rel="noopener noreferrer"
+    starburst={true}
+  >
+    Buy your ticket
+  </Button>
+</Container>
+
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
@@ -29,13 +46,17 @@
 
     perspective: 1500px;
     user-select: none;
-    margin: 24px auto;
-    border-radius: 24px;
+    margin: 0 auto 1.5rem;
+    border-radius: 1.5rem;
 
     display: flex;
     flex-direction: column;
 
     transition: 0.2s transform cubic-bezier(0, 0, 0.2, 1);
+
+    @include bp(tablet) {
+      margin: 0 auto 2.5rem;
+    }
 
     &:hover {
       transform: scale(1.03);
@@ -73,10 +94,7 @@
 
   @media (max-width: 768px) {
     .holo-group {
-      perspective: none;
-    }
-    .holo-card {
-      transform-style: flat;
+      perspective: 1000px;
     }
     .holo-overlay {
       opacity: 0.4;
@@ -118,10 +136,6 @@
     height: 160%;
     width: 160%;
     transform: translate(-50%, -50%);
-
-    @media (max-width: 768px) {
-      transform: translate(calc(-50% + var(--gyro-x, 0) * 1px), -50%);
-    }
   }
 
   .holo-gradient1 {
@@ -266,6 +280,7 @@
   if (!prefersReducedMotion) {
     // Collect all gradient quickTo functions for gyro control
     const allGradientControls: Array<{
+      card: HTMLElement;
       grad1XTo: gsap.QuickToFunc;
       grad1YTo: gsap.QuickToFunc;
       grad2XTo: gsap.QuickToFunc;
@@ -310,11 +325,15 @@
         ease: "cubic-bezier(0,0,.2,1)",
       });
 
-      // Set initial centered position
-      gsap.set(radial, { xPercent: -50, yPercent: -50 });
+      // Set initial centered position for all overlay elements
+      gsap.set([gradient1, gradient2, radial], {
+        xPercent: -50,
+        yPercent: -50,
+      });
 
-      // Store controls for gyro access
+      // Store controls for gyro access (including card for mobile tilt)
       allGradientControls.push({
+        card,
         grad1XTo,
         grad1YTo,
         grad2XTo,
@@ -370,30 +389,47 @@
       }
     });
 
-    // Mobile: gyroscope control (roll only)
+    // Mobile: full gyroscope control (both axes)
     if (isMobile && window.DeviceOrientationEvent) {
       let initialGamma: number | null = null;
+      let initialBeta: number | null = null;
+      const maxTilt = 12; // degrees, slightly more than desktop for mobile
 
       const handleOrientation = (e: DeviceOrientationEvent) => {
-        if (e.gamma === null) return;
+        if (e.gamma === null || e.beta === null) return;
 
         // Capture initial position on first reading
         if (initialGamma === null) initialGamma = e.gamma;
+        if (initialBeta === null) initialBeta = e.beta;
 
-        // Calculate relative movement from initial position (roll only)
-        const gamma = e.gamma - initialGamma; // left-to-right tilt (-90 to 90)
+        // Calculate relative movement from initial position
+        const gamma = e.gamma - initialGamma; // left-to-right tilt
+        const beta = e.beta - initialBeta; // forward-back tilt
 
-        // Normalize to -1 to 1 range
-        const normalizedX = Math.max(-1, Math.min(1, gamma / 20));
+        // Normalize to -1 to 1 range (lower divisor = more sensitive)
+        const normalizedX = Math.max(-1, Math.min(1, gamma / 15));
+        const normalizedY = Math.max(-1, Math.min(1, beta / 12));
 
-        // Apply to all ticket gradients (horizontal movement only)
+        // Apply to all ticket cards and gradients
         allGradientControls.forEach((controls) => {
-          controls.grad1XTo(normalizedX * 120);
-          controls.grad1YTo(0);
-          controls.grad2XTo(-normalizedX * 90);
-          controls.grad2YTo(0);
-          controls.xTo(normalizedX * 150);
-          controls.yTo(0);
+          // 3D card tilt (same as desktop)
+          gsap.to(controls.card, {
+            rotateY: normalizedX * maxTilt,
+            rotateX: -normalizedY * maxTilt,
+            duration: 0.3,
+            ease: "cubic-bezier(0,0,.2,1)",
+            overwrite: "auto",
+          });
+
+          // Gradient shift - constrained to avoid edge visibility
+          controls.grad1XTo(normalizedX * 40);
+          controls.grad1YTo(normalizedY * 25);
+          controls.grad2XTo(-normalizedX * 30);
+          controls.grad2YTo(-normalizedY * 20);
+
+          // Radial highlight
+          controls.xTo(-normalizedX * 60);
+          controls.yTo(-normalizedY * 40);
         });
       };
 
