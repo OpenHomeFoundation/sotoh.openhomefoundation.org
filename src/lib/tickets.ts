@@ -102,7 +102,7 @@ export const tickets: Ticket[] = [
     id: 14,
     image: "/images/ticket/ticket-7-light.webp",
     overlay: "/images/ticket/ticket-7-overlay.webp",
-    text: "/images/ticket/text-on-light.svg",
+    text: "/images/ticket/text-on-dark.svg",
     theme: "light",
   },
   {

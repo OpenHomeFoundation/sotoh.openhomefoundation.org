@@ -35,14 +35,14 @@
     display: flex;
     flex-direction: column;
 
-    transition: 0.5s transform ease-out;
+    transition: 0.2s transform cubic-bezier(0, 0, 0.2, 1);
 
     &:hover {
       transform: scale(1.03);
 
       .holo-overlay {
         opacity: 0.4;
-        transition: opacity 0.5s ease-out;
+        transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);
       }
     }
   }
@@ -284,30 +284,30 @@
 
       // Gradient shift (quickTo for smooth rainbow movement)
       const grad1XTo = gsap.quickTo(gradient1, "x", {
-        duration: 0.5,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
       const grad1YTo = gsap.quickTo(gradient1, "y", {
-        duration: 0.5,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
       const grad2XTo = gsap.quickTo(gradient2, "x", {
-        duration: 0.6,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
       const grad2YTo = gsap.quickTo(gradient2, "y", {
-        duration: 0.6,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
 
       // Radial highlight follow (quickTo for high-frequency x/y)
       const xTo = gsap.quickTo(radial, "x", {
-        duration: 0.3,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
       const yTo = gsap.quickTo(radial, "y", {
-        duration: 0.3,
-        ease: "power2.out",
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
       });
 
       // Set initial centered position
@@ -344,7 +344,7 @@
             rotateY: normalizedX * maxTilt,
             rotateX: -normalizedY * maxTilt,
             duration: 0.75,
-            ease: "power2.out",
+            ease: "cubic-bezier(0,0,.2,1)",
             overwrite: "auto",
           });
 
@@ -360,7 +360,7 @@
             rotateX: 0,
             rotateY: 0,
             duration: 0.75,
-            ease: "power2.out",
+            ease: "cubic-bezier(0,0,.2,1)",
           });
           grad1XTo(0);
           grad1YTo(0);
