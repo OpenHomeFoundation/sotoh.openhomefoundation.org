@@ -1,5 +1,5 @@
-// Target date: April 8th, 2026
-export const TARGET_DATE = new Date("2026-04-08T00:00:00");
+// Target date: April 8th, 2026 @ 1300
+export const TARGET_DATE = new Date("2026-04-08T13:00:00");
 
 export interface CountdownValues {
   days: number;
@@ -9,7 +9,9 @@ export interface CountdownValues {
   isExpired: boolean;
 }
 
-export function calculateCountdown(targetDate: Date = TARGET_DATE): CountdownValues {
+export function calculateCountdown(
+  targetDate: Date = TARGET_DATE,
+): CountdownValues {
   const now = new Date();
   const difference = targetDate.getTime() - now.getTime();
 
@@ -24,7 +26,9 @@ export function calculateCountdown(targetDate: Date = TARGET_DATE): CountdownVal
   }
 
   const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const hours = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+  );
   const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 

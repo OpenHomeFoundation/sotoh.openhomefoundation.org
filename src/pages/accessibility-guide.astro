@@ -32,9 +32,10 @@ const description =
       <Content>
         <div class="content-container content-container--source">
           <p>
-            Source: <a href="" target="_blank" rel="noreferrer noopener"
+            Source: <a href="https://www.tivolivredenburg.nl/english/faq/" target="_blank" rel="noreferrer noopener"
               >Tivolivredenburg website</a
-            >
+            > & <a href="https://www.tivolivredenburg.nl/bezoek/toegankelijkheid/" target="_blank" rel="noreferrer noopener"
+              >Accessibility page</a>
           </p>
         </div>
       </Content>
@@ -51,8 +52,16 @@ const description =
         padding: 4.5rem 0;
 
         .content-container--source {
+          width: 100%;
+          max-width: 100%;
           margin-top: 2rem;
           background: rgba(247, 246, 242, 0.4);
+          border-radius: 0.75rem;
+          padding: 0.75rem 1.5rem;
+
+          p {
+            color: var(--ohf-dark-grey);
+          }
 
           a {
             color: var(--ohf-dark-grey);

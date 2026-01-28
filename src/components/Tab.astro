@@ -70,6 +70,10 @@ const tabId = `${group}-${slugify(title)}`;
     display: none;
     order: 1; // Move content below labels
     width: 100%;
+
+    :global(.container) {
+      padding: 0;
+    }
   }
 
   .tab-radio:checked + .tab-title + .tab-content {

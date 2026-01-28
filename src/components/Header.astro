@@ -49,7 +49,12 @@ const { lightMode = false } = Astro.props;
     </a>
 
     <div class="site-header__ctas">
-      <Button href="/" class="button button--primary button--tickets">
+      <Button
+        href="https://events.openhomefoundation.org/sotoh26/"
+        class="button button--primary button--tickets"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Buy tickets
       </Button>
     </div>
@@ -108,12 +113,8 @@ const { lightMode = false } = Astro.props;
       <div class="meta-links">
         <CopyEmail email="events@openhomefoundation.org" class="help-link" />
 
-        <TextWipe href="/privacy-policy/"
-          >Privacy policy</TextWipe
-        >
-        <TextWipe href="/terms-and-conditions/"
-          >Terms and conditions</TextWipe
-        >
+        <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
+        <TextWipe href="/terms-and-conditions/">Terms and conditions</TextWipe>
       </div>
     </div>
   </div>
@@ -285,11 +286,7 @@ const { lightMode = false } = Astro.props;
       flex-direction: row;
       gap: 8px;
       margin-left: auto;
-      display: none;
-
-      @include bp(large-mobile) {
-        display: flex;
-      }
+      display: flex;
     }
 
     &-burger {
@@ -308,7 +305,6 @@ const { lightMode = false } = Astro.props;
       flex-direction: column;
       align-items: center;
       transition: 0.3s background-color ease-in-out;
-      margin-left: auto;
 
       @include bp(large-mobile) {
         margin: 0;
