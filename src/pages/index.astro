@@ -58,15 +58,23 @@ import Footer from "../sections/Footer.astro";
     }
 
     &-ticket {
-      padding: 4rem 1rem;
+      padding: 2rem 1rem;
+
+      @include bp(tablet) {
+        padding: 4rem 1rem;
+      }
 
       @include bp(desktop) {
-        padding: 4rem 0;
+        padding: 8rem 0;
       }
     }
 
     &-image-carousel {
-      padding-top: 5rem;
+      padding-top: 2rem;
+
+      @include bp(desktop) {
+        padding-top: 5rem;
+      }
     }
 
     &-what-is,

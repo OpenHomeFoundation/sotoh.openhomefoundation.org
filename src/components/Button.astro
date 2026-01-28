@@ -8,6 +8,7 @@ interface Props {
   disabled?: boolean;
   target?: string;
   starburst?: boolean;
+  rel?: string;
 }
 const {
   class: className = "",
@@ -16,10 +17,17 @@ const {
   disabled = false,
   target = "_self",
   starburst = false,
+  rel = "",
 } = Astro.props;
 ---
 
-<a class={className} href={href} aria-disabled={disabled} target={target}>
+<a
+  class={className}
+  href={href}
+  aria-disabled={disabled}
+  target={target}
+  rel={rel}
+>
   {
     icon ? (
       <div class="button-icon">

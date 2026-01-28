@@ -183,6 +183,16 @@ const { image, hasScrollEntry = true, imageCopyright } = Astro.props;
     }
   }
 
+  :global(body.page-home) {
+    .full-image-content {
+      :global(.container) {
+        :global(*) {
+          color: var(--text-on-dark);
+        }
+      }
+    }
+  }
+
   .full-image-content {
     :global(.container) {
       gap: 0;
