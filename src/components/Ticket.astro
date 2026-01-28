@@ -332,9 +332,9 @@
           const x = e.clientX - rect.left - rect.width / 2;
           const y = e.clientY - rect.top - rect.height / 2;
 
-          // Radial highlight
-          xTo(x);
-          yTo(y);
+          // Radial highlight (inverted for parallax effect)
+          xTo(-x);
+          yTo(-y);
 
           // Parallax tilt (normalized -1 to 1)
           const normalizedX = x / (rect.width / 2);
