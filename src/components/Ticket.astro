@@ -412,10 +412,10 @@ import Button from "./Button.astro";
 
         // Apply to all ticket cards and gradients
         allGradientControls.forEach((controls) => {
-          // 3D card tilt (same as desktop)
+          // 3D card tilt (inverted to match physical device movement)
           gsap.to(controls.card, {
-            rotateY: normalizedX * maxTilt,
-            rotateX: -normalizedY * maxTilt,
+            rotateY: -normalizedX * maxTilt,
+            rotateX: normalizedY * maxTilt,
             duration: 0.3,
             ease: "cubic-bezier(0,0,.2,1)",
             overwrite: "auto",
