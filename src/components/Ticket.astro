@@ -1,7 +1,7 @@
 <div class="holo-group">
   <div class="holo-card">
+    <div class="holo-text"></div>
     <div class="holo-overlay">
-      <div class="holo-text"></div>
       <div class="holo-bg"></div>
       <div class="holo-gradient1"></div>
       <div class="holo-gradient2"></div>
@@ -42,7 +42,7 @@
 
       .holo-overlay {
         opacity: 0.4;
-        transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.5s ease-out;
       }
     }
   }
@@ -64,7 +64,7 @@
   .holo-overlay {
     position: absolute;
     inset: 0;
-    transition: opacity 0.75s ease-in-out;
+    transition: opacity 0.3s ease-out;
     z-index: 10;
     mix-blend-mode: hard-light;
     opacity: 0;
@@ -91,6 +91,7 @@
     inset: 0;
     background-size: cover;
     background-position: center;
+    z-index: 1;
   }
 
   .holo-bg {
@@ -119,10 +120,7 @@
     transform: translate(-50%, -50%);
 
     @media (max-width: 768px) {
-      transform: translate(
-        calc(-50% + var(--gyro-x, 0) * 1px),
-        -50%
-      );
+      transform: translate(calc(-50% + var(--gyro-x, 0) * 1px), -50%);
     }
   }
 
