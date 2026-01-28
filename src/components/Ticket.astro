@@ -370,34 +370,30 @@
       }
     });
 
-    // Mobile: gyroscope control
+    // Mobile: gyroscope control (roll only)
     if (isMobile && window.DeviceOrientationEvent) {
-      let initialBeta: number | null = null;
       let initialGamma: number | null = null;
 
       const handleOrientation = (e: DeviceOrientationEvent) => {
-        if (e.beta === null || e.gamma === null) return;
+        if (e.gamma === null) return;
 
         // Capture initial position on first reading
-        if (initialBeta === null) initialBeta = e.beta;
         if (initialGamma === null) initialGamma = e.gamma;
 
-        // Calculate relative movement from initial position
-        const beta = e.beta - initialBeta; // front-to-back tilt (-180 to 180)
+        // Calculate relative movement from initial position (roll only)
         const gamma = e.gamma - initialGamma; // left-to-right tilt (-90 to 90)
 
-        // Normalize to -1 to 1 range (using reasonable tilt ranges)
+        // Normalize to -1 to 1 range
         const normalizedX = Math.max(-1, Math.min(1, gamma / 20));
-        const normalizedY = Math.max(-1, Math.min(1, beta / 20));
 
-        // Apply to all ticket gradients
+        // Apply to all ticket gradients (horizontal movement only)
         allGradientControls.forEach((controls) => {
           controls.grad1XTo(normalizedX * 120);
-          controls.grad1YTo(normalizedY * 75);
+          controls.grad1YTo(0);
           controls.grad2XTo(-normalizedX * 90);
-          controls.grad2YTo(-normalizedY * 60);
+          controls.grad2YTo(0);
           controls.xTo(normalizedX * 150);
-          controls.yTo(normalizedY * 75);
+          controls.yTo(0);
         });
       };
 
