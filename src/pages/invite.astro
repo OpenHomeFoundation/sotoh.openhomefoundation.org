@@ -1,0 +1,49 @@
+---
+const title = "I'm Attending! - State of the Open Home 2026";
+const description =
+  "Join me at State of the Open Home 2026 in Utrecht on April 8. Celebrate, connect, and discover what's next for the open home!";
+const canonical = "https://sotoh.openhomefoundation.org/invite";
+const ogImageUrl = "https://sotoh.openhomefoundation.org/api/invite-og";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="I'm attending State of the Open Home 2026!" />
+    <meta property="og:site_name" content="State of the Open Home - Open Home Foundation" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content="I'm attending State of the Open Home 2026!" />
+  </head>
+  <body>
+    <script is:inline>
+      window.location.replace("/#ticket");
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/#ticket" />
+      <p>
+        Redirecting to <a href="/">State of the Open Home</a>...
+      </p>
+    </noscript>
+  </body>
+</html>
