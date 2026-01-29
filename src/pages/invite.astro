@@ -2,8 +2,9 @@
 const title = "I'm Attending! - State of the Open Home 2026";
 const description =
   "Join me at State of the Open Home 2026 in Utrecht on April 8. Celebrate, connect, and discover what's next for the open home!";
-const canonical = "https://sotoh.openhomefoundation.org/invite";
-const ogImageUrl = "https://sotoh.openhomefoundation.org/api/invite-og";
+const siteOrigin = Astro.url.origin;
+const canonical = `${siteOrigin}/invite`;
+const ogImageUrl = `${siteOrigin}/api/invite-og`;
 ---
 
 <!doctype html>
