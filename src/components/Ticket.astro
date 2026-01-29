@@ -391,31 +391,51 @@ import Button from "./Button.astro";
 
     // Mobile: full gyroscope control (both axes)
     if (isMobile && window.DeviceOrientationEvent) {
-      let initialGamma: number | null = null;
-      let initialBeta: number | null = null;
+      let refGamma: number | null = null;
+      let refBeta: number | null = null;
       const maxTilt = 12; // degrees, slightly more than desktop for mobile
+      const rangeGamma = 15; // degrees of device tilt for full -1 to 1 range
+      const rangeBeta = 12;
 
       const handleOrientation = (e: DeviceOrientationEvent) => {
         if (e.gamma === null || e.beta === null) return;
 
-        // Capture initial position on first reading
-        if (initialGamma === null) initialGamma = e.gamma;
-        if (initialBeta === null) initialBeta = e.beta;
+        // Initialize reference on first reading
+        if (refGamma === null) refGamma = e.gamma;
+        if (refBeta === null) refBeta = e.beta;
 
-        // Calculate relative movement from initial position
-        const gamma = e.gamma - initialGamma; // left-to-right tilt
-        const beta = e.beta - initialBeta; // forward-back tilt
+        // Calculate difference from reference
+        const diffGamma = e.gamma - refGamma;
+        const diffBeta = e.beta - refBeta;
 
-        // Normalize to -1 to 1 range (lower divisor = more sensitive)
-        const normalizedX = Math.max(-1, Math.min(1, gamma / 15));
-        const normalizedY = Math.max(-1, Math.min(1, beta / 12));
+        // Normalize to -1 to 1 range
+        let normalizedX = diffGamma / rangeGamma;
+        let normalizedY = diffBeta / rangeBeta;
+
+        // Sliding window: when hitting limits, adjust reference point
+        // This ensures movement is always responsive when tilting back
+        if (normalizedX > 1) {
+          refGamma = e.gamma - rangeGamma;
+          normalizedX = 1;
+        } else if (normalizedX < -1) {
+          refGamma = e.gamma + rangeGamma;
+          normalizedX = -1;
+        }
+
+        if (normalizedY > 1) {
+          refBeta = e.beta - rangeBeta;
+          normalizedY = 1;
+        } else if (normalizedY < -1) {
+          refBeta = e.beta + rangeBeta;
+          normalizedY = -1;
+        }
 
         // Apply to all ticket cards and gradients
         allGradientControls.forEach((controls) => {
-          // 3D card tilt (inverted to match physical device movement)
+          // 3D card tilt
           gsap.to(controls.card, {
-            rotateY: -normalizedX * maxTilt,
-            rotateX: normalizedY * maxTilt,
+            rotateY: normalizedX * maxTilt,
+            rotateX: -normalizedY * maxTilt,
             duration: 0.3,
             ease: "cubic-bezier(0,0,.2,1)",
             overwrite: "auto",
