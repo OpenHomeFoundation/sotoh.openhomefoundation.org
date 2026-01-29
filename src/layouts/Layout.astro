@@ -141,9 +141,12 @@ const fullTitle =
 </style>
 
 <script>
+  import { showCredits } from "../lib/credits";
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { ScrollSmoother } from "gsap/ScrollSmoother";
+
+  showCredits();
 
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
