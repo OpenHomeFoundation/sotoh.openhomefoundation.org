@@ -111,6 +111,7 @@ const fullTitle =
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Special+Gothic+Expanded+One&display=swap"
       rel="stylesheet"
     />
+    <script src="/credits.js" is:inline></script>
   </head>
   <body class={bodyClass}>
     <slot name="header" />
@@ -141,12 +142,9 @@ const fullTitle =
 </style>
 
 <script>
-  import { showCredits } from "../lib/credits";
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { ScrollSmoother } from "gsap/ScrollSmoother";
-
-  showCredits();
 
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
