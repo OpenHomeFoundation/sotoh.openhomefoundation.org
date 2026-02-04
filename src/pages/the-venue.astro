@@ -38,10 +38,14 @@ const description =
 
       <p>
         To keep State of the Open Home safe and fun for everyone, please read
-        and respect TivoliVredenburg’s house rules. Most importantly: leave the
-        professional recording gear at home, bring your ID as well as your event
-        ticket, and remember that outside food/drink isn't allowed (rest assured
-        there will be plenty of refreshment available at the event itself!).
+        and respect TivoliVredenburg’s <a
+          href="https://www.tivolivredenburg.nl/english/house-rules/"
+          rel="noopener noreferrer"
+          target="_blank">house rules</a
+        >. Most importantly: please leave the professional recording gear at
+        home, bring your ID as well as your event ticket, and remember that
+        outside food/drink isn't allowed (rest assured there will be plenty of
+        refreshment available at the event itself!).
       </p>
       <Button
         href="https://www.tivolivredenburg.nl/english/house-rules/"
@@ -86,6 +90,17 @@ const description =
           />
         </div>
       </Content>
+    </Container>
+    <Container>
+      <div class="content-container content-container--source">
+        <p>
+          Source: <a
+            href="https://www.tivolivredenburg.nl/socialsafety/"
+            target="_blank"
+            rel="noreferrer noopener">Tivolivredenburg website</a
+          >
+        </p>
+      </div>
     </Container>
   </section>
 
@@ -166,6 +181,29 @@ const description =
           border-radius: 1rem;
           padding: 1.5rem;
 
+          &:global(.content-container--source) {
+            padding: 0.75rem 1.5rem;
+            margin-top: 2rem;
+            background-color: rgba(247, 246, 242, 0.4);
+
+            a {
+              color: var(--ohf-dark-grey);
+              text-decoration: none;
+
+              background-image: linear-gradient(
+                transparent calc(100% - 1px),
+                var(--ohf-dark-grey) 1px
+              );
+              background-size: 100% 100%;
+              background-repeat: no-repeat;
+              transition: background-size 0.3s;
+
+              &:hover {
+                background-size: 0% 100%;
+              }
+            }
+          }
+
           p {
             color: var(--ohf-dark-grey);
             text-wrap: auto;
@@ -223,6 +261,7 @@ const description =
       }
 
       &-accessibility {
+        margin-top: 5rem;
         margin-bottom: 4.5rem;
       }
     }
