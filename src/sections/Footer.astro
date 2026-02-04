@@ -139,6 +139,10 @@ import TextWipe from "../components/TextWipe.astro";
       flex-direction: column;
       align-items: flex-start;
 
+      @include bp(tablet) {
+        width: 40%;
+      }
+
       :global(.button) {
         margin-top: 2rem;
       }
@@ -171,6 +175,7 @@ import TextWipe from "../components/TextWipe.astro";
       flex-direction: column;
 
       @include bp(tablet) {
+        width: 60%;
         flex-direction: row;
       }
 
