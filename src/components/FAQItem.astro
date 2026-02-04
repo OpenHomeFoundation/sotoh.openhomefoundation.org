@@ -271,9 +271,31 @@ const sluggifiedTitle = slugify(title);
         text-wrap: initial;
       }
 
+      :global(ul) {
+        list-style-type: disc;
+        padding-left: 1.15rem;
+      }
+
       :global(p&:not(:last-child)),
       :global(ul&:not(:last-child)) {
         margin-bottom: 1rem;
+      }
+
+      :global(a) {
+        color: var(--ohf-dark-grey);
+        text-decoration: none;
+
+        background-image: linear-gradient(
+          transparent calc(100% - 1px),
+          var(--ohf-dark-grey) 1px
+        );
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        transition: background-size 0.3s;
+
+        &:hover {
+          background-size: 0% 100%;
+        }
       }
 
       &-animation {
