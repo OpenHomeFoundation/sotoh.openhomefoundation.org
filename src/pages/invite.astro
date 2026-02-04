@@ -4,7 +4,7 @@ const description =
   "Join me at State of the Open Home 2026 in Utrecht on April 8. Celebrate, connect, and discover what's next for the open home!";
 const siteOrigin = Astro.url.origin;
 const canonical = `${siteOrigin}/invite`;
-const ogImageUrl = `${siteOrigin}/api/invite-og`;
+const ogImageUrl = `https://phase-2--sotoh.netlify.app/api/invite-og`;
 ---
 
 <!doctype html>
@@ -25,8 +25,14 @@ const ogImageUrl = `${siteOrigin}/api/invite-og`;
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="I'm attending State of the Open Home 2026!" />
-    <meta property="og:site_name" content="State of the Open Home - Open Home Foundation" />
+    <meta
+      property="og:image:alt"
+      content="I'm attending State of the Open Home 2026!"
+    />
+    <meta
+      property="og:site_name"
+      content="State of the Open Home - Open Home Foundation"
+    />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
@@ -34,7 +40,10 @@ const ogImageUrl = `${siteOrigin}/api/invite-og`;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content="I'm attending State of the Open Home 2026!" />
+    <meta
+      name="twitter:image:alt"
+      content="I'm attending State of the Open Home 2026!"
+    />
   </head>
   <body>
     <script is:inline>
