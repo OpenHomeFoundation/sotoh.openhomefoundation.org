@@ -6,8 +6,8 @@ interface Props {
 const { variant } = Astro.props;
 
 const backgroundImage = variant
-  ? `/assets/speakers/speaker-card-${variant}.webp`
-  : "/assets/speakers/speaker-card-1.webp";
+  ? `/images/speaker-cards/speaker-card-${variant}.webp`
+  : "/images/speaker-cards/speaker-card-1.webp";
 ---
 
 <div class="speaker-card" style={`background-image: url(${backgroundImage})`}>
