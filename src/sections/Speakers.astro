@@ -121,6 +121,48 @@ import { speakers } from "../lib/speakers";
       { passive: true },
     );
 
+    // Drag support
+    var isDragging = false;
+    var startPointer = 0;
+    var startX = 0;
+
+    function onDragStart(e) {
+      isDragging = true;
+      startPointer = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+      startX = currentX;
+      track.style.transition = "none";
+      track.style.cursor = "grabbing";
+    }
+
+    function onDragMove(e) {
+      if (!isDragging) return;
+      var pointer = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+      var delta = pointer - startPointer;
+      var x = Math.min(0, Math.max(-maxScroll, startX + delta));
+      currentX = x;
+      track.style.transform = "translate3d(" + x + "px,0,0)";
+    }
+
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      track.style.transition = "";
+      track.style.cursor = "";
+      // Snap to nearest slide
+      var snapped = Math.round(currentX / slideStep) * slideStep;
+      moveTo(snapped);
+    }
+
+    track.addEventListener("mousedown", onDragStart);
+    track.addEventListener("touchstart", onDragStart, { passive: true });
+    window.addEventListener("mousemove", onDragMove);
+    window.addEventListener("touchmove", onDragMove, { passive: true });
+    window.addEventListener("mouseup", onDragEnd);
+    window.addEventListener("touchend", onDragEnd);
+
+    // Prevent link/image dragging inside track
+    track.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
     measure();
     updateButtons();
   });
@@ -146,6 +188,8 @@ import { speakers } from "../lib/speakers";
       overflow: visible;
       will-change: transform;
       transition: transform 0.4s ease-in-out;
+      cursor: grab;
+      user-select: none;
     }
 
     &__slide {
