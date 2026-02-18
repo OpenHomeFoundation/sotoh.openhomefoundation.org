@@ -12,7 +12,7 @@ import BrandIcon from "./BrandIcon.astro";
 
 <Container containerClass="container--hero">
   <p class="event-host p--large">
-    An event organized by the <Fragment set:html={ICONS["OHFWordmark"]} />
+    An event organized by the <Fragment set:html={ICONS["OHFLogo"]} />
   </p>
 
   <div class="brand-icons">
@@ -69,6 +69,13 @@ import BrandIcon from "./BrandIcon.astro";
     line-height: 1.4;
     margin-bottom: 0;
 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0 0.6rem;
+    flex-wrap: wrap;
+
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
       animation-name: animate-up-fade;
@@ -76,6 +83,12 @@ import BrandIcon from "./BrandIcon.astro";
       animation-duration: 0.45s;
       animation-timing-function: var(--entry-ease);
       animation-delay: 0.55s;
+    }
+
+    :global(svg) {
+      width: 100%;
+      max-width: 350px;
+      max-height: 34px;
     }
   }
 
