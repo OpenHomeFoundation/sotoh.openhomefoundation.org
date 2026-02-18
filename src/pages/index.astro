@@ -9,6 +9,7 @@ import WhatIs from "../sections/WhatIs.astro";
 import Carousel from "../components/Carousel.astro";
 import Why from "../sections/Why.astro";
 import Tickertape from "../components/Tickertape.astro";
+import Speakers from "../sections/Speakers.astro";
 import BePart from "../sections/BePart.astro";
 import Footer from "../sections/Footer.astro";
 ---
@@ -35,6 +36,9 @@ import Footer from "../sections/Footer.astro";
   </section>
   <section class="block block-why" id="why-we-are-building-in-the-open">
     <Why />
+  </section>
+  <section class="block block-speakers" id="speakers">
+    <Speakers />
   </section>
   <section class="block block-be-part" id="be-part-of-the-conversation">
     <BePart />
@@ -85,6 +89,16 @@ import Footer from "../sections/Footer.astro";
     &-what-is,
     &-why {
       margin-bottom: 5rem;
+    }
+
+    &-speakers {
+      margin-top: 5rem;
+      margin-bottom: 5rem;
+
+      @include bp(desktop) {
+        margin-top: 10rem;
+        margin-bottom: 10rem;
+      }
     }
   }
 </style>
