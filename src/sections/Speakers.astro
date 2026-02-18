@@ -16,10 +16,175 @@ import { speakers } from "../lib/speakers";
       </p>
     </div>
 
-    {speakers.map((speaker) => <SpeakerCard {...speaker} />)}
+    <div class="carousel">
+      <div class="carousel__nav">
+        <button
+          class="carousel__btn carousel__btn--prev"
+          data-carousel-prev
+          aria-label="Previous speakers"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button
+          class="carousel__btn carousel__btn--next"
+          data-carousel-next
+          aria-label="Next speakers"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="carousel__track" data-carousel-track>
+        {
+          speakers.map((speaker) => (
+            <div class="carousel__slide">
+              <SpeakerCard {...speaker} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </Content>
 </Container>
 
-<style lang="scss">
-  //
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    var track = document.querySelector("[data-carousel-track]");
+    var prevBtn = document.querySelector("[data-carousel-prev]");
+    var nextBtn = document.querySelector("[data-carousel-next]");
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    var currentX = 0;
+    var slideStep = 0;
+    var maxScroll = 0;
+
+    function measure() {
+      var slide = track.querySelector(".carousel__slide");
+      slideStep = slide
+        ? slide.offsetWidth + parseFloat(getComputedStyle(track).gap || "0")
+        : 300;
+      maxScroll = track.scrollWidth - track.parentElement.offsetWidth;
+    }
+
+    function updateButtons() {
+      prevBtn.disabled = currentX >= 0;
+      nextBtn.disabled = currentX <= -maxScroll;
+    }
+
+    function moveTo(x) {
+      currentX = Math.min(0, Math.max(-maxScroll, x));
+      track.style.transform = "translate3d(" + currentX + "px,0,0)";
+      updateButtons();
+    }
+
+    prevBtn.addEventListener("click", function () {
+      moveTo(currentX + slideStep);
+    });
+
+    nextBtn.addEventListener("click", function () {
+      moveTo(currentX - slideStep);
+    });
+
+    var resizeTimer;
+    window.addEventListener(
+      "resize",
+      function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          measure();
+          moveTo(currentX);
+        }, 150);
+      },
+      { passive: true },
+    );
+
+    measure();
+    updateButtons();
+  });
+</script>
+
+<style lang="scss" is:global>
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .carousel {
+    width: 100%;
+
+    &__nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    &__track {
+      display: flex;
+      gap: 0.75rem;
+      overflow: visible;
+      will-change: transform;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    &__slide {
+      flex: 0 0 256px;
+      height: 386px;
+      contain: layout style;
+
+      @include bp(tablet) {
+        flex: 0 0 291px;
+        height: 560px;
+      }
+    }
+
+    &__btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--text-on-dark);
+      background: transparent;
+      color: var(--text-on-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        opacity 0.3s,
+        background-color 0.3s,
+        color 0.3s;
+
+      &:hover:not(:disabled) {
+        background-color: var(--text-on-dark);
+        color: var(--text-on-light);
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+    }
+  }
 </style>
