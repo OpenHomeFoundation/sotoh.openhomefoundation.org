@@ -1,24 +1,100 @@
 ---
 interface Props {
-  variant?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+  firstName?: string;
+  lastName?: string;
+  role?: string;
+  image?: string;
+  variant?: number;
+  theme?: string;
 }
 
-const { variant } = Astro.props;
+const { firstName, lastName, role, image, variant, theme } = Astro.props;
 
 const backgroundImage = variant
   ? `/images/speaker-cards/speaker-card-${variant}.webp`
   : "/images/speaker-cards/speaker-card-1.webp";
 ---
 
-<div class="speaker-card" style={`background-image: url(${backgroundImage})`}>
+<div
+  class={`speaker-card speaker-card--${theme}`}
+  style={`background-image: url(${backgroundImage})`}
+>
+  <p class="speaker-card__name">
+    <span class="first-name heading">{firstName}</span>
+    <span class="last-name">{lastName}</span>
+  </p>
+
+  <p class="speaker-card__role heading">{role}</p>
 </div>
 
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .speaker-card {
+    --text-color: var(--text-on-dark);
+
+    &--light {
+      --text-color: var(--text-on-light);
+    }
+
     width: 100%;
-    aspect-ratio: 1 / 1;
+    max-width: 291px;
+    max-height: 560px;
+    aspect-ratio: 1 / 2;
     background-size: cover;
     background-position: center;
     border-radius: 8px;
+    color: var(--text-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+
+    padding: 1.25rem 1.5rem;
+
+    @include bp(tablet) {
+      padding: 2.5rem 1.5rem;
+    }
+
+    p,
+    .heading {
+      color: var(--text-color);
+    }
+
+    &__name {
+      display: flex;
+      flex-direction: column;
+      font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+
+      @include bp(tablet) {
+        margin-bottom: 1.25rem;
+      }
+
+      .first-name {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
+        margin-bottom: 0;
+      }
+    }
+
+    &__role {
+      border: 1px solid var(--text-color);
+      padding: 0.375rem 0.75rem 0.37rem;
+      border-radius: 2.5rem;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      text-wrap: unset;
+
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+
+      @include bp(tablet) {
+        padding: 0.5rem 1.25rem 0.45rem;
+      }
+    }
   }
 </style>
