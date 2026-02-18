@@ -1,5 +1,22 @@
 ---
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
 import SpeakerCard from "../components/SpeakerCard.astro";
 ---
 
-<SpeakerCard variant={1} />
+<Container containerClass="container--column">
+  <Content>
+    <h2 class="h2">THE SPEAKERS</h2>
+    <div class="content-container text-center">
+      <p class="p--large">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </div>
+    <SpeakerCard variant={1} />
+  </Content>
+</Container>
+
+<style lang="scss">
+  //
+</style>
