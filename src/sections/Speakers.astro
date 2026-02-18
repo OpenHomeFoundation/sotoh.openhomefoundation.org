@@ -121,36 +121,77 @@ import { speakers } from "../lib/speakers";
       { passive: true },
     );
 
+    // ScrollSmoother helper — pause/resume during horizontal drag
+    function getScrollSmoother() {
+      return window.ScrollSmoother && window.ScrollSmoother.get
+        ? window.ScrollSmoother.get()
+        : null;
+    }
+
     // Drag support
     var isDragging = false;
-    var startPointer = 0;
+    var directionLocked = false;
+    var directionRejected = false;
+    var startPointerX = 0;
+    var startPointerY = 0;
     var startX = 0;
+    var LOCK_THRESHOLD = 6;
 
     function onDragStart(e) {
+      var isTouch = e.type === "touchstart";
       isDragging = true;
-      startPointer = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+      directionLocked = false;
+      directionRejected = false;
+      startPointerX = isTouch ? e.touches[0].clientX : e.clientX;
+      startPointerY = isTouch ? e.touches[0].clientY : e.clientY;
       startX = currentX;
-      track.style.transition = "none";
-      track.style.cursor = "grabbing";
+      if (!isTouch) {
+        track.style.transition = "none";
+        track.style.cursor = "grabbing";
+      }
     }
 
     function onDragMove(e) {
-      if (!isDragging) return;
-      var pointer = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-      var delta = pointer - startPointer;
-      var x = Math.min(0, Math.max(-maxScroll, startX + delta));
+      if (!isDragging || directionRejected) return;
+      var isTouch = e.type === "touchmove";
+      var pointerX = isTouch ? e.touches[0].clientX : e.clientX;
+      var pointerY = isTouch ? e.touches[0].clientY : e.clientY;
+      var dx = pointerX - startPointerX;
+      var dy = pointerY - startPointerY;
+
+      if (!directionLocked) {
+        if (Math.abs(dx) < LOCK_THRESHOLD && Math.abs(dy) < LOCK_THRESHOLD) return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          directionRejected = true;
+          return;
+        }
+        directionLocked = true;
+        track.style.transition = "none";
+        // Pause ScrollSmoother so it doesn't fight the horizontal drag
+        var smoother = getScrollSmoother();
+        if (smoother) smoother.paused(true);
+      }
+
+      var x = Math.min(0, Math.max(-maxScroll, startX + dx));
       currentX = x;
       track.style.transform = "translate3d(" + x + "px,0,0)";
     }
 
     function onDragEnd() {
       if (!isDragging) return;
+      var wasLocked = directionLocked;
       isDragging = false;
+      directionLocked = false;
+      directionRejected = false;
       track.style.transition = "";
       track.style.cursor = "";
-      // Snap to nearest slide
       var snapped = Math.round(currentX / slideStep) * slideStep;
       moveTo(snapped);
+      // Resume ScrollSmoother
+      if (wasLocked) {
+        var smoother = getScrollSmoother();
+        if (smoother) smoother.paused(false);
+      }
     }
 
     track.addEventListener("mousedown", onDragStart);
