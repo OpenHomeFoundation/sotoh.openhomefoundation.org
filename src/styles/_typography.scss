@@ -10,7 +10,8 @@ body {
 .h3,
 .h4,
 .h5,
-.h6 {
+.h6,
+.heading {
   font-family: var(--typography-heading-font-family);
   font-weight: var(--typography-heading-font-weight);
   text-wrap: balance;
