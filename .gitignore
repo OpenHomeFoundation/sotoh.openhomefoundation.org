@@ -32,3 +32,5 @@ pnpm-debug.log*
 
 # Todo
 todo.md
+# Local Netlify folder
+.netlify

@@ -13,12 +13,18 @@ import TextWipe from "../components/TextWipe.astro";
         An event organized by the Open Home Foundation
       </div>
       <Button
-        href="/"
-        class="button button--primary button--primary-hover-light"
-        disabled={true}
+        href="https://events.openhomefoundation.org/sotoh26/"
+        class="button button--primary button--tickets"
+        target="_blank"
+        rel="noopener noreferrer"
+        starburst={true}
       >
-        Tickets coming soon
+        Buy tickets
       </Button>
+      <div class="footer-content-bottom">
+        <CopyEmail email="events@openhomefoundation.org" class="help-link" />
+        <span>Copyright @ Open Home Foundation</span>
+      </div>
     </div>
     <div class="footer-nav">
       <div class="footer-nav-column">
@@ -36,6 +42,29 @@ import TextWipe from "../components/TextWipe.astro";
           >
           <TextWipe class="footer-nav-item" href="/#be-part-of-the-conversation"
             >Be part of the conversation</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Resources</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="/the-venue/"
+            >The venue</TextWipe
+          >
+          <TextWipe class="footer-nav-item" href="/faq/">FAQ</TextWipe>
+          <TextWipe class="footer-nav-item" href="/accessibility-guide/"
+            >Accessibility guide</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
+        <div class="footer-nav-title">Legal</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="/privacy-policy/"
+            >Privacy policy</TextWipe
+          >
+          <TextWipe class="footer-nav-item" href="/terms-and-conditions/"
+            >Terms and conditions</TextWipe
           >
         </div>
       </div>
@@ -65,12 +94,6 @@ import TextWipe from "../components/TextWipe.astro";
             href="https://www.facebook.com/p/Open-Home-Foundation-61558575472603/"
             >Facebook</TextWipe
           >
-        </div>
-      </div>
-      <div class="footer-nav-column">
-        <div class="footer-extra">
-          <CopyEmail email="events@openhomefoundation.org" />
-          <span>Copyright @ Open Home Foundation</span>
         </div>
       </div>
     </div>
@@ -115,7 +138,10 @@ import TextWipe from "../components/TextWipe.astro";
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      max-width: 400px;
+
+      @include bp(tablet) {
+        width: 40%;
+      }
 
       :global(.button) {
         margin-top: 2rem;
@@ -124,32 +150,32 @@ import TextWipe from "../components/TextWipe.astro";
       .h2 {
         text-align: left;
       }
-    }
-    .footer-extra {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: -4px;
 
-      :global(.text-wipe),
-      :global(.copy-email) {
-        font-weight: 500;
-      }
+      &-bottom {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+        gap: 8px;
 
-      span {
-        font-size: 12px;
-        line-height: 1.3;
+        :global(.text-wipe) {
+          font-weight: 500;
+        }
+
+        span {
+          font-size: 12px;
+        }
       }
     }
 
     .footer-nav {
       display: flex;
-      gap: 20px 60px;
+      gap: 20px 6px;
       flex-grow: 1;
       justify-content: space-between;
       flex-direction: column;
 
       @include bp(tablet) {
+        width: 60%;
         flex-direction: row;
       }
 

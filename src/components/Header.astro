@@ -4,9 +4,14 @@ import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 
 import { ICONS } from "../lib/icons";
+
+interface Props {
+  lightMode?: boolean;
+}
+const { lightMode = false } = Astro.props;
 ---
 
-<header class="site-header">
+<header class:list={["site-header", { "light-mode": lightMode }]}>
   <div class="site-header__row">
     <a href="/" rel="home" class="logo" aria-label="State of the Open Home">
       <div class="icon-wrap">
@@ -44,8 +49,13 @@ import { ICONS } from "../lib/icons";
     </a>
 
     <div class="site-header__ctas">
-      <Button href="/" class="button button--hollow button--tickets" disabled>
-        Tickets coming soon
+      <Button
+        href="https://events.openhomefoundation.org/sotoh26/"
+        class="button button--primary button--tickets"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Buy tickets
       </Button>
     </div>
 
@@ -64,18 +74,36 @@ import { ICONS } from "../lib/icons";
           <TextWipe href="/">Home</TextWipe>
           <ul>
             <li>
-              <TextWipe href="#what-is-state-of-the-open-home"
+              <TextWipe href="/#what-is-state-of-the-open-home"
                 >What is State of the Open Home?</TextWipe
               >
             </li>
             <li>
-              <TextWipe href="#why-we-are-building-in-the-open"
+              <TextWipe href="/#why-we-are-building-in-the-open"
                 >Why we’re building in the open</TextWipe
               >
             </li>
             <li>
-              <TextWipe href="#be-part-of-the-conversation"
+              <TextWipe href="/#be-part-of-the-conversation"
                 >Be part of the conversation</TextWipe
+              >
+            </li>
+          </ul>
+        </li>
+        <li>
+          <TextWipe href="#" disabled={true}>Resources</TextWipe>
+          <ul>
+            <li>
+              <TextWipe class="footer-nav-item" href="/the-venue/"
+                >The venue</TextWipe
+              >
+            </li>
+            <li>
+              <TextWipe class="footer-nav-item" href="/faq/">FAQ</TextWipe>
+            </li>
+            <li>
+              <TextWipe class="footer-nav-item" href="/accessibility-guide/"
+                >Accessibility guide</TextWipe
               >
             </li>
           </ul>
@@ -84,6 +112,9 @@ import { ICONS } from "../lib/icons";
 
       <div class="meta-links">
         <CopyEmail email="events@openhomefoundation.org" class="help-link" />
+
+        <TextWipe href="/privacy-policy/">Privacy policy</TextWipe>
+        <TextWipe href="/terms-and-conditions/">Terms and conditions</TextWipe>
       </div>
     </div>
   </div>
@@ -120,18 +151,9 @@ import { ICONS } from "../lib/icons";
       padding: 40px 0;
     }
 
-    &.is-scrolled {
-      --header-bgc: var(--header-bgc-active);
+    &.is-scrolled,
+    &.light-mode {
       --burger-bgc: var(--ohf-dark-blue);
-
-      .mobile-nav {
-        opacity: 1;
-        transform: translateY(calc(-100% + 80px));
-      }
-
-      @include bp(tablet) {
-        padding: 20px 0;
-      }
 
       .logo {
         .icon-wrap {
@@ -153,11 +175,30 @@ import { ICONS } from "../lib/icons";
           transform: translate3d(0, 100%, 0);
         }
       }
+    }
 
-      .site-header__ctas {
-        :global(.button--tickets) {
-          border: 2px solid var(--ohf-dark-blue);
-          color: var(--ohf-dark-blue);
+    &.is-scrolled {
+      --header-bgc: var(--header-bgc-active);
+
+      .mobile-nav {
+        opacity: 1;
+        transform: translateY(calc(-100% + 72px));
+
+        @include bp(large-mobile) {
+          transform: translateY(calc(-100% + 86px));
+        }
+      }
+
+      @include bp(tablet) {
+        padding: 20px 0;
+      }
+    }
+
+    &.light-mode {
+      .logo .icon-wrap {
+        .icon-light,
+        .icon-dark {
+          transition-delay: 0ms;
         }
       }
     }
@@ -245,11 +286,7 @@ import { ICONS } from "../lib/icons";
       flex-direction: row;
       gap: 8px;
       margin-left: auto;
-      display: none;
-
-      @include bp(large-mobile) {
-        display: flex;
-      }
+      display: flex;
     }
 
     &-burger {
@@ -268,7 +305,6 @@ import { ICONS } from "../lib/icons";
       flex-direction: column;
       align-items: center;
       transition: 0.3s background-color ease-in-out;
-      margin-left: auto;
 
       @include bp(large-mobile) {
         margin: 0;
@@ -361,13 +397,6 @@ import { ICONS } from "../lib/icons";
 
         .icon-dark {
           transform: translate3d(0, 100%, 0);
-        }
-      }
-
-      .site-header__ctas {
-        :global(.button--tickets) {
-          border: 2px solid var(--ohf-dark-blue);
-          color: var(--ohf-dark-blue);
         }
       }
 
@@ -579,6 +608,22 @@ import { ICONS } from "../lib/icons";
       }
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .site-header .logo .icon-wrap .icon-light,
+    .site-header .logo .icon-wrap .icon-dark,
+    .site-header-burger,
+    .site-header-burger-icon,
+    .site-header-burger-icon::before,
+    .site-header-burger-icon::after,
+    .mobile-nav,
+    .mobile-nav__inner > ul,
+    .mobile-nav__inner > .meta-links,
+    .mobile-nav__inner::-webkit-scrollbar-thumb {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
@@ -629,5 +674,4 @@ import { ICONS } from "../lib/icons";
       }
     });
   }
-
 </script>

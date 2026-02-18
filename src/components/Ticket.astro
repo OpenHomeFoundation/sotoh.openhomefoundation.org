@@ -1,138 +1,499 @@
 ---
-
+import Container from "./Container.astro";
+import Button from "./Button.astro";
 ---
 
-<div class="ticket-wrapper">
-  <div class="ticket">
-    <div class="glass"></div>
-    <div class="glass"></div>
+<div class="holo-group">
+  <div class="holo-card">
+    <div class="holo-text"></div>
+    <div class="holo-overlay">
+      <div class="holo-bg"></div>
+      <div class="holo-gradient1"></div>
+      <div class="holo-gradient2"></div>
+      <div class="holo-radial"></div>
+    </div>
+    <div class="holo-noise"></div>
+    <div class="holo-img-wrap">
+      <img
+        class="holo-img"
+        width="996"
+        height="315"
+        alt="State of the Open Home ticket for illustration purposes only"
+        loading="eager"
+      />
+    </div>
   </div>
 </div>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="0"
-  height="0"
-  style="position:absolute; overflow:hidden"
->
-  <defs>
-    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence
-        type="fractalNoise"
-        baseFrequency="0.008 0.008"
-        numOctaves="2"
-        seed="92"
-        result="noise"></feTurbulence>
-      <feGaussianBlur in="noise" stdDeviation="2" result="blurred"
-      ></feGaussianBlur>
-      <feDisplacementMap
-        in="SourceGraphic"
-        in2="blurred"
-        scale="20"
-        xChannelSelector="R"
-        yChannelSelector="G"></feDisplacementMap>
-    </filter>
-  </defs>
-</svg>
+<Container containerClass="container--column">
+  <Button
+    href="https://events.openhomefoundation.org/sotoh26/"
+    class="button button--primary button--tickets"
+    target="_blank"
+    rel="noopener noreferrer"
+    starburst={true}
+  >
+    Buy your ticket
+  </Button>
+</Container>
+
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
-  .ticket {
-    --glass-drop-shadow-blur: 24px;
-    --glass-frost: 8px;
-    --glass-shadow-blur: 2px;
-    --glass-shadow-color: #ffffff;
-    --glass-shadow-offset: 0;
-    --glass-shadow-spread: 0px;
-    --glass-tint-color: 255, 255, 255;
-    --glass-tint-opacity: 0.2;
-    --radius: 10px;
+  .holo-group {
+    width: 100%;
+    max-width: 996px;
+    aspect-ratio: 996 / 315;
 
-    @include bp(desktop) {
-      --radius: 16px;
-    }
+    perspective: 1500px;
+    user-select: none;
+    margin: 0 auto 1.5rem;
+    border-radius: 1.5rem;
 
     display: flex;
-    gap: 6px;
+    flex-direction: column;
+
+    opacity: 0.001;
+    transition:
+      0.2s transform cubic-bezier(0, 0, 0.2, 1),
+      0.3s opacity ease-in-out;
+
+    &.loaded {
+      opacity: 1;
+    }
+
+    @include bp(tablet) {
+      margin: 0 auto 2.5rem;
+    }
+
+    &:hover {
+      transform: scale(1.03);
+
+      .holo-overlay {
+        opacity: 0.4;
+        transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);
+      }
+    }
+  }
+
+  .holo-card {
+    position: relative;
+    isolation: isolate;
+    z-index: 10;
+    overflow: hidden;
+    border-radius: 8px;
+    transform-style: preserve-3d;
+    will-change: transform;
+
+    @include bp(desktop) {
+      border-radius: 12px;
+    }
+  }
+
+  .holo-overlay {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.3s ease-out;
+    z-index: 10;
+    mix-blend-mode: hard-light;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .holo-group {
+      perspective: 1000px;
+    }
+    .holo-overlay {
+      opacity: 0.4;
+    }
+    .holo-group:hover {
+      transform: none;
+    }
+  }
+
+  .holo-text {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 11;
+  }
+
+  .holo-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+
+    &.light {
+      filter: invert(1);
+    }
+  }
+
+  .holo-bg-repeat {
+    background-size: contain;
+  }
+
+  .holo-gradient1,
+  .holo-gradient2 {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-10%);
-    width: 90%;
-    aspect-ratio: 2.83858268/1;
-    max-width: 600px;
+    height: 160%;
+    width: 160%;
+    transform: translate(-50%, -50%);
   }
 
-  .ticket-wrapper {
-    animation: subtle-rotate 8s ease-in-out infinite;
+  .holo-gradient1 {
+    opacity: 0.25;
+    mix-blend-mode: hue;
+    background: linear-gradient(
+      135deg,
+      rgb(255, 8, 0) 2%,
+      rgb(255, 225, 0) 12.9661%,
+      rgb(115, 255, 0) 23.5922%,
+      rgb(0, 255, 238) 39.1029%,
+      rgb(0, 251, 255) 48.545%,
+      rgb(0, 51, 255) 59.1618%,
+      rgb(183, 0, 255) 62.9954%,
+      rgb(255, 8, 0) 76.7431%
+    );
   }
 
-  svg filter feDisplacementMap {
-    scale: 100;
+  .holo-gradient2 {
+    opacity: 0.5;
+    mix-blend-mode: plus-lighter;
+    background: linear-gradient(
+      315deg,
+      rgb(19, 20, 21) 0%,
+      rgb(143, 163, 163) 6.03181%,
+      rgb(162, 163, 163) 9.74451%,
+      rgb(20, 20, 20) 25.0721%,
+      rgb(143, 163, 163) 33.5357%,
+      rgb(164, 166, 166) 35.2988%,
+      rgb(37, 37, 38) 41.503%,
+      rgb(161, 161, 161) 52.393%,
+      rgb(124, 125, 125) 61.1346%,
+      rgb(19, 20, 21) 66.269%,
+      rgb(166, 166, 166) 74.4633%,
+      rgb(163, 163, 163) 79.8987%,
+      rgb(19, 20, 21) 85.7299%,
+      rgb(161, 161, 161) 89.8948%,
+      rgb(19, 20, 21) 100%
+    );
   }
 
-  @-moz-document url-prefix() {
-    .glass {
-      backdrop-filter: blur(10px);
-    }
-  }
-
-  .glass {
-    border-radius: var(--radius);
-    box-shadow: 0px 20px var(--glass-drop-shadow-blur) rgba(0, 0, 0, 0.1);
-    position: relative;
-    transition: transform 0.2s ease-out;
-    z-index: 1;
-    overflow: hidden;
-    width: 100%;
-
-    &:nth-child(1) {
-      flex-basis: 22%;
-    }
-    &:nth-child(2) {
-      flex-basis: 78%;
-    }
-
-    &:before {
-      background-color: rgba(
-        var(--glass-tint-color),
-        var(--glass-tint-opacity)
-      );
-      border-radius: var(--radius);
-      box-shadow: inset var(--glass-shadow-offset) var(--glass-shadow-offset)
-        var(--glass-shadow-blur) var(--glass-shadow-spread)
-        var(--glass-shadow-color);
-      content: "";
-      inset: 0;
-      position: absolute;
-    }
-
-    &:after {
-      backdrop-filter: blur(var(--glass-frost));
-      content: "";
-      filter: url("#glass-distortion");
-      inset: 0;
-      position: absolute;
-      z-index: -1;
-    }
-  }
-
-  img {
-    height: 100%;
-    inset: 0;
-    object-fit: cover;
+  .holo-radial {
     position: absolute;
-    width: 100%;
-    z-index: -1;
+    inset: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: overlay;
+    filter: blur(24px);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgb(255, 255, 255) 0%,
+      rgba(255, 255, 255, 0.5) 43.6638%,
+      rgba(255, 255, 255, 0.11) 80.5409%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    will-change: transform;
   }
 
-  @keyframes subtle-rotate {
-    0%,
-    100% {
-      transform: rotate(2deg);
+  .holo-noise {
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 261 261' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.08' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 20%;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .holo-img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .holo-group {
+      transition: none;
     }
-    50% {
-      transform: rotate(5deg);
+    .holo-group:hover {
+      transform: none;
+    }
+    .holo-overlay {
+      transition: none;
+      opacity: 0.4;
+    }
+    .holo-card {
+      will-change: auto;
+    }
+    .holo-radial {
+      will-change: auto;
+    }
+    .holo-img {
+      opacity: 1;
+      transition: none;
     }
   }
 </style>
+
+<script>
+  import gsap from "gsap";
+  import { tickets } from "../lib/tickets";
+
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  // Initialize tickets with random selection
+  document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
+    const ticket = tickets[Math.floor(Math.random() * tickets.length)];
+    const ticketText = group.querySelector<HTMLElement>(".holo-text");
+    const holoBg = group.querySelector<HTMLElement>(".holo-bg");
+    const ticketImg = group.querySelector<HTMLImageElement>(".holo-img");
+
+    if (ticket && holoBg && ticketImg) {
+      // Set overlay background
+      holoBg.style.backgroundImage = `url('${ticket.overlay}')`;
+
+      // Set text background based on theme
+      ticketText!.style.backgroundImage = `url('${ticket.text}')`;
+
+      // Apply invert filter for light theme tickets
+      if (ticket.theme === "light") {
+        holoBg.classList.add("light");
+      }
+
+      // Set ticket image and fade in once loaded
+      ticketImg.onload = () => {
+        group.classList.add("loaded");
+      };
+      ticketImg.src = ticket.image;
+    }
+  });
+
+  // Skip all motion effects if user prefers reduced motion
+  if (prefersReducedMotion) {
+    // Ensure overlay is visible without animation
+    document.querySelectorAll<HTMLElement>(".holo-overlay").forEach((el) => {
+      el.style.opacity = "0.4";
+    });
+  }
+
+  // Only set up motion effects if not reduced motion
+  if (!prefersReducedMotion) {
+    // Collect all gradient quickTo functions for gyro control
+    const allGradientControls: Array<{
+      card: HTMLElement;
+      grad1XTo: gsap.QuickToFunc;
+      grad1YTo: gsap.QuickToFunc;
+      grad2XTo: gsap.QuickToFunc;
+      grad2YTo: gsap.QuickToFunc;
+      xTo: gsap.QuickToFunc;
+      yTo: gsap.QuickToFunc;
+    }> = [];
+
+    // Mouse-follow using GSAP quickTo for optimal performance
+    document.querySelectorAll<HTMLElement>(".holo-group").forEach((group) => {
+      const radial = group.querySelector(".holo-radial") as HTMLElement;
+      const card = group.querySelector(".holo-card") as HTMLElement;
+      const gradient1 = group.querySelector(".holo-gradient1") as HTMLElement;
+      const gradient2 = group.querySelector(".holo-gradient2") as HTMLElement;
+      if (!radial || !card) return;
+
+      // Gradient shift (quickTo for smooth rainbow movement)
+      const grad1XTo = gsap.quickTo(gradient1, "x", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+      const grad1YTo = gsap.quickTo(gradient1, "y", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+      const grad2XTo = gsap.quickTo(gradient2, "x", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+      const grad2YTo = gsap.quickTo(gradient2, "y", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+
+      // Radial highlight follow (quickTo for high-frequency x/y)
+      const xTo = gsap.quickTo(radial, "x", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+      const yTo = gsap.quickTo(radial, "y", {
+        duration: 0.1,
+        ease: "cubic-bezier(0,0,.2,1)",
+      });
+
+      // Set initial centered position for all overlay elements
+      gsap.set([gradient1, gradient2, radial], {
+        xPercent: -50,
+        yPercent: -50,
+      });
+
+      // Store controls for gyro access (including card for mobile tilt)
+      allGradientControls.push({
+        card,
+        grad1XTo,
+        grad1YTo,
+        grad2XTo,
+        grad2YTo,
+        xTo,
+        yTo,
+      });
+
+      // Desktop: mouse-follow
+      if (!isMobile) {
+        const maxTilt = 6; // degrees
+
+        group.addEventListener("pointermove", (e: PointerEvent) => {
+          const rect = group.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          // Radial highlight (inverted for parallax effect, scaled to 70%)
+          xTo(-x * 0.7);
+          yTo(-y * 0.7);
+
+          // Parallax tilt (normalized -1 to 1)
+          const normalizedX = x / (rect.width / 2);
+          const normalizedY = y / (rect.height / 2);
+
+          gsap.to(card, {
+            rotateY: normalizedX * maxTilt,
+            rotateX: -normalizedY * maxTilt,
+            duration: 0.75,
+            ease: "cubic-bezier(0,0,.2,1)",
+            overwrite: "auto",
+          });
+
+          // Gradient shift for holographic rainbow effect
+          grad1XTo(normalizedX * 80);
+          grad1YTo(normalizedY * 50);
+          grad2XTo(-normalizedX * 60);
+          grad2YTo(-normalizedY * 40);
+        });
+
+        group.addEventListener("pointerleave", () => {
+          gsap.to(card, {
+            rotateX: 0,
+            rotateY: 0,
+            duration: 0.75,
+            ease: "cubic-bezier(0,0,.2,1)",
+          });
+          grad1XTo(0);
+          grad1YTo(0);
+          grad2XTo(0);
+          grad2YTo(0);
+        });
+      }
+    });
+
+    // Mobile: full gyroscope control (both axes)
+    if (isMobile && window.DeviceOrientationEvent) {
+      let refGamma: number | null = null;
+      let refBeta: number | null = null;
+      const maxTilt = 12; // degrees, slightly more than desktop for mobile
+      const rangeGamma = 25; // degrees of device tilt for full -1 to 1 range
+      const rangeBeta = 20;
+
+      const handleOrientation = (e: DeviceOrientationEvent) => {
+        if (e.gamma === null || e.beta === null) return;
+
+        // Initialize reference on first reading
+        if (refGamma === null) refGamma = e.gamma;
+        if (refBeta === null) refBeta = e.beta;
+
+        // Calculate difference from reference
+        const diffGamma = e.gamma - refGamma;
+        const diffBeta = e.beta - refBeta;
+
+        // Normalize to -1 to 1 range
+        let normalizedX = diffGamma / rangeGamma;
+        let normalizedY = diffBeta / rangeBeta;
+
+        // Sliding window: when hitting limits, adjust reference point
+        // This ensures movement is always responsive when tilting back
+        if (normalizedX > 1) {
+          refGamma = e.gamma - rangeGamma;
+          normalizedX = 1;
+        } else if (normalizedX < -1) {
+          refGamma = e.gamma + rangeGamma;
+          normalizedX = -1;
+        }
+
+        if (normalizedY > 1) {
+          refBeta = e.beta - rangeBeta;
+          normalizedY = 1;
+        } else if (normalizedY < -1) {
+          refBeta = e.beta + rangeBeta;
+          normalizedY = -1;
+        }
+
+        // Apply to all ticket cards and gradients
+        allGradientControls.forEach((controls) => {
+          // 3D card tilt
+          gsap.to(controls.card, {
+            rotateY: normalizedX * maxTilt,
+            rotateX: -normalizedY * maxTilt,
+            duration: 0.3,
+            ease: "cubic-bezier(0,0,.2,1)",
+            overwrite: "auto",
+          });
+
+          // Gradient shift - constrained to avoid edge visibility
+          controls.grad1XTo(normalizedX * 40);
+          controls.grad1YTo(normalizedY * 25);
+          controls.grad2XTo(-normalizedX * 30);
+          controls.grad2YTo(-normalizedY * 20);
+
+          // Radial highlight (scaled to 70%)
+          controls.xTo(-normalizedX * 42);
+          controls.yTo(-normalizedY * 28);
+        });
+      };
+
+      // Request permission on iOS 13+
+      if (
+        typeof (DeviceOrientationEvent as any).requestPermission === "function"
+      ) {
+        // Add a one-time touch handler to request permission
+        document.addEventListener(
+          "touchstart",
+          () => {
+            (DeviceOrientationEvent as any)
+              .requestPermission()
+              .then((response: string) => {
+                if (response === "granted") {
+                  window.addEventListener(
+                    "deviceorientation",
+                    handleOrientation,
+                  );
+                }
+              })
+              .catch(console.error);
+          },
+          { once: true },
+        );
+      } else {
+        // Non-iOS or older iOS
+        window.addEventListener("deviceorientation", handleOrientation);
+      }
+    }
+  }
+</script>

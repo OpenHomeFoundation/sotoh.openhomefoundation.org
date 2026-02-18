@@ -1,0 +1,28 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["tabs", className]}>
+  <slot />
+</div>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    row-gap: 24px;
+
+    @include bp(desktop) {
+      gap: 12px;
+      row-gap: 32px;
+    }
+  }
+</style>

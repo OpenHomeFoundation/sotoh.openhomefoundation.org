@@ -7,6 +7,8 @@ interface Props {
   icon?: ICON;
   disabled?: boolean;
   target?: string;
+  starburst?: boolean;
+  rel?: string;
 }
 const {
   class: className = "",
@@ -14,10 +16,18 @@ const {
   icon,
   disabled = false,
   target = "_self",
+  starburst = false,
+  rel = "",
 } = Astro.props;
 ---
 
-<a class={className} href={href} aria-disabled={disabled} target={target}>
+<a
+  class={className}
+  href={href}
+  aria-disabled={disabled}
+  target={target}
+  rel={rel}
+>
   {
     icon ? (
       <div class="button-icon">
@@ -29,64 +39,68 @@ const {
     <span class="button-text__default"><slot /></span>
     <span class="button-text__hover" aria-hidden="true"><slot /></span>
   </span>
-  <!-- Top bursts -->
-  <span
-    class="burst"
-    style="--angle: -50deg; --size: 13px; --delay: 0ms; --distance: 48px; --start-x: 5%; --color: var(--sotoh-yellow);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["building"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: -25deg; --size: 10px; --delay: 80ms; --distance: 36px; --start-x: 28%; --color: var(--sotoh-blue);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["privacy"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: 5deg; --size: 11px; --delay: 40ms; --distance: 42px; --start-x: 47%; --color: var(--sotoh-purple);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["sustainability"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: 30deg; --size: 9px; --delay: 140ms; --distance: 37px; --start-x: 68%; --color: var(--sotoh-yellow);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["choice"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: 55deg; --size: 12px; --delay: 200ms; --distance: 52px; --start-x: 88%; --color: var(--sotoh-blue);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["building"]} />
-  </span>
-  <!-- Bottom bursts -->
-  <span
-    class="burst"
-    style="--angle: 125deg; --size: 10px; --delay: 100ms; --distance: 50px; --start-x: 82%; --color: var(--sotoh-purple);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["privacy"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: 160deg; --size: 8px; --delay: 160ms; --distance: 40px; --start-x: 38%; --color: var(--sotoh-yellow);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["choice"]} />
-  </span>
-  <span
-    class="burst"
-    style="--angle: -135deg; --size: 11px; --delay: 60ms; --distance: 44px; --start-x: 12%; --color: var(--sotoh-blue);"
-    aria-hidden="true"
-  >
-    <Fragment set:html={ICONS["sustainability"]} />
-  </span>
+  {
+    starburst && (
+      <>
+        <span
+          class="burst"
+          style="--angle: -50deg; --size: 13px; --delay: 0ms; --distance: 48px; --start-x: 5%; --color: var(--sotoh-yellow);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["building"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: -25deg; --size: 10px; --delay: 80ms; --distance: 36px; --start-x: 28%; --color: var(--sotoh-blue);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["privacy"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: 5deg; --size: 11px; --delay: 40ms; --distance: 42px; --start-x: 47%; --color: var(--sotoh-purple);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["sustainability"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: 30deg; --size: 9px; --delay: 140ms; --distance: 37px; --start-x: 68%; --color: var(--sotoh-yellow);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["choice"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: 55deg; --size: 12px; --delay: 200ms; --distance: 52px; --start-x: 88%; --color: var(--sotoh-blue);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["building"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: 125deg; --size: 10px; --delay: 100ms; --distance: 50px; --start-x: 82%; --color: var(--sotoh-purple);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["privacy"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: 160deg; --size: 8px; --delay: 160ms; --distance: 40px; --start-x: 38%; --color: var(--sotoh-yellow);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["choice"]} />
+        </span>
+        <span
+          class="burst"
+          style="--angle: -135deg; --size: 11px; --delay: 60ms; --distance: 44px; --start-x: 12%; --color: var(--sotoh-blue);"
+          aria-hidden="true"
+        >
+          <Fragment set:html={ICONS["sustainability"]} />
+        </span>
+      </>
+    )
+  }
 </a>
 
 <style lang="scss" is:global>
@@ -155,9 +169,7 @@ const {
       }
 
       &__default {
-        transition:
-          color 0.3s ease-in-out,
-          transform 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
       }
 
       &__hover {
@@ -199,6 +211,7 @@ const {
       background-color: var(--sotoh-yellow);
       color: var(--ohf-dark-blue);
       transition: background-color 0.3s ease-in-out;
+      will-change: background-color;
 
       .button-text__hover {
         color: var(--sotoh-yellow);
@@ -231,7 +244,6 @@ const {
       }
     }
 
-    // Burst effect - Option 4: rotate + translate
     .burst {
       --angle: 0deg;
       --size: 12px;
@@ -248,7 +260,6 @@ const {
       pointer-events: none;
       z-index: -1;
 
-      // Start: centered, rotated to angle, no outward movement, scaled down
       transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0)
         scale(0);
       opacity: 0;
@@ -265,7 +276,6 @@ const {
     }
 
     &:hover .burst {
-      // End: translate outward along rotated axis, scale up
       transform: translate(-50%, -50%) rotate(var(--angle))
         translateY(calc(var(--distance) * -1)) scale(1);
       opacity: 1;
