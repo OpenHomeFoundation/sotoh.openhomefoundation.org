@@ -2,6 +2,8 @@
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
 import SpeakerCard from "../components/SpeakerCard.astro";
+
+import { speakers } from "../lib/speakers";
 ---
 
 <Container containerClass="container--column">
@@ -13,7 +15,8 @@ import SpeakerCard from "../components/SpeakerCard.astro";
         tempor incididunt ut labore et dolore magna aliqua.
       </p>
     </div>
-    <SpeakerCard variant={1} />
+
+    {speakers.map((speaker) => <SpeakerCard {...speaker} />)}
   </Content>
 </Container>
 
