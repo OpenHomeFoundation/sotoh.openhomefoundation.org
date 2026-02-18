@@ -3,6 +3,8 @@ import Button from "../components/Button.astro";
 import Container from "../components/Container.astro";
 import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
+
+import { ICONS } from "../lib/icons";
 ---
 
 <footer id="matter-container">
@@ -10,11 +12,11 @@ import TextWipe from "../components/TextWipe.astro";
     <div class="footer-content">
       <div class="h2">State of the Open Home 2026</div>
       <div class="footer-subtitle">
-        An event organized by the Open Home Foundation
+        An event organized by the <Fragment set:html={ICONS["OHFLogo"]} />
       </div>
       <Button
         href="https://events.openhomefoundation.org/sotoh26/"
-        class="button button--primary button--tickets"
+        class="button button--primary button--primary-hover-light button--tickets"
         target="_blank"
         rel="noopener noreferrer"
         starburst={true}
@@ -23,7 +25,7 @@ import TextWipe from "../components/TextWipe.astro";
       </Button>
       <div class="footer-content-bottom">
         <CopyEmail email="events@openhomefoundation.org" class="help-link" />
-        <span>Copyright @ Open Home Foundation</span>
+        <span>Copyright &copy; Open Home Foundation</span>
       </div>
     </div>
     <div class="footer-nav">
@@ -46,6 +48,13 @@ import TextWipe from "../components/TextWipe.astro";
         </div>
       </div>
       <div class="footer-nav-column">
+        <div class="footer-nav-title">Conference</div>
+        <div class="footer-nav-items">
+          <TextWipe class="footer-nav-item" href="/#speakers">Speakers</TextWipe
+          >
+        </div>
+      </div>
+      <div class="footer-nav-column">
         <div class="footer-nav-title">Resources</div>
         <div class="footer-nav-items">
           <TextWipe class="footer-nav-item" href="/the-venue/"
@@ -55,11 +64,6 @@ import TextWipe from "../components/TextWipe.astro";
           <TextWipe class="footer-nav-item" href="/accessibility-guide/"
             >Accessibility guide</TextWipe
           >
-        </div>
-      </div>
-      <div class="footer-nav-column">
-        <div class="footer-nav-title">Legal</div>
-        <div class="footer-nav-items">
           <TextWipe class="footer-nav-item" href="/privacy-policy/"
             >Privacy policy</TextWipe
           >
@@ -164,6 +168,23 @@ import TextWipe from "../components/TextWipe.astro";
         span {
           font-size: 12px;
         }
+      }
+    }
+
+    .footer-subtitle {
+      display: flex;
+      flex-direction: row;
+      aign-items: center;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-weight: 300;
+
+      :global(svg) {
+        max-width: 190px;
+        max-height: 18px;
+
+        transform: translateY(-1px);
       }
     }
 
