@@ -93,10 +93,10 @@ import Button from "./Button.astro";
   .holo-overlay {
     position: absolute;
     inset: 0;
-    transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
     z-index: 10;
     mix-blend-mode: hard-light;
-    opacity: 0;
+    opacity: 0.25;
     pointer-events: none;
   }
 
