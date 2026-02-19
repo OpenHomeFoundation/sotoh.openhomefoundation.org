@@ -135,11 +135,11 @@ const { lightMode = false } = Astro.props;
 
   .site-header {
     --header-bgc: transparent;
-    --header-bgc-active: rgba(255, 255, 255, 0.5);
+    --header-bgc-active: rgba(255, 255, 255, 0.6);
     --link-color: var(--text-on-dark);
     --link-hover-color: var(--ohf-dark-blue);
     --burger-bgc: transparent;
-    --blur: blur(6px);
+    --blur: blur(12px);
 
     display: flex;
     flex-direction: row;
@@ -434,7 +434,7 @@ const { lightMode = false } = Astro.props;
           transition-delay: 0.45s;
         }
 
-        .mobile-nav__inner::-webkit-scrollbar-thumb {
+        .mobile-nav__inner ul::-webkit-scrollbar-thumb {
           background-color: var(--ohf-dark-blue);
           transition-delay: 0.5s;
         }
@@ -476,21 +476,6 @@ const { lightMode = false } = Astro.props;
       padding-bottom: 1rem;
       overflow-y: auto;
 
-      &::-webkit-scrollbar {
-        width: 6px;
-        background: transparent;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: transparent;
-        border-radius: 4px;
-        transition: background-color 0.3s ease-in-out;
-      }
-
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -511,20 +496,35 @@ const { lightMode = false } = Astro.props;
 
       ul {
         width: 100%;
-        max-width: 400px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 4rem 0 2rem;
         text-align: center;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+          width: 6px;
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: transparent;
+          border-radius: 4px;
+          transition: background-color 0.3s ease-in-out;
+        }
 
         @include bp(large-mobile) {
-          padding: 5rem 0;
+          padding: 3rem 0;
         }
 
         li {
-          width: 100%;
+          width: auto;
           font-family: var(--typography-heading-font-family);
 
           padding: 1.5rem 0;

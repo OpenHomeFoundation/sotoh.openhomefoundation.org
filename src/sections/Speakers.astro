@@ -1,6 +1,9 @@
 ---
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
+import SpeakerCard from "../components/SpeakerCard.astro";
+
+import { speakers } from "../lib/speakers";
 ---
 
 <Container containerClass="container--column">
@@ -12,9 +15,264 @@ import Content from "../components/Content.astro";
         tempor incididunt ut labore et dolore magna aliqua.
       </p>
     </div>
+
+    <div class="carousel">
+      <div class="carousel__nav">
+        <button
+          class="carousel__btn carousel__btn--prev"
+          data-carousel-prev
+          aria-label="Previous speakers"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button
+          class="carousel__btn carousel__btn--next"
+          data-carousel-next
+          aria-label="Next speakers"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="carousel__track" data-carousel-track>
+        {
+          speakers.map((speaker) => (
+            <div class="carousel__slide">
+              <SpeakerCard {...speaker} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </Content>
 </Container>
 
-<style lang="scss">
-  //
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    var track = document.querySelector("[data-carousel-track]");
+    var prevBtn = document.querySelector("[data-carousel-prev]");
+    var nextBtn = document.querySelector("[data-carousel-next]");
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    var currentX = 0;
+    var slideStep = 0;
+    var maxScroll = 0;
+
+    function measure() {
+      var slide = track.querySelector(".carousel__slide");
+      slideStep = slide
+        ? slide.offsetWidth + parseFloat(getComputedStyle(track).gap || "0")
+        : 300;
+      maxScroll = track.scrollWidth - track.parentElement.offsetWidth;
+    }
+
+    function updateButtons() {
+      prevBtn.disabled = currentX >= 0;
+      nextBtn.disabled = currentX <= -maxScroll;
+    }
+
+    function moveTo(x) {
+      currentX = Math.min(0, Math.max(-maxScroll, x));
+      track.style.transform = "translate3d(" + currentX + "px,0,0)";
+      updateButtons();
+    }
+
+    prevBtn.addEventListener("click", function () {
+      moveTo(currentX + slideStep);
+    });
+
+    nextBtn.addEventListener("click", function () {
+      moveTo(currentX - slideStep);
+    });
+
+    var resizeTimer;
+    window.addEventListener(
+      "resize",
+      function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          measure();
+          moveTo(currentX);
+        }, 150);
+      },
+      { passive: true },
+    );
+
+    // ScrollSmoother helper — pause/resume during horizontal drag
+    function getScrollSmoother() {
+      return window.ScrollSmoother && window.ScrollSmoother.get
+        ? window.ScrollSmoother.get()
+        : null;
+    }
+
+    // Drag support
+    var isDragging = false;
+    var directionLocked = false;
+    var directionRejected = false;
+    var startPointerX = 0;
+    var startPointerY = 0;
+    var startX = 0;
+    var LOCK_THRESHOLD = 6;
+
+    function onDragStart(e) {
+      var isTouch = e.type === "touchstart";
+      isDragging = true;
+      directionLocked = false;
+      directionRejected = false;
+      startPointerX = isTouch ? e.touches[0].clientX : e.clientX;
+      startPointerY = isTouch ? e.touches[0].clientY : e.clientY;
+      startX = currentX;
+      if (!isTouch) {
+        track.style.transition = "none";
+        track.style.cursor = "grabbing";
+      }
+    }
+
+    function onDragMove(e) {
+      if (!isDragging || directionRejected) return;
+      var isTouch = e.type === "touchmove";
+      var pointerX = isTouch ? e.touches[0].clientX : e.clientX;
+      var pointerY = isTouch ? e.touches[0].clientY : e.clientY;
+      var dx = pointerX - startPointerX;
+      var dy = pointerY - startPointerY;
+
+      if (!directionLocked) {
+        if (Math.abs(dx) < LOCK_THRESHOLD && Math.abs(dy) < LOCK_THRESHOLD)
+          return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          directionRejected = true;
+          return;
+        }
+        directionLocked = true;
+        track.style.transition = "none";
+        // Pause ScrollSmoother so it doesn't fight the horizontal drag
+        var smoother = getScrollSmoother();
+        if (smoother) smoother.paused(true);
+      }
+
+      var x = Math.min(0, Math.max(-maxScroll, startX + dx));
+      currentX = x;
+      track.style.transform = "translate3d(" + x + "px,0,0)";
+    }
+
+    function onDragEnd() {
+      if (!isDragging) return;
+      var wasLocked = directionLocked;
+      isDragging = false;
+      directionLocked = false;
+      directionRejected = false;
+      track.style.transition = "";
+      track.style.cursor = "";
+      var snapped = Math.round(currentX / slideStep) * slideStep;
+      moveTo(snapped);
+      // Resume ScrollSmoother
+      if (wasLocked) {
+        var smoother = getScrollSmoother();
+        if (smoother) smoother.paused(false);
+      }
+    }
+
+    track.addEventListener("mousedown", onDragStart);
+    track.addEventListener("touchstart", onDragStart, { passive: true });
+    window.addEventListener("mousemove", onDragMove);
+    window.addEventListener("touchmove", onDragMove, { passive: true });
+    window.addEventListener("mouseup", onDragEnd);
+    window.addEventListener("touchend", onDragEnd);
+
+    // Prevent link/image dragging inside track
+    track.addEventListener("dragstart", function (e) {
+      e.preventDefault();
+    });
+
+    measure();
+    updateButtons();
+  });
+</script>
+
+<style lang="scss" is:global>
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .carousel {
+    width: 100%;
+
+    &__nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    &__track {
+      display: flex;
+      gap: 0.75rem;
+      overflow: visible;
+      will-change: transform;
+      transition: transform 0.4s ease-in-out;
+      cursor: grab;
+      user-select: none;
+    }
+
+    &__slide {
+      flex: 0 0 208px;
+      height: 366px;
+      contain: layout style;
+
+      @include bp(tablet) {
+        flex: 0 0 291px;
+        height: 560px;
+      }
+    }
+
+    &__btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--text-on-dark);
+      background: transparent;
+      color: var(--text-on-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        opacity 0.3s,
+        background-color 0.3s,
+        color 0.3s;
+
+      &:hover:not(:disabled) {
+        background-color: var(--text-on-dark);
+        color: var(--text-on-light);
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+    }
+  }
 </style>
