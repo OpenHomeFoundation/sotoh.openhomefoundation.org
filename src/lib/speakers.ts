@@ -1,9 +1,21 @@
+const speakerImages = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/speakers/*.{webp,png,jpg,jpeg}",
+  { eager: true },
+);
+
+function getImage(filename: string): ImageMetadata {
+  const path = `../assets/speakers/${filename}`;
+  const match = speakerImages[path];
+  if (!match) throw new Error(`Speaker image not found: ${path}`);
+  return match.default;
+}
+
 export const speakers = [
   {
     firstName: "Paulus",
     lastName: "Schoutsen",
     role: "President of the OHF",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("paulus.webp"),
     variant: 1,
     theme: "dark",
   },
@@ -11,7 +23,7 @@ export const speakers = [
     firstName: "Franck",
     lastName: "Nijhof",
     role: "Lead of Home Assistant",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("franck.webp"),
     variant: 2,
     theme: "dark",
   },
@@ -19,7 +31,7 @@ export const speakers = [
     firstName: "Jean-Loïc",
     lastName: "Pouffier",
     role: "Lead of Product & UX",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("jlo.webp"),
     variant: 3,
     theme: "dark",
   },
@@ -27,7 +39,7 @@ export const speakers = [
     firstName: "Marcel",
     lastName: "van der Veldt",
     role: "Lead of Ecosystem",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("marcel.webp"),
     variant: 4,
     theme: "light",
   },
@@ -35,7 +47,7 @@ export const speakers = [
     firstName: "TBC",
     lastName: "tbc",
     role: "TBC",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: "",
     variant: 5,
     theme: "dark",
   },
@@ -43,7 +55,7 @@ export const speakers = [
     firstName: "Carl",
     lastName: "Olof Albertsson",
     role: "VP of commercial at Nabu Casa",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("carl.webp"),
     variant: 6,
     theme: "light",
   },
@@ -51,7 +63,7 @@ export const speakers = [
     firstName: "Trevor",
     lastName: "Schirmer",
     role: "Technical Lead at Apollo",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("trevor.webp"),
     variant: 7,
     theme: "light",
   },
@@ -59,7 +71,7 @@ export const speakers = [
     firstName: "Laura",
     lastName: "Palombi",
     role: "Product Manager at OHf",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("laura.webp"),
     variant: 8,
     theme: "dark",
   },
@@ -67,7 +79,7 @@ export const speakers = [
     firstName: "Matthias",
     lastName: "de Baat",
     role: "UX Designer at OHf",
-    image: "/images/speaker-cards/speaker-card-1.webp",
+    image: getImage("matthias.webp"),
     variant: 8,
     theme: "dark",
   },

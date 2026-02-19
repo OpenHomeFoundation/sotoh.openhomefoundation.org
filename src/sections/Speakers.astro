@@ -160,7 +160,8 @@ import { speakers } from "../lib/speakers";
       var dy = pointerY - startPointerY;
 
       if (!directionLocked) {
-        if (Math.abs(dx) < LOCK_THRESHOLD && Math.abs(dy) < LOCK_THRESHOLD) return;
+        if (Math.abs(dx) < LOCK_THRESHOLD && Math.abs(dy) < LOCK_THRESHOLD)
+          return;
         if (Math.abs(dy) > Math.abs(dx)) {
           directionRejected = true;
           return;
@@ -202,7 +203,9 @@ import { speakers } from "../lib/speakers";
     window.addEventListener("touchend", onDragEnd);
 
     // Prevent link/image dragging inside track
-    track.addEventListener("dragstart", function (e) { e.preventDefault(); });
+    track.addEventListener("dragstart", function (e) {
+      e.preventDefault();
+    });
 
     measure();
     updateButtons();
@@ -234,8 +237,8 @@ import { speakers } from "../lib/speakers";
     }
 
     &__slide {
-      flex: 0 0 256px;
-      height: 386px;
+      flex: 0 0 208px;
+      height: 366px;
       contain: layout style;
 
       @include bp(tablet) {
