@@ -146,7 +146,6 @@ import { speakers } from "../lib/speakers";
       startPointerY = isTouch ? e.touches[0].clientY : e.clientY;
       startX = currentX;
       if (!isTouch) {
-        track.style.transition = "none";
         track.style.cursor = "grabbing";
       }
     }
@@ -168,6 +167,7 @@ import { speakers } from "../lib/speakers";
         }
         directionLocked = true;
         track.style.transition = "none";
+        track.style.cursor = "grabbing";
         // Pause ScrollSmoother so it doesn't fight the horizontal drag
         var smoother = getScrollSmoother();
         if (smoother) smoother.paused(true);
@@ -186,8 +186,10 @@ import { speakers } from "../lib/speakers";
       directionRejected = false;
       track.style.transition = "";
       track.style.cursor = "";
-      var snapped = Math.round(currentX / slideStep) * slideStep;
-      moveTo(snapped);
+      if (wasLocked) {
+        var snapped = Math.round(currentX / slideStep) * slideStep;
+        moveTo(snapped);
+      }
       // Resume ScrollSmoother
       if (wasLocked) {
         var smoother = getScrollSmoother();
