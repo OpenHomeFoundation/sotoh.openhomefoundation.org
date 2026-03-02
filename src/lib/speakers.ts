@@ -44,12 +44,12 @@ export const speakers = [
     theme: "light",
   },
   {
-    firstName: "TBC",
-    lastName: "tbc",
-    role: "TBC",
-    image: "",
+    firstName: "Kevin",
+    lastName: "Ahrendt",
+    role: "Software Engineer AT OHF",
+    image: getImage("kevin.webp"),
     variant: 5,
-    theme: "dark",
+    theme: "light",
   },
   {
     firstName: "Carl",
@@ -83,4 +83,20 @@ export const speakers = [
     variant: 8,
     theme: "dark",
   },
+  // {
+  //   firstName: "tbc",
+  //   lastName: "tbc",
+  //   role: "tbc",
+  //   image: "",
+  //   variant: 8,
+  //   theme: "dark",
+  // },
+  // {
+  //   firstName: "tbc",
+  //   lastName: "tbc",
+  //   role: "tbc",
+  //   image: "",
+  //   variant: 8,
+  //   theme: "dark",
+  // },
 ];
