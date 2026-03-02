@@ -92,13 +92,17 @@ const { lightMode = false } = Astro.props;
         </li>
         <li>
           <TextWipe href="#" disabled={true}>Conference</TextWipe>
-          <ul>
-            <li>
-              <TextWipe class="footer-nav-item" href="/#speakers"
-                >Speakers</TextWipe
-              >
-            </li>
-          </ul>
+          {
+            false && (
+              <ul>
+                <li>
+                  <TextWipe class="footer-nav-item" href="/#speakers">
+                    Speakers
+                  </TextWipe>
+                </li>
+              </ul>
+            )
+          }
         </li>
         <li>
           <TextWipe href="#" disabled={true}>Resources</TextWipe>
