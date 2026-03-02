@@ -5,6 +5,8 @@ import "../styles/_reset.scss";
 import "../styles/_global.scss";
 import "../styles/_typography.scss";
 
+import Marker from "../components/Marker.astro";
+
 interface Props {
   title?: string;
   description?: string;
@@ -112,6 +114,8 @@ const fullTitle =
       rel="stylesheet"
     />
     <script src="/credits.js" is:inline></script>
+
+    <Marker />
   </head>
   <body class={bodyClass}>
     <slot name="header" />
