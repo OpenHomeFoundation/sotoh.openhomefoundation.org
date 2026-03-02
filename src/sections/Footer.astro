@@ -47,13 +47,18 @@ import { ICONS } from "../lib/icons";
           >
         </div>
       </div>
-      <div class="footer-nav-column">
-        <div class="footer-nav-title">Conference</div>
-        <div class="footer-nav-items">
-          <TextWipe class="footer-nav-item" href="/#speakers">Speakers</TextWipe
-          >
-        </div>
-      </div>
+      {
+        false && (
+          <div class="footer-nav-column">
+            <div class="footer-nav-title">Conference</div>
+            <div class="footer-nav-items">
+              <TextWipe class="footer-nav-item" href="/#speakers">
+                Speakers
+              </TextWipe>
+            </div>
+          </div>
+        )
+      }
       <div class="footer-nav-column">
         <div class="footer-nav-title">Resources</div>
         <div class="footer-nav-items">
