@@ -5,12 +5,14 @@ interface Props {
   firstName?: string;
   lastName?: string;
   role?: string;
+  company?: string;
   image?: ImageMetadata;
   variant?: number;
   theme?: string;
 }
 
-const { firstName, lastName, role, image, variant, theme } = Astro.props;
+const { firstName, lastName, role, company, image, variant, theme } =
+  Astro.props;
 
 const backgroundImage = variant
   ? `/images/speaker-cards/speaker-card-${variant}.webp`
@@ -26,7 +28,10 @@ const backgroundImage = variant
     <span class="last-name">{lastName}</span>
   </p>
 
-  <p class="speaker-card__role heading">{role}</p>
+  <div class="speaker-card__meta">
+    <p class="speaker-card__role heading">{role}</p>
+    <p class="speaker-card__company heading">{company}</p>
+  </div>
 
   {
     image && (
@@ -74,7 +79,7 @@ const backgroundImage = variant
     @include bp(tablet) {
       max-width: 291px;
       max-height: 560px;
-      padding: 2.5rem 1.5rem;
+      padding: 2rem 1.5rem;
     }
 
     &__image {
@@ -101,15 +106,14 @@ const backgroundImage = variant
     }
 
     &__name {
+      width: 100%;
       display: flex;
       flex-direction: column;
       font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
       line-height: 1;
       margin-bottom: 0.75rem;
-
-      @include bp(tablet) {
-        margin-bottom: 1.25rem;
-      }
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--text-color);
 
       .first-name {
         text-transform: uppercase;
@@ -119,20 +123,18 @@ const backgroundImage = variant
       }
     }
 
-    &__role {
-      font-size: 0.625rem;
+    &__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    &__role,
+    &__company {
+      font-size: 0.75rem;
       line-height: 1.2;
       text-wrap: unset;
-
-      @include bp(tablet) {
-        border: 1px solid var(--text-color);
-        padding: 0.375rem 0.75rem 0.37rem;
-        border-radius: 2.5rem;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(5px);
-
-        padding: 0.5rem 0.75rem 0.45rem;
-      }
+      margin: 0;
     }
   }
 </style>
