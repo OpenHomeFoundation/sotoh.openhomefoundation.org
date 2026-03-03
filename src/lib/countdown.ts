@@ -1,4 +1,4 @@
-// Target date: April 8th, 2026 @ 1300
+// Target date: April 8th, 2026 @ 1800
 export const TARGET_DATE = new Date("2026-04-08T18:00:00");
 
 export interface CountdownValues {

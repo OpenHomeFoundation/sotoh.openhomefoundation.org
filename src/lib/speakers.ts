@@ -71,7 +71,7 @@ export const speakers = [
     firstName: "Laura",
     lastName: "Palombi",
     role: "Product Manager at OHf",
-    image: getImage("laura.webp"),
+    image: "",
     variant: 8,
     theme: "dark",
   },
