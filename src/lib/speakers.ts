@@ -68,7 +68,7 @@ export const speakers = [
   {
     firstName: "Trevor",
     lastName: "Schirmer",
-    role: "Technical Lead",
+    role: "Co-founder",
     company: "Apollo Automation",
     image: getImage("trevor.webp"),
     variant: 7,
@@ -104,7 +104,7 @@ export const speakers = [
   {
     firstName: "Melissa",
     lastName: "Thermidor",
-    role: "Community Lead",
+    role: "Lead of Community",
     company: "Open Home Foundation",
     image: getImage("paulus.webp"),
     variant: 11,
