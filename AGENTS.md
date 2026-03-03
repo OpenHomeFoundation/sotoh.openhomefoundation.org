@@ -1,0 +1,1 @@
+When reviewing a PR, crawl the site using the preview URL and give me a table of all of the meta titles and descriptions. If any of them are missing, please let me know.
