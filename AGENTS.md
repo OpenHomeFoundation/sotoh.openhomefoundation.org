@@ -1,0 +1,1 @@
+When reviewing a PR for the web app, run `npm run build` and then `npm run preview` locally, crawl the pages served from `http://localhost:4321` (limited to URLs discovered from `src/pages` or the sitemap), and produce a table listing each page’s HTML `<title>` and `<meta name="description">`. If any page is missing either of these fields, please call it out explicitly.
