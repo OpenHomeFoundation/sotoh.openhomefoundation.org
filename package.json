@@ -18,7 +18,7 @@
     "matter-js": "^0.20.0",
     "pathseg": "^1.2.1",
     "poly-decomp": "^0.3.0",
-    "sass": "^1.97.2"
+    "sass": "^1.97.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
