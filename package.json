@@ -21,7 +21,7 @@
     "sass": "^1.97.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.0.9"
   }
 }
