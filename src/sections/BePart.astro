@@ -14,7 +14,31 @@ import sotoh2025 from "../images/73c53fd29806a0d26241809b75c6cb1eb462380d.jpg";
       and sustainability as much as you do. Your voice moves us forward!
     </p>
     <p>
-      <strong>Limited tickets available now! </strong>
+      <strong
+        ><a
+          class="limited-tickets"
+          href="https://events.openhomefoundation.org/sotoh26/"
+          target="_blank"
+          rel="noreferrer noopener">Limited tickets available now!</a
+        ></strong
+      >
     </p>
   </div>
 </FullImage>
+
+<style lang="scss">
+  .limited-tickets {
+    text-decoration: none;
+    background-image: linear-gradient(
+      transparent calc(100% - 1px),
+      var(--text-on-dark) 1px
+    );
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s;
+
+    &:hover {
+      background-size: 0% 100%;
+    }
+  }
+</style>
