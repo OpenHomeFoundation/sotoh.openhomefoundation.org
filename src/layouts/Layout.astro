@@ -11,7 +11,9 @@ interface Props {
   canonical?: string;
   includeEventSchema?: boolean;
   noindex?: boolean;
+  bodyClass?: string;
 }
+const { bodyClass = "" } = Astro.props;
 
 const defaultTitle = "State of the Open Home - Open Home Foundation";
 const defaultDescription =
@@ -51,7 +53,7 @@ const fullTitle =
     <meta property="og:description" content={description} />
     <meta
       property="og:image"
-      content="https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
+      content="https://sotoh.openhomefoundation.org/share-image.png"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -68,7 +70,7 @@ const fullTitle =
     <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
-      content="https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
+      content="https://sotoh.openhomefoundation.org/share-image.png"
     />
     <meta name="twitter:image:alt" content="State of the Open Home 2026" />
 
@@ -98,7 +100,7 @@ const fullTitle =
             "name": "Open Home Foundation",
             "url": "https://www.openhomefoundation.org"
           },
-          "image": "https://sotoh.openhomefoundation.org/sotoh-share-image.webp"
+          "image": "https://sotoh.openhomefoundation.org/share-image.png"
         }
       </script>
     )}
@@ -109,8 +111,9 @@ const fullTitle =
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Special+Gothic+Expanded+One&display=swap"
       rel="stylesheet"
     />
+    <script src="/credits.js" is:inline></script>
   </head>
-  <body>
+  <body class={bodyClass}>
     <slot name="header" />
     <div id="smooth-wrapper">
       <div id="smooth-content">
@@ -249,4 +252,22 @@ const fullTitle =
       }
     });
   });
+
+  // Handle hash in URL on page load
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      // Small delay to ensure ScrollSmoother is ready
+      requestAnimationFrame(() => {
+        const smoother = ScrollSmoother.get();
+        if (smoother) {
+          smoother.scrollTo(target, true, "top top+=120");
+        } else {
+          const targetPosition =
+            target.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top: targetPosition, behavior: "smooth" });
+        }
+      });
+    }
+  }
 </script>

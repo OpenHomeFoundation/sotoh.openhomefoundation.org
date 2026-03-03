@@ -1,0 +1,289 @@
+---
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+import Button from "../components/Button.astro";
+
+import { MAP } from "../lib/map";
+---
+
+<Container containerClass="container--column">
+  <h2 class="h2">Getting there</h2>
+
+  <div class="getting-there">
+    <div class="getting-there__row getting-there__row-reverse">
+      <div class="card-container">
+        <div class="card animate--fade-up">
+          <Content>
+            <h3 class="h3">Via public transport</h3>
+            <p>
+              As well as being close to Utrecht Central Station and the Hoog
+              Catharijne shopping center, TivoliVredenburg is served by several
+              bus stops:
+            </p>
+            <ul>
+              <li>Vredenburg, right next to TivoliVredenburg</li>
+              <li>
+                Utrecht Central Station, Centrumzijde, a 5-minute walk away
+              </li>
+              <li>Sint Jacobsstraat, a few minutes' walk</li>
+              <li>Neude, a 5-minute walk</li>
+            </ul>
+          </Content>
+        </div>
+        <div class="card animate--fade-up">
+          <Content>
+            <h3 class="h3">On foot from Utrecht Central Station</h3>
+            <p>
+              From the platform, walk to the station hall towards the Hoog
+              Catharijne shopping center. Enter Hoog Catharijne from the station
+              square (look up for the iconic domed roof) and turn left upon
+              entering. Follow the path to the right (past H&M and C&A), walk
+              straight ahead, and down the escalator. You’ll see
+              TivoliVredenburg on your left.
+            </p>
+            <p>
+              <strong
+                >Please note: this route includes escalators and elevators.</strong
+              >
+            </p>
+          </Content>
+        </div>
+      </div>
+      <div class="map animate--fade-up">
+        <Fragment set:html={MAP["mapPortrait"]} />
+        <Fragment set:html={MAP["mapLandscape"]} />
+
+        <Button
+          href="https://www.google.com/maps/place/TivoliVredenburg/@52.0926197,5.1129775,15z/data=!4m5!3m4!1s0x0:0xcb73f73b5ccc3eb6!8m2!3d52.0926197!4d5.1129775?shorturl=1"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="get-directions button button--primary"
+          starburst={false}>Get directions</Button
+        >
+      </div>
+    </div>
+
+    <div class="getting-there__row">
+      <div class="card animate--fade-up">
+        <Content>
+          <h3 class="h3">Cars & parking</h3>
+          <p>
+            Visitors to TivoliVredenburg, get 20% off when booking an electric
+            car-sharing service via <a
+              href="https://www.tivolivredenburg.nl/mywheels/"
+              rel="noopener noreferrer"
+              target="_blank">MyWheels</a
+            >: an easy, greener option if you’re not able to walk, cycle or
+            travel to the venue via public transport. There are plenty of <a
+              href="https://www.utrecht.nl/wonen-en-leven/parkeren/parkeren-bezoeker/parkeergarages-in-utrecht#c42637"
+              rel="noopener noreferrer"
+              target="_blank">parking options in Utrecht</a
+            >. The nearest to TivoliVredenburg are the Hoog Catharijne parking
+            areas (P1, P2, P3, P4, P5, or P6). Paardenveld, Bijenkorf/LaVie, and
+            Springweg parking are also within walking distance.
+          </p>
+
+          <p>
+            <strong>
+              Please note: Satnav can be unreliable in the city center, so
+              familiarize yourself with the route beforehand and stay alert for
+              signs!</strong
+            >
+          </p>
+        </Content>
+      </div>
+      <div class="card animate--fade-up animate--fade-up">
+        <Content>
+          <h3 class="h3">By bike</h3>
+          <p>
+            Utrecht was ranked as the <a
+              href="https://copenhagenizeindex.eu/"
+              rel="noopener noreferrer"
+              target="_blank">most bike-friendly city in Europe</a
+            > (and indeed the world!) last year, so it’s a great way to get around,
+            whether you bring your own ride or <a
+              href="https://www.discover-utrecht.com/collection/bike-rental/"
+              rel="noopener noreferrer"
+              target="_blank">rent one</a
+            >. You can park your bike undercover in one of the free, guarded
+            bike parking facilities nearby – <a
+              href="https://www.tivolivredenburg.nl/bezoek/route/"
+              rel="noopener noreferrer"
+              target="_blank">U-Stal Vredenburg</a
+            > is the closest. Bikes parked in restricted zones may be removed by the
+            authorities, so please stick to designated areas.
+          </p>
+        </Content>
+      </div>
+      <div class="card animate--fade-up">
+        <Content>
+          <h3 class="h3">Parking for visitors with disabilities</h3>
+          <p>
+            The closest accessible parking is the P5 Hoog Catharijne, which has
+            16 accessible spaces and an elevator. Free accessible parking spaces
+            are also available nearby at Varkenmarkt 16 and Bergstraat 54. If
+            you have a <a
+              href="https://www.tivolivredenburg.nl/bezoek/route/#section_7"
+              target="_blank"
+              rel="noreferrer noopener"
+              >disabled parking permit from the Municipality of Utrecht</a
+            >, you can also park for free in paid spaces, except those marked
+            with the “Permit Holders” sign. This permit is free to apply for,
+            even if you live outside of the city. Please consult our <a
+              href="/accessibility-guide/">Accessibility Guide</a
+            > for more information about the venue and event itself.
+          </p>
+        </Content>
+      </div>
+    </div>
+  </div>
+</Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .getting-there {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__row {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      &-reverse {
+        flex-direction: column-reverse;
+      }
+
+      @include bp(tablet) {
+        flex-direction: row;
+      }
+    }
+  }
+
+  .card-container {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @include bp(tablet) {
+      width: 33%;
+    }
+
+    .card {
+      height: 100%;
+    }
+  }
+
+  .map {
+    width: 100%;
+    position: relative;
+
+    @include bp(tablet) {
+      width: 66%;
+    }
+
+    :global(svg) {
+      width: 100%;
+      height: 100%;
+
+      :global(.map--route) {
+        stroke-dasharray: 5 5;
+        animation: animateRoute 1s linear infinite;
+      }
+    }
+
+    :global(.map--portrait) {
+      display: block;
+    }
+
+    :global(.map--landscape) {
+      display: none;
+    }
+
+    :global(.get-directions) {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+    }
+
+    @include bp(tablet) {
+      :global(.map--portrait) {
+        display: none;
+      }
+
+      :global(.map--landscape) {
+        display: block;
+      }
+    }
+  }
+
+  @keyframes animateRoute {
+    to {
+      stroke-dashoffset: 20;
+    }
+  }
+
+  .h2 {
+    color: var(--text-on-light);
+  }
+
+  .card {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+
+    .h3 {
+      color: var(--text-on-light);
+      font-size: 1.5rem;
+      text-transform: none;
+      font-family: var(--typography-body-font-family);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    p,
+    ul,
+    a {
+      color: var(--ohf-dark-grey);
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 1rem;
+      margin-top: 1rem;
+    }
+
+    strong {
+      a {
+        font-weight: 600;
+      }
+    }
+
+    a {
+      text-decoration: none;
+
+      background-image: linear-gradient(
+        transparent calc(100% - 1px),
+        var(--ohf-dark-grey) 1px
+      );
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+
+      &:hover {
+        background-size: 0% 100%;
+      }
+    }
+  }
+</style>

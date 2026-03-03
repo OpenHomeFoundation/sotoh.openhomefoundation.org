@@ -3,12 +3,24 @@ import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"a"> {
   href?: string;
+  class?: string;
+  disabled?: boolean;
 }
 
-const { href = "#", class: className = "", ...attrs } = Astro.props;
+const {
+  href = "#",
+  class: className = "",
+  disabled = false,
+  ...attrs
+} = Astro.props;
 ---
 
-<a class={`text-wipe ${className}`} href={href} {...attrs}>
+<a
+  class={`text-wipe ${className}`}
+  href={href}
+  {...attrs}
+  aria-disabled={disabled}
+>
   <span class="text-wipe__default"><slot /></span>
   <span class="text-wipe__hover" aria-hidden="true"><slot /></span>
 </a>
@@ -20,6 +32,10 @@ const { href = "#", class: className = "", ...attrs } = Astro.props;
     overflow: hidden;
     text-decoration: none;
     color: #a2aab6;
+
+    &[aria-disabled="true"] {
+      pointer-events: none;
+    }
 
     &__default,
     &__hover {

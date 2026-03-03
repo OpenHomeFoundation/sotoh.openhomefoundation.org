@@ -10,18 +10,20 @@ body {
 .h3,
 .h4,
 .h5,
-.h6 {
+.h6,
+.heading {
   font-family: var(--typography-heading-font-family);
   font-weight: var(--typography-heading-font-weight);
   text-wrap: balance;
   color: var(--text-on-dark);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   line-height: 1;
   text-align: center;
 
   @include bp(tablet) {
     text-align: left;
+    margin-bottom: 2rem;
   }
 
   &:last-child {
@@ -52,15 +54,33 @@ p,
     line-height: 1.16;
   }
 
+  &--small {
+    font-size: 0.75rem;
+  }
+
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
 }
 
-strong {
+strong,
+strong a {
   font-weight: 600;
 }
 
 .text-center {
   text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.text-dark {
+  color: var(--text-on-light);
+}
+
+ul li,
+ol li {
+  font-weight: 300;
 }

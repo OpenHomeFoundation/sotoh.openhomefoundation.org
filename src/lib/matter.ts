@@ -28,7 +28,7 @@ const GAME_SHAPES = [
   { type: "halfPipe", color: "#18BCFF", size: 1.3 }, // 8. cyan halfPipe (bigger)
   { type: "halfPipe", color: "#95E85A", size: 1.5 }, // 9. green halfPipe
   { type: "circle", color: "#FFFFFF", size: 1.7 }, // 10. white circle (huge)
-  { type: "circle", color: "#FFD700", size: 2.0 }, // 11. gold circle (final)
+  { type: "circle", color: "#FFD351", size: 2.0 }, // 11. yellow circle (final)
 ] as const;
 
 // Replace fill color in SVG string
@@ -279,40 +279,47 @@ export class MatterScene {
     // add all bodies to the world
     Composite.add(this.engine.world, bodies);
 
-    // Add mouse control for dragging
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // Add mouse control for dragging (skip if reduced motion)
     const mouse = Mouse.create(this.render.canvas);
-    const mouseConstraint = MouseConstraint.create(this.engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.6,
-        render: {
-          visible: false,
+    if (!prefersReducedMotion) {
+      const mouseConstraint = MouseConstraint.create(this.engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.6,
+          render: {
+            visible: false,
+          },
         },
-      },
-    });
-    Composite.add(this.engine.world, mouseConstraint);
+      });
+      Composite.add(this.engine.world, mouseConstraint);
 
-    // Keep mouse in sync with rendering
-    this.render.mouse = mouse;
+      // Keep mouse in sync with rendering
+      this.render.mouse = mouse;
 
-    // Release dragged object when mouse leaves canvas
-    this.render.canvas.addEventListener("mouseleave", () => {
-      mouse.button = -1;
-    });
+      // Release dragged object when mouse leaves canvas
+      this.render.canvas.addEventListener("mouseleave", () => {
+        mouse.button = -1;
+      });
 
-    // Track clicks on shapes for game mode activation
-    Events.on(mouseConstraint, "mousedown", () => {
-      if (this.gameMode) return;
+      // Track clicks on shapes for game mode activation
+      Events.on(mouseConstraint, "mousedown", () => {
+        if (this.gameMode) return;
 
-      // Check if clicking on a body (not walls)
-      const body = mouseConstraint.body;
-      if (body && !body.isStatic) {
-        this.clickCount++;
-        if (this.clickCount >= 10) {
-          this.startGameMode();
+        // Check if clicking on a body (not walls)
+        const body = mouseConstraint.body;
+        if (body && !body.isStatic) {
+          this.clickCount++;
+          if (this.clickCount >= 10) {
+            this.startGameMode();
+          }
         }
-      }
-    });
+      });
+    }
 
     // Allow page scrolling over the canvas
     // @ts-expect-error - mousewheel exists on Mouse but not in types
@@ -369,6 +376,9 @@ export class MatterScene {
   }
 
   private initGyroControl(): void {
+    // Skip gyro if user prefers reduced motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     // Gyro requires secure context (HTTPS)
     if (!window.isSecureContext) return;
 

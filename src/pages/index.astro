@@ -4,16 +4,17 @@ import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Countdown from "../components/Countdown.astro";
 import Building from "../sections/Building.astro";
-import TickertapeGroup from "../components/TickertapeGroup.astro";
+import Ticket from "../components/Ticket.astro";
 import WhatIs from "../sections/WhatIs.astro";
 import Carousel from "../components/Carousel.astro";
 import Why from "../sections/Why.astro";
 import Tickertape from "../components/Tickertape.astro";
+import Speakers from "../sections/Speakers.astro";
 import BePart from "../sections/BePart.astro";
 import Footer from "../sections/Footer.astro";
 ---
 
-<Layout>
+<Layout bodyClass="page-home">
   <Header slot="header" />
   <section class="block block-hero">
     <Hero />
@@ -21,11 +22,11 @@ import Footer from "../sections/Footer.astro";
   <section class="block block-countdown">
     <Countdown />
   </section>
+  <section class="block block-ticket" id="ticket">
+    <Ticket />
+  </section>
   <section class="block block-building">
     <Building />
-  </section>
-  <section class="block block-tickertape-group">
-    <TickertapeGroup />
   </section>
   <section class="block block-what-is" id="what-is-state-of-the-open-home">
     <WhatIs />
@@ -36,6 +37,13 @@ import Footer from "../sections/Footer.astro";
   <section class="block block-why" id="why-we-are-building-in-the-open">
     <Why />
   </section>
+  {
+    false && (
+      <section class="block block-speakers" id="speakers">
+        <Speakers />
+      </section>
+    )
+  }
   <section class="block block-be-part" id="be-part-of-the-conversation">
     <BePart />
   </section>
@@ -46,27 +54,56 @@ import Footer from "../sections/Footer.astro";
 </Layout>
 
 <style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
   .block {
     &-hero {
       margin-bottom: 2rem;
     }
 
-    &-countdown {
-      margin-bottom: 6rem;
+    &-ticket {
+      padding: 3.5rem 1rem;
+
+      @include bp(tablet) {
+        padding: 5rem 1rem;
+      }
+
+      @include bp(desktop) {
+        padding: 7rem 0;
+      }
     }
 
-    &-tickertape-group {
-      overflow: hidden;
+    &-building {
+      padding-bottom: 4rem;
+
+      @include bp(tablet) {
+        padding-bottom: 6rem;
+      }
     }
 
     &-image-carousel {
-      padding-top: 5rem;
+      padding-top: 2rem;
+      margin-bottom: 5rem;
+
+      @include bp(desktop) {
+        padding-top: 4rem;
+      }
     }
 
     &-what-is,
-    &-image-carousel,
     &-why {
       margin-bottom: 5rem;
+    }
+
+    &-speakers {
+      overflow: hidden;
+      margin-top: 5rem;
+      margin-bottom: 5rem;
+
+      @include bp(desktop) {
+        margin-top: 10rem;
+        margin-bottom: 10rem;
+      }
     }
   }
 </style>

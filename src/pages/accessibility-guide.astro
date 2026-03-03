@@ -1,0 +1,246 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Tickertape from "../components/Tickertape.astro";
+import Footer from "../sections/Footer.astro";
+import AccessibilityGuideHero from "../sections/AccessibilityGuideHero.astro";
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+
+import { Image } from "astro:assets";
+import accessibilityGuideImg from "../images/accessibility-entrance.webp";
+
+const title = "Accessibility - State of the Open Home";
+const description =
+  "Building an open and inclusive event means ensuring everyone can participate and have a positive experience. Read our accessibility guide for State of the Open Home 2026.";
+---
+
+<Layout
+  bodyClass="page-accessibility"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
+  <Header slot="header" lightMode />
+  <section class="block block-accessibility-guide">
+    <AccessibilityGuideHero />
+  </section>
+
+  <section class="block block-entrance">
+    <Container containerClass="container--accessible-entrance">
+      <Content>
+        <div class="container-container">
+          <h2 class="p--large">Accessible entrance</h2>
+          <p>
+            State of the Open Home 2026 takes place in TivoliVredenburg. The
+            building is large, with multiple halls and rooms on different
+            floors, where programs can take place simultaneously. The most
+            accessible entrance is on Vredenburgkade next to the Singel canal
+            (see image for reference). From here you can access the main hall,
+            where you will find the State of the Open Home registration desk.
+            There you will be welcomed by one of our staff members or
+            TivoliVredenburg employees, who can also guide you to the location
+            of our event if you wish.
+          </p>
+        </div>
+
+        <Image
+          widths={[500, 768, 1024, 1280, 1440, 1920, 2160, 2560]}
+          src={accessibilityGuideImg}
+          alt="Image displaying the venue"
+        />
+      </Content>
+    </Container>
+  </section>
+
+  <section class="block block-event-areas">
+    <Container>
+      <Content>
+        <div class="container-container">
+          <h2 class="p--large">State of the Open Home event areas</h2>
+          <p>
+            Our program takes place across three floors of the building. Here is
+            a summary of these areas to help you plan your journey:
+          </p>
+          <ol>
+            <li>
+              <strong>K.F. Hein Foyer (Floor 5)</strong>: This is one of our
+              networking areas. It includes spacious zones for socializing and
+              has great views of the city. You can reach this floor via the
+              escalators from the central hall. If you need assistance, please
+              see the  “Mobility assistance” section below.
+            </li>
+            <li>
+              <strong>Pandora Foyer (Floor 6)</strong>: This is our second
+              networking area, located on the floor below the main stage. It
+              includes its own bar, accessible toilet, and more city views. Like
+              the K.F. Hein Foyer, it is accessed via escalators.
+            </li>
+            <li>
+              <strong>Pandora Hall (Floor 7)</strong>: This is the area where
+              the main program with audience will take place. The hall is
+              accessible for visitors with disabilities. While escalators reach
+              the sixth floor, there are two flights of regular stairs from the
+              Pandora Foyer to the Pandora Hall. If you have difficulty with
+              stairs, please see the “Mobility assistance” section below
+              regarding elevator access.
+            </li>
+          </ol>
+        </div>
+      </Content>
+    </Container>
+  </section>
+
+  <section class="block block-mobility">
+    <Container>
+      <Content>
+        <div class="container-container">
+          <h2 class="p--large">Mobility assistance</h2>
+          <p>
+            All guests with accessibility needs will be welcomed at the
+            registration desk, where a TivoliVredenburg staff member will
+            provide an access pass for the elevator and/or clear a verbal
+            explanation of the routing and facilities, along with printed
+            instructions showing the different floors and directions. If needed,
+            a staff member can assist you upon arrival and guide you directly to
+            the event areas.
+          </p>
+
+          <p>
+            Inside Pandora Hall, we will reserve clearly marked
+            wheelchair-accessible spaces in the audience zone. If you are
+            attending in a wheelchair or require a reserved space, please let us
+            know in advance at <a
+              href="mailto:events@openhomefoundation.org"
+              target="_blank">events@openhomefoundation.org</a
+            > so we can ensure these arrangements are ready for you.
+          </p>
+
+          <p>
+            Pandora Hall will have non-allocated seating for all ticket holders.
+            Our networking foyers (K.F. Hein and Pandora) feature a mix of
+            seating and floor space. If you have difficulty standing for long
+            periods or would like assistance, please <a
+              href="mailto:events@openhomefoundation.org"
+              target="_blank">contact us</a
+            >, or speak to a staff member on-site.
+          </p>
+          <p>
+            Officially trained assistance dogs are welcome by the venue, but
+            please <a
+              href="mailto:events@openhomefoundation.org"
+              target="_blank">let us know in advance</a
+            > if you’ll be bringing yours along so we can give you guidance on issues
+            like the noise and light levels of the event.
+          </p>
+          <p>
+            If you have any other accessibility support requests, please contact
+            us in advance at <a
+              href="mailto:events@openhomefoundation.org"
+              target="_blank">events@openhomefoundation.org</a
+            >. We will work with the TivoliVredenburg team to help with the
+            specific type of support you need.
+          </p>
+        </div>
+      </Content>
+    </Container>
+  </section>
+
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" class="full-width" fullWidth={true} />
+  </section>
+  <Footer slot="footer" />
+
+  <style lang="scss">
+    @use "../styles/mixins/breakpoint.scss" as *;
+
+    .block {
+      padding: 2rem 0;
+
+      &-accessibility-guide {
+        padding: 0;
+        margin-bottom: 4rem;
+      }
+
+      &-tickertape {
+        padding-bottom: 0;
+      }
+
+      &-entrance {
+        :global(.container--accessible-entrance) {
+          align-items: center;
+
+          img {
+            width: 100%;
+            max-width: 488px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            @include bp(tablet) {
+              width: 40%;
+              object-position: 40% center;
+            }
+
+            @include bp(desktop) {
+              width: 100%;
+              object-position: center;
+            }
+          }
+        }
+      }
+
+      p,
+      ol {
+        color: var(--ohf-dark-grey);
+      }
+
+      p {
+        text-wrap: auto;
+      }
+
+      h2 {
+        color: var(--ohf-dark-blue);
+        margin-bottom: 0.5rem;
+      }
+
+      ol {
+        list-style-type: decimal;
+        padding-left: 1.2rem;
+        line-height: 1.2;
+        font-size: 1.125rem;
+
+        ::marker {
+          font-weight: 600;
+        }
+
+        li {
+          margin-bottom: 0.5rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      a {
+        color: var(--ohf-dark-grey);
+        text-decoration: none;
+
+        background-image: linear-gradient(
+          transparent calc(100% - 1px),
+          var(--ohf-dark-grey) 1px
+        );
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        transition: background-size 0.3s;
+
+        &:hover {
+          background-size: 0% 100%;
+        }
+      }
+    }
+  </style>
+</Layout>

@@ -1,0 +1,269 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Tickertape from "../components/Tickertape.astro";
+import Footer from "../sections/Footer.astro";
+import Tivolivredenburg from "../sections/Tivolivredenburg.astro";
+import GettingThere from "../sections/GettingThere.astro";
+import Button from "../components/Button.astro";
+import TitleText from "../sections/TitleText.astro";
+import KeepingSafe from "../components/KeepingSafe.astro";
+
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+import CopyEmail from "../components/CopyEmail.astro";
+
+const title = "The Venue - State of the Open Home";
+const description =
+  "Join us for the State of the Open Home 2026, at the Tivolivredenburg, Utrecht.";
+---
+
+<Layout
+  bodyClass="page-the-venue"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
+  <Header slot="header" lightMode />
+  <section class="block block-be-part">
+    <Tivolivredenburg />
+  </section>
+  <section class="block block-getting-there">
+    <GettingThere />
+  </section>
+
+  <section class="block block-venue-rules">
+    <TitleText>
+      <h2 class="h2" slot="title">Venue rules</h2>
+
+      <p>
+        To keep State of the Open Home safe and fun for everyone, please read
+        and respect TivoliVredenburg’s <a
+          href="https://www.tivolivredenburg.nl/english/house-rules/"
+          rel="noopener noreferrer"
+          target="_blank">house rules</a
+        >. Most importantly: please leave the professional recording gear at
+        home, bring your ID as well as your event ticket, and remember that
+        outside food/drink isn't allowed (rest assured there will be plenty of
+        refreshment available at the event itself!).
+      </p>
+      <Button
+        href="https://www.tivolivredenburg.nl/english/house-rules/"
+        target="_blank"
+        class="button button--primary"
+        starburst={false}>View venue rules</Button
+      >
+    </TitleText>
+  </section>
+
+  <section class="block block-keeping-safe">
+    <TitleText>
+      <h2 class="h2" slot="title">Keeping safe</h2>
+
+      <p>
+        Building in the open can mean honest conversations and lively debate –
+        but always with respect and care for everyone in the room. To help
+        everyone feel welcome and included, we’d like to emphasise
+        TivoliVredenburg's social safety guidelines:
+      </p>
+    </TitleText>
+    <KeepingSafe />
+  </section>
+
+  <section class="block block-notice">
+    <Container containerClass="container--column animate--fade-up">
+      <Content>
+        <div class="content-container">
+          <p class="p--large">
+            Notice anything unusual or unwelcome? Let us know!
+          </p>
+          <p>
+            Do you feel unsafe, or do you see someone else feeling uneasy?
+            Report it to a member of staff – from the Social Safety team, at the
+            bar, at the cash register, with security, or to someone with an
+            earpiece. You don't have to be certain. We take every report
+            seriously.
+          </p>
+          <CopyEmail
+            class="button button--primary"
+            email="events@openhomefoundation.org"
+          />
+        </div>
+      </Content>
+    </Container>
+    <Container>
+      <div class="content-container content-container--source">
+        <p>
+          Source: <a
+            href="https://www.tivolivredenburg.nl/socialsafety/"
+            target="_blank"
+            rel="noreferrer noopener">Tivolivredenburg website</a
+          >
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="block block-accessibility">
+    <TitleText>
+      <h2 class="h2" slot="title">Accessibility</h2>
+
+      <p>
+        Building an open and inclusive event means ensuring everyone can
+        participate and have a positive experience. TivoliVredenburg is designed
+        to be accessible to all visitors, and we're here to help with any
+        specific needs you may have.
+      </p>
+      <Button
+        href="/accessibility-guide/"
+        class="get-directions button button--primary"
+        starburst={false}>go to accessibility guide</Button
+      >
+    </TitleText>
+  </section>
+
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" class="full-width" fullWidth={true} />
+  </section>
+  <Footer slot="footer" />
+
+  <style lang="scss">
+    @use "../styles/mixins/breakpoint.scss" as *;
+
+    :global(.container) {
+      // align-items: center;
+    }
+
+    .block {
+      &-getting-there {
+        padding: 0 0 4.5rem;
+
+        @include bp(desktop) {
+          padding: 4.5rem 0;
+        }
+      }
+
+      &-event-faq {
+        padding: 0 0 4.5rem;
+
+        .h2 {
+          margin-bottom: 4rem;
+        }
+      }
+
+      &-venue-rules {
+        margin-bottom: 4.5rem;
+      }
+
+      &-keeping-safe {
+        margin-bottom: 4rem;
+
+        @include bp(desktop) {
+          margin-bottom: 2rem;
+        }
+      }
+
+      &-notice {
+        margin-bottom: 4rem;
+
+        @include bp(desktop) {
+          margin-bottom: 2rem;
+        }
+
+        :global(.container) {
+          align-items: flex-start;
+        }
+
+        :global(.content-container) {
+          width: 100%;
+          max-width: 100%;
+          background-color: #fff;
+          border-radius: 1rem;
+          padding: 1.5rem;
+
+          &:global(.content-container--source) {
+            padding: 0.75rem 1.5rem;
+            margin-top: 2rem;
+            background-color: rgba(247, 246, 242, 0.4);
+
+            a {
+              color: var(--ohf-dark-grey);
+              text-decoration: none;
+
+              background-image: linear-gradient(
+                transparent calc(100% - 1px),
+                var(--ohf-dark-grey) 1px
+              );
+              background-size: 100% 100%;
+              background-repeat: no-repeat;
+              transition: background-size 0.3s;
+
+              &:hover {
+                background-size: 0% 100%;
+              }
+            }
+          }
+
+          p {
+            color: var(--ohf-dark-grey);
+            text-wrap: auto;
+
+            &.p--large {
+              color: var(--text-on-light);
+              font-weight: 500;
+            }
+          }
+
+          .copy-email {
+            :global(.copy-email__tooltip) {
+              bottom: 110%;
+            }
+
+            position: relative;
+            overflow: visible;
+            color: var(--text-on-dark);
+            padding: 8px 10px;
+            border-radius: 40px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-family: var(--typography-heading-font-family);
+            font-weight: var(--typography-heading-font-weight);
+            font-size: 0.75rem;
+            gap: 12px;
+            text-transform: uppercase;
+
+            @include bp(large-mobile) {
+              padding: 12px 24px;
+            }
+
+            background-color: var(--sotoh-yellow);
+            color: var(--ohf-dark-blue);
+            transition: background-color 0.3s ease-in-out;
+
+            .button-text__hover {
+              color: var(--sotoh-yellow);
+            }
+
+            &:hover {
+              background-color: var(--ohf-dark-blue);
+
+              @media (prefers-reduced-motion: reduce) {
+                .button-text__default {
+                  color: var(--sotoh-yellow);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &-accessibility {
+        margin-top: 5rem;
+        margin-bottom: 4.5rem;
+      }
+    }
+  </style>
+</Layout>

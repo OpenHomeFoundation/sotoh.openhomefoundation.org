@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Container from "../components/Container.astro";
+import Tabs from "../components/Tabs.astro";
+import Tab from "../components/Tab.astro";
+import EventFAQ from "../sections/EventFAQ.astro";
+import TicketInclusionsFAQ from "../sections/TicketInclusionsFAQ.astro";
+import Tickertape from "../components/Tickertape.astro";
+import Footer from "../sections/Footer.astro";
+
+const title = "FAQs - State of the Open Home";
+const description =
+  "Got some questions? Find out answers to some frequently asked questions for State of the Open Home 2026.";
+---
+
+<Layout
+  bodyClass="page-faq"
+  includeEventSchema={false}
+  title={title}
+  description={description}
+>
+  <Header slot="header" lightMode />
+  <section class="block block-event-faq">
+    <Container containerClass="container--column">
+      <h2 class="h2 text-dark text-center">Got some questions?</h2>
+      <Tabs>
+        <Tab group="resources" title="The Event" isActive={true}>
+          <EventFAQ />
+        </Tab>
+        <Tab group="resources" title="Ticket and Inclusions">
+          <TicketInclusionsFAQ />
+        </Tab>
+      </Tabs>
+    </Container>
+  </section>
+  <section class="block block-tickertape">
+    <Tickertape theme="yellow" class="full-width" fullWidth={true} />
+  </section>
+  <Footer slot="footer" />
+</Layout>
+
+<style lang="scss">
+  .block-tickertape {
+    margin-top: 4rem;
+  }
+</style>

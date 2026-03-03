@@ -415,4 +415,18 @@ const style = duration ? `--brand-icon-duration: ${duration}ms` : undefined;
       animation: privacy-quad-4 var(--brand-icon-duration, 6000ms) $timing 1s infinite normal forwards;
     }
   }
+
+  // ============================================
+  // Reduced motion: play animations once instead of looping
+  // ============================================
+  @media (prefers-reduced-motion: reduce) {
+    .brand-icon--building,
+    .brand-icon--choice,
+    .brand-icon--sustainability,
+    .brand-icon--privacy {
+      * {
+        animation-iteration-count: 1 !important;
+      }
+    }
+  }
 </style>

@@ -1,0 +1,82 @@
+---
+import { slugify } from "../lib/slugify";
+
+interface Props {
+  title: string;
+  group: string;
+  isActive?: boolean;
+}
+
+const { title, group, isActive = false } = Astro.props;
+
+if (!title) {
+  throw new Error("Tab component requires a 'title' prop.");
+}
+
+if (!group) {
+  throw new Error("Tab component requires a 'group' prop.");
+}
+
+const tabId = `${group}-${slugify(title)}`;
+---
+
+<input
+  type="radio"
+  name={group}
+  id={tabId}
+  class="tab-radio"
+  checked={isActive}
+/>
+<label for={tabId} class="tab-title">{title}</label>
+<div class="tab-content">
+  <slot />
+</div>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .tab-radio {
+    display: none;
+    order: -1; // Keep with labels
+  }
+
+  .tab-title {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--ohf-dark-blue);
+    border-radius: 100px;
+    color: var(--text-on-light);
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--typography-heading-font-family);
+    order: -1; // Move labels to the top
+    padding: 12px 24px;
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      color 0.2s ease;
+    user-select: none;
+
+    &:hover {
+      background-color: rgba(0, 35, 50, 0.05);
+    }
+  }
+
+  .tab-radio:checked + .tab-title {
+    background-color: var(--ohf-light-grey);
+    box-shadow: none;
+  }
+
+  .tab-content {
+    display: none;
+    order: 1; // Move content below labels
+    width: 100%;
+
+    :global(.container) {
+      padding: 0;
+    }
+  }
+
+  .tab-radio:checked + .tab-title + .tab-content {
+    display: block;
+  }
+</style>
