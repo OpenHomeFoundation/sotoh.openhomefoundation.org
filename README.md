@@ -1,46 +1,53 @@
-# Astro Starter Kit: Basics
+# State of the Open Home
+
+Website for **State of the Open Home**, the annual event organized by the [Open Home Foundation](https://www.openhomefoundation.org/) celebrating the open home community. The event takes place in Utrecht, The Netherlands at the TivoliVredenburg venue.
+
+Live at: [sotoh.openhomefoundation.org](https://sotoh.openhomefoundation.org)
+
+## Tech Stack
+
+- [Astro](https://astro.build/) — static site generator
+- [Sass](https://sass-lang.com/) — styling
+- [GSAP](https://gsap.com/) — animations
+- [Matter.js](https://brm.io/matter-js/) — physics simulations
+- [Playwright](https://playwright.dev/) — end-to-end testing
+- [Netlify](https://www.netlify.com/) — hosting and deployment
+
+## Prerequisites
+
+- Node.js 22 (see `.nvmrc`)
+- npm
+
+## Getting Started
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The dev server starts at `localhost:4321`.
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command             | Description                                      |
+| :------------------ | :----------------------------------------------- |
+| `npm run dev`       | Start local dev server                           |
+| `npm run build`     | Build the production site to `./dist/`           |
+| `npm run preview`   | Preview the production build locally             |
+| `npm run test`      | Run Playwright end-to-end tests                  |
+| `npm run astro ...` | Run Astro CLI commands (e.g. `astro add`)        |
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+## Project Structure
+
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+src/
+  components/   # Reusable UI components (Hero, Countdown, Ticket, FAQ, etc.)
+  sections/     # Page sections (Building, Speakers, BePart, Footer, etc.)
+  layouts/      # Page layouts (Layout, TextLayout)
+  pages/        # Astro file-based routing (index, FAQ, venue, invite, etc.)
+  lib/          # Shared utilities and data (icons, speakers, countdown, etc.)
+  styles/       # Global styles, variables, and mixins
+  images/       # Static images and carousel slides
+public/         # Favicons, manifest, and other static assets
+tests/          # Playwright test specs
+```
