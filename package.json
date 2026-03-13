@@ -13,7 +13,7 @@
     "@astrojs/netlify": "^6.6.4",
     "@astrojs/sitemap": "^3.7.0",
     "@types/matter-js": "^0.20.2",
-    "astro": "^5.18.0",
+    "astro": "^6.0.4",
     "gsap": "^3.14.2",
     "matter-js": "^0.20.0",
     "pathseg": "^1.2.1",
