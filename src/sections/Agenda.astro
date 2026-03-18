@@ -18,7 +18,13 @@ import { agenda } from "../lib/agenda";
               {item.items.map((subItem) => (
                 <div class="agenda__item">
                   <div class="agenda__title">{subItem.title}</div>
-                  <!-- If we have segments -->
+                  {subItem.speakers && (
+                    <div class="agenda__segment-speakers">
+                      {subItem.speakers.map((speaker) => (
+                        <span class="agenda__speaker">{speaker}</span>
+                      ))}
+                    </div>
+                  )}
                   {subItem.segments && (
                     <div class="agenda__segments">
                       {subItem.segments.map((segment) => (
@@ -153,6 +159,7 @@ import { agenda } from "../lib/agenda";
       align-items: center;
       text-align: center;
       height: 100%;
+      gap: 20px;
 
       @include bp(tablet){
         align-items: flex-start;
@@ -179,7 +186,6 @@ import { agenda } from "../lib/agenda";
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-top: 20px;
     }
 
     &__segment{
