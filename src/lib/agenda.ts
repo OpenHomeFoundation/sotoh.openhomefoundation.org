@@ -33,7 +33,7 @@ export const agenda: { time: string; items: AgendaItem[] }[] = [
         title: "How we build in the open",
         segments: [
           {
-            title: "With Home Assistan Labs",
+            title: "With Home Assistant Labs",
             speakers: ["Franck Nijhof", "Jean-Loïc Pouffier"],
           },
           {
