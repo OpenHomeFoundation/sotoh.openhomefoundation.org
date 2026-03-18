@@ -1,0 +1,237 @@
+---
+import Container from "../components/Container.astro";
+import Content from "../components/Content.astro";
+
+import { agenda } from "../lib/agenda";
+---
+
+<Container containerClass="container--column">
+  <Content>
+    <h2 class="h2">Program: Building in the open</h2>
+    <div class="agenda">
+      {
+        agenda.map((item) => (
+          <div class="agenda__row">
+            <div class="agenda__time">{item.time}</div>
+            <div class="agenda__items">
+              {item.items.map((subItem) => (
+                <div class="agenda__item">
+                  <div class="agenda__title">{subItem.title}</div>
+                  {subItem.speakers && (
+                    <div class="agenda__segment-speakers">
+                      {subItem.speakers.map((speaker) => (
+                        <span class="agenda__speaker">{speaker}</span>
+                      ))}
+                    </div>
+                  )}
+                  {subItem.segments && (
+                    <div class="agenda__segments">
+                      {subItem.segments.map((segment) => (
+                        <div class="agenda__segment">
+                          <div class="agenda__segment-title">{segment.title}</div>
+                          <!-- If we have speakers for this segment -->
+                          {segment.speakers && (
+                            <div class="agenda__segment-speakers">
+                              {segment.speakers.map((speaker) => (
+                                <span class="agenda__speaker">{speaker}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Content>
+</Container>
+
+<style lang="scss" is:global>
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .agenda{
+    --diamond-icon: url("data:image/svg+xml,%3Csvg width='24' height='25' viewBox='0 0 24 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 25C12 18.3726 6.62742 13 1.04907e-06 13L12 13L12 25Z' fill='%23F7F6F2'/%3E%3Cpath d='M-5.24537e-07 12C6.62742 12 12 6.62742 12 5.24537e-07L12 12L-5.24537e-07 12Z' fill='%23F7F6F2'/%3E%3Cpath d='M12 -2.09815e-06C12 6.62742 17.3726 12 24 12L12 12L12 -2.09815e-06Z' fill='%23F7F6F2'/%3E%3Cpath d='M24 13C17.3726 13 12 18.3726 12 25L12 13L24 13Z' fill='%23F7F6F2'/%3E%3Crect y='12' width='24' height='1' fill='%23F7F6F2'/%3E%3C/svg%3E");
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 32px;
+
+    &__row{
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      gap: 12px;
+
+      @include bp(tablet){
+        flex-direction: row;
+        gap: 24px;
+      }
+
+      &:not(:last-child){
+        .agenda__time{
+          position: relative;
+          &::after{
+            content: "";
+            background-image: var(--diamond-icon);
+            bottom: -28px;
+            display: none;
+            height: 24px;
+            position: absolute;
+            right: -25px;
+            width: 24px;
+
+            @include bp(tablet){
+              display: block;
+            }
+          }
+        }
+
+        &::after{
+          content: "";
+          background: var(--ohf-light-grey);
+          height: 1px;
+          width: calc(100% - 2rem);
+          position: absolute;
+          bottom: -16px;
+          left: 1rem;
+        }
+
+       &::before{
+            content: "";
+            background-image: var(--diamond-icon);
+            bottom: -27px;
+            height: 24px;
+            position: absolute;
+            left: calc(50% - 12px);
+            width: 24px;
+
+            @include bp(tablet){
+              display: none;
+            }
+          }
+        }
+
+    }
+
+    &__time{
+      font-family: var(--typography-heading-font-family);
+      font-weight: var(--typography-heading-font-weight);
+      display: grid;
+      place-items: center;
+      white-space: nowrap;
+      padding: 20px;
+      font-size: 12px;
+      width: 100%;
+
+      @include bp(tablet){
+        font-size: 14px;
+        max-width: 200px;
+        padding: 40px 20px;
+      }
+
+      @include bp(desktop){
+        font-size: 16px;
+        max-width: 266px;
+      }
+    }
+
+    &__time, &__items{
+      flex-grow: 1;
+    }
+
+    &__time, &__item{
+      background: rgba(247, 246, 242, .1);
+      border: 1px solid var(--ohf-light-grey);
+      border-radius: 1rem;
+    }
+
+    &__item{
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+
+      @include bp(tablet){
+        align-items: flex-start;
+        text-align: left;
+        padding: 36px 24px;
+      }
+    }
+
+    &__title{
+      font-size: 16px;
+
+      @include bp(tablet){
+        font-size: 22px;
+      }
+    }
+
+    &__items{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    &__segments{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    &__segment{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &__segment-title{
+      font-weight: 500;
+    }
+
+    &__segment-speakers{
+      font-weight: 300;
+      display: flex;
+      gap: 8px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      @include bp(tablet){
+        justify-content: flex-start;
+      }
+
+      .agenda__speaker{
+        display: inline-block;
+
+        &:not(:last-child)::after{
+          content: "•"; // bullet
+          padding: 0 6px;
+
+          @include bp(tablet){
+            padding: 0 12px;
+          }
+        }
+      }
+    }
+
+    &__segment-title, &__segment-speakers{
+      font-size: 12px;
+
+      @include bp(tablet){
+        font-size: 14px;
+      }
+
+      @include bp(desktop){
+        font-size: 16px;
+      }
+    }
+  }
+</style>
