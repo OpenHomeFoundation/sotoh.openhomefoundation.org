@@ -8,6 +8,9 @@ import { agenda } from "../lib/agenda";
 <Container containerClass="container--column">
   <Content>
     <h2 class="h2">Program: Building in the open</h2>
+    <p>
+      Times shown in the agenda are in CET
+    </p>
     <div class="agenda">
       {
         agenda.map((item) => (
@@ -61,6 +64,8 @@ import { agenda } from "../lib/agenda";
     flex-direction: column;
     width: 100%;
     gap: 32px;
+    margin-top: 32px;
+
 
     &__row{
       display: flex;
