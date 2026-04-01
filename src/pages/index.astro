@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
+import YoutubeLivestream from "../components/YoutubeLivestream.astro";
 import Hero from "../components/Hero.astro";
 import Countdown from "../components/Countdown.astro";
 import Building from "../sections/Building.astro";
@@ -17,17 +18,20 @@ import Agenda from "../sections/Agenda.astro";
 
 <Layout bodyClass="page-home">
   <Header slot="header" />
-  <section class="block block-hero">
-    <Hero />
+  <section class="block block-livestream">
+    <YoutubeLivestream />
   </section>
-  <section class="block block-countdown">
-    <Countdown />
+  <section class="block block-building">
+    <Building />
   </section>
   <section class="block block-ticket" id="ticket">
     <Ticket />
   </section>
-  <section class="block block-building">
-    <Building />
+  <section class="block block-speakers" id="speakers">
+    <Speakers />
+  </section>
+  <section class="block block-agenda" id="agenda">
+    <Agenda />
   </section>
   <section class="block block-what-is" id="what-is-state-of-the-open-home">
     <WhatIs />
@@ -37,12 +41,6 @@ import Agenda from "../sections/Agenda.astro";
   </section>
   <section class="block block-why" id="why-we-are-building-in-the-open">
     <Why />
-  </section>
-  <section class="block block-speakers" id="speakers">
-    <Speakers />
-  </section>
-  <section class="block block-agenda" id="agenda">
-    <Agenda />
   </section>
   <section class="block block-be-part" id="be-part-of-the-conversation">
     <BePart />
@@ -57,27 +55,21 @@ import Agenda from "../sections/Agenda.astro";
   @use "../styles/mixins/breakpoint.scss" as *;
 
   .block {
-    &-hero {
-      margin-bottom: 2rem;
-    }
-
     &-ticket {
-      padding: 3.5rem 1rem;
+      padding: 0 1rem 1.5rem;
 
       @include bp(tablet) {
-        padding: 5rem 1rem;
-      }
-
-      @include bp(desktop) {
-        padding: 7rem 0;
+        padding: 0 1rem 1rem;
       }
     }
 
     &-building {
-      padding-bottom: 4rem;
+      padding-top: 4rem;
+      padding-bottom: 3rem;
 
       @include bp(tablet) {
-        padding-bottom: 6rem;
+        padding-top: 6rem;
+        padding-bottom: 5rem;
       }
     }
 
@@ -98,7 +90,6 @@ import Agenda from "../sections/Agenda.astro";
     &-speakers {
       overflow: hidden;
       margin-top: 5rem;
-      margin-bottom: 5rem;
     }
 
     &-agenda {
@@ -107,7 +98,7 @@ import Agenda from "../sections/Agenda.astro";
       margin-bottom: 5rem;
 
       @include bp(desktop) {
-        margin-top: 10rem;
+        margin-top: 8rem;
         margin-bottom: 10rem;
       }
     }

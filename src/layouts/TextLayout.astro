@@ -25,7 +25,7 @@ const canonical = `https://sotoh.openhomefoundation.org${Astro.url.pathname}`;
   <div class="text-page">
     <Container containerClass="container--column">
       <div class="text-content">
-        <h1 class="h1">{title}</h1>
+        {title && <h1 class="h1">{title}</h1>}
         <slot />
       </div>
     </Container>
