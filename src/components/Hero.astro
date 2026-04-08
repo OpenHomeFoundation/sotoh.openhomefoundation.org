@@ -8,6 +8,7 @@ import { ICONS } from "../lib/icons";
 
 import logoPlaceholder from "../images/logo-placeholder.png";
 import BrandIcon from "./BrandIcon.astro";
+import Button from "./Button.astro";
 ---
 
 <Container containerClass="container--hero">
@@ -27,8 +28,16 @@ import BrandIcon from "./BrandIcon.astro";
     <ul class="event-details">
       <li>Wednesday, April 8, 2026</li>
       <li>Utrecht, The Netherlands</li>
-      <li>Tickets available now!</li>
     </ul>
+    <Button
+      href="https://www.youtube.com/watch?v=XyAL1to3Lm4"
+      class="button button--primary button--tickets"
+      target="_blank"
+      rel="noopener noreferrer"
+      icon="youtube"
+    >
+      Rewatch the event
+    </Button>
   </Content>
 </Container>
 
@@ -49,6 +58,21 @@ import BrandIcon from "./BrandIcon.astro";
   img {
     width: 100%;
     height: auto;
+  }
+
+  // button anim up
+  :global(.button) {
+    position: relative;
+    overflow: visible;
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation-name: animate-up-fade;
+      animation-fill-mode: forwards;
+      animation-duration: 0.5s;
+      animation-timing-function: var(--entry-ease);
+      animation-delay: 0.75s;
+    }
   }
 
   h1 {
