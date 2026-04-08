@@ -48,17 +48,6 @@ const { lightMode = false } = Astro.props;
       </div>
     </a>
 
-    <div class="site-header__ctas">
-      <Button
-        href="https://events.openhomefoundation.org/sotoh26/"
-        class="button button--primary button--tickets"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Buy tickets
-      </Button>
-    </div>
-
     <div class="site-header-burger">
       <input type="checkbox" id="site-header-burger-toggle" />
       <label class="site-header-burger-label" for="site-header-burger-toggle"
@@ -249,6 +238,7 @@ const { lightMode = false } = Astro.props;
       width: 120px;
       display: flex;
       flex-direction: row;
+      flex-grow: 1;
 
       @include bp(large-mobile) {
         width: 150px;
