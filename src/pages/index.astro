@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
-import YoutubeLivestream from "../components/YoutubeLivestream.astro";
 import Building from "../sections/Building.astro";
 import Ticket from "../components/Ticket.astro";
 import WhatIs from "../sections/WhatIs.astro";
@@ -12,12 +11,13 @@ import Speakers from "../sections/Speakers.astro";
 import BePart from "../sections/BePart.astro";
 import Footer from "../sections/Footer.astro";
 import Agenda from "../sections/Agenda.astro";
+import Hero from "../components/Hero.astro";
 ---
 
 <Layout bodyClass="page-home">
   <Header slot="header" />
-  <section class="block block-livestream">
-    <YoutubeLivestream />
+  <section class="block block-hero">
+    <Hero />
   </section>
   <section class="block block-building">
     <Building />
