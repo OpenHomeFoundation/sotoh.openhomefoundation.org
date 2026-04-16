@@ -62,7 +62,7 @@ import Hero from "../components/Hero.astro";
     }
 
     &-building {
-      padding-top: 4rem;
+      padding-top: 2rem;
       padding-bottom: 3rem;
 
       @include bp(tablet) {
@@ -87,7 +87,11 @@ import Hero from "../components/Hero.astro";
 
     &-speakers {
       overflow: hidden;
-      margin-top: 5rem;
+      margin-top: 1rem;
+
+      @include bp(desktop) {
+        margin-top: 5rem;
+      }
     }
 
     &-agenda {
