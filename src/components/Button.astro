@@ -244,6 +244,18 @@ const {
       }
     }
 
+    &--header {
+      @media (max-width: 500px) {
+        &:has(.button-icon) {
+          padding: 8px 10px;
+        }
+
+        .button-icon {
+          display: none;
+        }
+      }
+    }
+
     .burst {
       --angle: 0deg;
       --size: 12px;
