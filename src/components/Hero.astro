@@ -2,13 +2,9 @@
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
 
-import { Image } from "astro:assets";
-
 import { ICONS } from "../lib/icons";
 
-import logoPlaceholder from "../images/logo-placeholder.png";
 import BrandIcon from "./BrandIcon.astro";
-import Button from "./Button.astro";
 ---
 
 <Container containerClass="container--hero">
@@ -25,19 +21,21 @@ import Button from "./Button.astro";
 
   <Content>
     <h1 class="h1">STATE OF THE OPEN HOME</h1>
-    <ul class="event-details">
-      <li>Wednesday, April 8, 2026</li>
-      <li>Utrecht, The Netherlands</li>
-    </ul>
-    <Button
-      href="https://www.youtube.com/watch?v=XyAL1to3Lm4"
-      class="button button--primary button--tickets"
-      target="_blank"
-      rel="noopener noreferrer"
-      icon="youtube"
-    >
-      Rewatch the event
-    </Button>
+
+    <div class="recap-container">
+      <p class="h2">2026 Event Highlights</p>
+      <div class="video-container embed-facade">
+        <div id="video-overlay"></div>
+        <iframe
+          width="1080"
+          height="608"
+          data-src="https://www.youtube.com/embed/TTsSRewv9ag?si=Ti547uieFuUM55tL&enablejsapi=1"
+          title="State of the Open Home 2026 Highlights"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+    </div>
   </Content>
 </Container>
 
@@ -116,67 +114,56 @@ import Button from "./Button.astro";
     }
   }
 
-  .event-details {
+  .recap-container {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: clamp(1rem, 0.9886rem + 0.6818vw, 1.5rem);
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.45s;
-      animation-timing-function: var(--entry-ease);
-      animation-delay: 0.85s;
-    }
-
-    @include bp(tablet) {
-      flex-direction: row;
-      gap: 1rem;
-    }
 
     @include bp(desktop) {
-      gap: 1.5rem;
+      margin-top: 2.5rem;
     }
 
-    li {
-      flex-shrink: 0;
-
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 0.625rem;
-
-      @include bp(tablet) {
-        gap: 1rem;
-      }
+    p {
+      text-align: center;
+      margin-bottom: 1rem;
 
       @include bp(desktop) {
-        gap: 1.5rem;
+        margin-bottom: 2.5rem;
       }
+    }
 
-      &:last-child {
-        &:after {
-          content: none;
+    .video-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.25);
+
+      display: flex;
+
+      #video-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0);
+        z-index: 1;
+        pointer-events: none;
+        transition: background 0.5s ease;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+
+        &.active {
+          background: rgba(0, 0, 0, 0.75);
         }
       }
 
-      &:after {
-        width: 0.25rem;
-        height: 0.25rem;
-        content: "";
-        display: inline-block;
-        background-color: currentColor;
-        border-radius: 50%;
-
-        @include bp(tablet) {
-          width: 0.5rem;
-          height: 0.5rem;
-        }
+      iframe {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
       }
     }
   }
@@ -201,3 +188,74 @@ import Button from "./Button.astro";
     }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("video-overlay")!;
+
+    let player: any = null;
+    let loaded = false;
+
+    const pauseVideo = () => player?.pauseVideo();
+
+    const initYTPlayer = (iframe: HTMLIFrameElement) => {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+
+      const previousReady = (window as any).onYouTubeIframeAPIReady;
+      (window as any).onYouTubeIframeAPIReady = () => {
+        previousReady?.();
+        player = new (window as any).YT.Player(iframe, {
+          events: {
+            onStateChange: (event: { data: number }) => {
+              const PLAYING = 1;
+              overlay.classList.toggle("active", event.data === PLAYING);
+            },
+          },
+        });
+      };
+
+      // Pause when the video container scrolls out of view
+      const container = iframe.closest(".video-container");
+      if (container) {
+        new IntersectionObserver(
+          ([entry]) => { if (!entry.isIntersecting) pauseVideo(); },
+          { threshold: 0 }
+        ).observe(container);
+      }
+
+      // Pause when the mobile menu opens
+      const menuToggle = document.querySelector<HTMLInputElement>(
+        "#site-header-burger-toggle"
+      );
+      menuToggle?.addEventListener("change", () => {
+        if (menuToggle.checked) pauseVideo();
+      });
+
+      // Pause when the tab loses focus
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) pauseVideo();
+      });
+    };
+
+    const lazyLoadYouTube = () => {
+      if (loaded) return;
+      loaded = true;
+      const iframes = document.querySelectorAll<HTMLIFrameElement>(
+        ".embed-facade iframe[data-src]",
+      );
+      iframes.forEach((iframe) => {
+        iframe.src = iframe.getAttribute("data-src")!;
+        iframe.removeAttribute("data-src");
+        initYTPlayer(iframe);
+      });
+    };
+
+    document.addEventListener("scroll", lazyLoadYouTube, { once: true });
+    document.addEventListener("click", lazyLoadYouTube, { once: true });
+    document.addEventListener("mousemove", lazyLoadYouTube, { once: true });
+    document.addEventListener("touchstart", lazyLoadYouTube, { once: true });
+    document.addEventListener("touchmove", lazyLoadYouTube, { once: true });
+  });
+</script>
