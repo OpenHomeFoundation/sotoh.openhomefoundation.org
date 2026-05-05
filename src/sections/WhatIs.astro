@@ -1,42 +1,60 @@
 ---
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
-import Button from "../components/Button.astro";
+
+import Image from "astro/components/Image.astro";
+import whatIsImg from "../images/what-is-state-of-the-open-home.webp";
 ---
 
-<Container containerClass="container--column">
+<Container containerClass="container--row">
   <Content>
-    <h3 class="h2">What is State of the Open Home?</h3>
-    <div class="content-container text-center">
-      <p>
-        State of the Open Home is our annual event where we celebrate our
-        community, share successes, and get excited about what's coming next.
-        This year you can be in the room with us – join our audience to be part
-        of the inspiring conversations, lively debate, and creative energy that
-        flows when Open Home advocates get together!
+    <div class="content-container what-is-content-container">
+      <h3 class="h2 animate--fade-up">What is State of the Open Home?</h3>
+      <p class="animate--fade-up">
+        State of the Open Home is where we celebrate our successes, share what
+        we’re working on, and get excited about the future. Each year brings a
+        new theme, but our community is always at the heart of the event:
+        whether you’re in the room with us or watching around the world.
       </p>
     </div>
-    <div class="buttons-container animate--fade-up">
-      <Button
-        class="primary"
-        href="https://www.youtube.com/watch?v=XyAL1to3Lm4"
-        target="_blank"
-        class="button button--primary"
-        icon="youtube"
-        starburst={true}
-      >
-        Rewatch the 2026 event
-      </Button>
-      <Button
-        class="primary"
-        href="https://www.youtube.com/watch?v=o4Vctz1_KYE"
-        target="_blank"
-        class="button button--primary"
-        icon="youtube"
-        starburst={true}
-      >
-        Rewatch the 2025 event
-      </Button>
-    </div>
+    <Image
+      src={whatIsImg}
+      alt="An image showing the stage at State of the Open Home 2026"
+    />
   </Content>
 </Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .what-is-content-container {
+    max-width: 468px;
+    margin-bottom: 0;
+
+    :global(p) {
+      text-align: center;
+
+      @include bp(tablet) {
+        text-align: left;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    max-width: 692px;
+    max-height: 420px;
+    flex-grow: 1;
+    object-fit: cover;
+    object-position: 90% center;
+    border-radius: 1.25rem;
+
+    @include bp(tablet) {
+      width: 40%;
+    }
+
+    @include bp(desktop) {
+      width: 60%;
+    }
+  }
+</style>
