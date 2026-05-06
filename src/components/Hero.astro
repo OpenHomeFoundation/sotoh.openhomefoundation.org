@@ -5,6 +5,10 @@ import Content from "../components/Content.astro";
 import { ICONS } from "../lib/icons";
 
 import BrandIcon from "./BrandIcon.astro";
+
+const YT_VIDEO_ID = "TTsSRewv9ag";
+const YT_WATCH_URL = `https://www.youtube.com/watch?v=${YT_VIDEO_ID}`;
+const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
 ---
 
 <Container containerClass="container--hero">
@@ -28,21 +32,37 @@ import BrandIcon from "./BrandIcon.astro";
     </div>
   </Content>
 </Container>
-<Container>
-  <div class="recap-container">
-    <div class="video-container embed-facade">
-      <div id="video-overlay"></div>
-      <iframe
-        width="1080"
-        height="608"
-        data-src="https://www.youtube.com/embed/TTsSRewv9ag?si=Ti547uieFuUM55tL&enablejsapi=1"
-        title="State of the Open Home 2026 Highlights"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen></iframe>
-    </div>
+
+<div class="recap-container">
+  <div class="video-container">
+    <iframe
+      data-src={YT_EMBED_SRC}
+      width="1080"
+      height="608"
+      title="State of the Open Home 2026 Highlights"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <a
+      href={YT_WATCH_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="video-link"
+      aria-label="Watch State of the Open Home 2026 highlights on YouTube"
+    >
+      <div class="video-cursor" aria-hidden="true">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <polygon points="5,3 18,10 5,17"></polygon>
+        </svg>
+      </div>
+    </a>
   </div>
-</Container>
+</div>
 
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
@@ -63,7 +83,6 @@ import BrandIcon from "./BrandIcon.astro";
     height: auto;
   }
 
-  // button anim up
   :global(.button) {
     position: relative;
     overflow: visible;
@@ -80,6 +99,11 @@ import BrandIcon from "./BrandIcon.astro";
 
   h1 {
     margin-bottom: 0;
+    text-align: center;
+
+    @include bp(desktop) {
+      text-align: left;
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
@@ -98,8 +122,13 @@ import BrandIcon from "./BrandIcon.astro";
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 0 0.6rem;
     flex-wrap: wrap;
+
+    @include bp(desktop) {
+      justify-content: flex-start;
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
@@ -124,9 +153,13 @@ import BrandIcon from "./BrandIcon.astro";
   }
 
   .hero__description {
-    text-align: left;
+    text-align: center;
     text-wrap: auto;
     margin-top: 0.5rem;
+
+    @include bp(desktop) {
+      text-align: left;
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
@@ -147,53 +180,49 @@ import BrandIcon from "./BrandIcon.astro";
     @include bp(desktop) {
       margin-top: 2.5rem;
     }
+  }
 
-    p {
-      text-align: center;
-      margin-bottom: 1rem;
+  .video-container {
+    position: relative;
+    width: 100%;
 
-      @include bp(desktop) {
-        margin-bottom: 2.5rem;
-      }
+    iframe {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      pointer-events: none;
     }
 
-    .video-container {
-      position: relative;
+    .video-link {
+      position: absolute;
+      inset: 0;
       z-index: 1;
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.25);
+    }
 
+    .video-cursor {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
       display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ohf-dark-blue);
+      pointer-events: none;
 
-      #video-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0);
-        z-index: 1;
-        pointer-events: none;
-        transition: background 0.5s ease;
-
-        @media (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
-
-        &.active {
-          background: rgba(0, 0, 0, 0.75);
-        }
-      }
-
-      iframe {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
+      @include bp(tablet) {
+        width: 80px;
+        height: 80px;
       }
     }
   }
 
   .brand-icons {
-    // 2x2
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, auto);
@@ -209,74 +238,93 @@ import BrandIcon from "./BrandIcon.astro";
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const overlay = document.getElementById("video-overlay")!;
+  import gsap from "gsap";
 
-    let player: any = null;
+  const container = document.querySelector(".video-container");
+  const link = document.querySelector(".video-link");
+  const cursor = document.querySelector(".video-cursor");
+  const iframe = document.querySelector(".video-container iframe");
+
+  if (container && link && cursor && iframe) {
+    const hasPointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (hasPointer && !prefersReducedMotion) {
+      cursor.style.top = "0";
+      cursor.style.left = "0";
+
+      const rect = container.getBoundingClientRect();
+      gsap.set(cursor, {
+        xPercent: -50,
+        yPercent: -50,
+        x: rect.width / 2,
+        y: rect.height / 2,
+        opacity: 0,
+      });
+
+      const xTo = gsap.quickTo(cursor, "x", {
+        duration: 0.2,
+        ease: "power2.out",
+      });
+      const yTo = gsap.quickTo(cursor, "y", {
+        duration: 0.2,
+        ease: "power2.out",
+      });
+
+      link.addEventListener("mousemove", (e) => {
+        const r = container.getBoundingClientRect();
+        xTo(e.clientX - r.left);
+        yTo(e.clientY - r.top);
+      });
+
+      link.addEventListener("mouseleave", () => {
+        gsap.to(cursor, { opacity: 0, duration: 0.2 });
+      });
+
+      link.addEventListener("mouseenter", () => {
+        gsap.to(cursor, { opacity: 1, duration: 0.2 });
+      });
+    }
+
+    let player = null;
     let loaded = false;
 
-    const pauseVideo = () => player?.pauseVideo();
+    const loadVideo = () => {
+      loaded = true;
+      iframe.src = iframe.dataset.src;
 
-    const initYTPlayer = (iframe: HTMLIFrameElement) => {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(tag);
 
-      const previousReady = (window as any).onYouTubeIframeAPIReady;
-      (window as any).onYouTubeIframeAPIReady = () => {
-        previousReady?.();
-        player = new (window as any).YT.Player(iframe, {
+      window.onYouTubeIframeAPIReady = () => {
+        player = new window.YT.Player(iframe, {
           events: {
-            onStateChange: (event: { data: number }) => {
-              const PLAYING = 1;
-              overlay.classList.toggle("active", event.data === PLAYING);
+            onStateChange: ({ data }) => {
+              if (data === 0) {
+                player.seekTo(0);
+                player.playVideo();
+              }
             },
           },
         });
       };
-
-      // Pause when the video container scrolls out of view
-      const container = iframe.closest(".video-container");
-      if (container) {
-        new IntersectionObserver(
-          ([entry]) => {
-            if (!entry.isIntersecting) pauseVideo();
-          },
-          { threshold: 0 },
-        ).observe(container);
-      }
-
-      // Pause when the mobile menu opens
-      const menuToggle = document.querySelector<HTMLInputElement>(
-        "#site-header-burger-toggle",
-      );
-      menuToggle?.addEventListener("change", () => {
-        if (menuToggle.checked) pauseVideo();
-      });
-
-      // Pause when the tab loses focus
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) pauseVideo();
-      });
     };
 
-    const lazyLoadYouTube = () => {
-      if (loaded) return;
-      loaded = true;
-      const iframes = document.querySelectorAll<HTMLIFrameElement>(
-        ".embed-facade iframe[data-src]",
-      );
-      iframes.forEach((iframe) => {
-        iframe.src = iframe.getAttribute("data-src")!;
-        iframe.removeAttribute("data-src");
-        initYTPlayer(iframe);
-      });
-    };
-
-    document.addEventListener("scroll", lazyLoadYouTube, { once: true });
-    document.addEventListener("click", lazyLoadYouTube, { once: true });
-    document.addEventListener("mousemove", lazyLoadYouTube, { once: true });
-    document.addEventListener("touchstart", lazyLoadYouTube, { once: true });
-    document.addEventListener("touchmove", lazyLoadYouTube, { once: true });
-  });
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!loaded) loadVideo();
+          else player?.playVideo();
+        } else {
+          player?.pauseVideo();
+        }
+      },
+      { threshold: 0 },
+    ).observe(container);
+  }
 </script>
