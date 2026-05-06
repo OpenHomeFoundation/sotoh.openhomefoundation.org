@@ -36,15 +36,15 @@ import CarouselTrack from "./CarouselTrack.astro";
         },
       );
 
-      // ScrollTrigger.create({
-      //   trigger: carousel,
-      //   start: "top bottom",
-      //   end: "bottom top",
-      //   onEnter: () => tween.play(),
-      //   onLeave: () => tween.pause(),
-      //   onEnterBack: () => tween.play(),
-      //   onLeaveBack: () => tween.pause(),
-      // });
+      ScrollTrigger.create({
+        trigger: carousel,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => tween.play(),
+        onLeave: () => tween.pause(),
+        onEnterBack: () => tween.play(),
+        onLeaveBack: () => tween.pause(),
+      });
     }
   }
 </script>
