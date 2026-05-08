@@ -42,25 +42,20 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
       title="State of the Open Home 2026 Highlights"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <a
-      href={YT_WATCH_URL}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
       class="video-link"
-      aria-label="Watch State of the Open Home 2026 highlights on YouTube"
+      aria-label="Play State of the Open Home 2026 highlights"
     >
       <div class="video-cursor" aria-hidden="true">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
+        <svg class="icon--play" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <polygon points="5,3 18,10 5,17"></polygon>
         </svg>
+        <svg class="icon--pause" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <rect x="4" y="3" width="4" height="14"></rect>
+          <rect x="12" y="3" width="4" height="14"></rect>
+        </svg>
       </div>
-    </a>
+    </button>
   </div>
 </div>
 
@@ -200,6 +195,26 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
       position: absolute;
       inset: 0;
       z-index: 1;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+
+      @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+        cursor: none;
+      }
+    }
+
+    .icon--pause {
+      display: none;
+    }
+
+    &.is-playing .icon--play {
+      display: none;
+    }
+
+    &.is-playing .icon--pause {
+      display: block;
     }
 
     .video-cursor {
@@ -294,6 +309,17 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
 
     let player = null;
     let loaded = false;
+    // 'background' = muted autoplay, 'playing' = unmuted, 'paused' = paused
+    let videoState = "background";
+
+    const setPlaying = (playing) => {
+      videoState = playing ? "playing" : "paused";
+      container.classList.toggle("is-playing", playing);
+      link.setAttribute(
+        "aria-label",
+        playing ? "Pause video" : "Play video",
+      );
+    };
 
     const loadVideo = () => {
       loaded = true;
@@ -307,9 +333,19 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
         player = new window.YT.Player(iframe, {
           events: {
             onStateChange: ({ data }) => {
+              // 0 = ended
               if (data === 0) {
-                player.seekTo(0);
-                player.playVideo();
+                if (videoState === "playing") {
+                  // Return to muted background loop
+                  player.mute();
+                  player.seekTo(0);
+                  player.playVideo();
+                  videoState = "background";
+                  container.classList.remove("is-playing");
+                } else {
+                  player.seekTo(0);
+                  player.playVideo();
+                }
               }
             },
           },
@@ -317,13 +353,29 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
       };
     };
 
+    link.addEventListener("click", () => {
+      if (!player) return;
+      if (videoState === "background") {
+        player.unMute();
+        player.seekTo(0);
+        player.playVideo();
+        setPlaying(true);
+      } else if (videoState === "playing") {
+        player.pauseVideo();
+        setPlaying(false);
+      } else {
+        player.playVideo();
+        setPlaying(true);
+      }
+    });
+
     new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           if (!loaded) loadVideo();
-          else player?.playVideo();
+          else if (videoState === "background") player?.playVideo();
         } else {
-          player?.pauseVideo();
+          if (videoState === "background") player?.pauseVideo();
         }
       },
       { threshold: 0 },
