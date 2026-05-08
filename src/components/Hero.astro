@@ -387,6 +387,7 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       if (!player) return;
       if (videoState === "background") {
         player.unMute();
+        player.setVolume(50);
         player.seekTo(0);
         player.playVideo();
         setPlaying(true);
