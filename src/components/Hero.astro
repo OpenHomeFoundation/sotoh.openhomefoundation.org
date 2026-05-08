@@ -7,7 +7,7 @@ import { ICONS } from "../lib/icons";
 import BrandIcon from "./BrandIcon.astro";
 
 const YT_VIDEO_ID = "TTsSRewv9ag";
-const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
+const YT_EMBED_SRC = `https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
 
 import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 ---
@@ -35,7 +35,10 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 </Container>
 
 <div class="recap-container">
-  <div class="video-container" style={`--placeholder: url(${videoPlaceholderImg.src})`}>
+  <div
+    class="video-container"
+    style={`--placeholder: url(${videoPlaceholderImg.src})`}
+  >
     <iframe
       data-src={YT_EMBED_SRC}
       width="1080"
