@@ -315,10 +315,17 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
     const setPlaying = (playing) => {
       videoState = playing ? "playing" : "paused";
       container.classList.toggle("is-playing", playing);
-      link.setAttribute(
-        "aria-label",
-        playing ? "Pause video" : "Play video",
-      );
+      link.setAttribute("aria-label", playing ? "Pause video" : "Play video");
+
+      if (!hasPointer) {
+        if (playing) {
+          // Swap to pause icon then fade out
+          gsap.to(cursor, { opacity: 0, duration: 0.3, delay: 0.4 });
+        } else {
+          // Fade play icon back in
+          gsap.to(cursor, { opacity: 1, duration: 0.3 });
+        }
+      }
     };
 
     const loadVideo = () => {
@@ -342,6 +349,7 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
                   player.playVideo();
                   videoState = "background";
                   container.classList.remove("is-playing");
+                  if (!hasPointer) gsap.to(cursor, { opacity: 1, duration: 0.3 });
                 } else {
                   player.seekTo(0);
                   player.playVideo();
@@ -369,11 +377,15 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
       }
     });
 
+    // Load on first user intent
+    document.addEventListener("mousemove", loadVideo, { once: true });
+    document.addEventListener("touchstart", loadVideo, { once: true });
+
+    // Pause/play background loop when scrolled out of view
     new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (!loaded) loadVideo();
-          else if (videoState === "background") player?.playVideo();
+          if (videoState === "background") player?.playVideo();
         } else {
           if (videoState === "background") player?.pauseVideo();
         }
