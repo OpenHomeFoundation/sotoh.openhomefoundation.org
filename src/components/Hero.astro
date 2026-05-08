@@ -8,6 +8,8 @@ import BrandIcon from "./BrandIcon.astro";
 
 const YT_VIDEO_ID = "TTsSRewv9ag";
 const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
+
+import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 ---
 
 <Container containerClass="container--hero">
@@ -33,7 +35,7 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
 </Container>
 
 <div class="recap-container">
-  <div class="video-container">
+  <div class="video-container" style={`--placeholder: url(${videoPlaceholderImg.src})`}>
     <iframe
       data-src={YT_EMBED_SRC}
       width="1080"
@@ -195,6 +197,9 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
   .video-container {
     position: relative;
     width: 100%;
+    background-image: var(--placeholder);
+    background-size: cover;
+    background-position: center;
 
     iframe {
       display: block;
