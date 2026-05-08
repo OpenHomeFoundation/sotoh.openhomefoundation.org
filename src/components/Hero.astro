@@ -7,7 +7,6 @@ import { ICONS } from "../lib/icons";
 import BrandIcon from "./BrandIcon.astro";
 
 const YT_VIDEO_ID = "TTsSRewv9ag";
-const YT_WATCH_URL = `https://www.youtube.com/watch?v=${YT_VIDEO_ID}`;
 const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
 ---
 
@@ -47,10 +46,24 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
       aria-label="Play State of the Open Home 2026 highlights"
     >
       <div class="video-cursor" aria-hidden="true">
-        <svg class="icon--play" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <svg
+          class="icon--play"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <polygon points="5,3 18,10 5,17"></polygon>
         </svg>
-        <svg class="icon--pause" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <svg
+          class="icon--pause"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <rect x="4" y="3" width="4" height="14"></rect>
           <rect x="12" y="3" width="4" height="14"></rect>
         </svg>
@@ -349,7 +362,8 @@ const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mu
                   player.playVideo();
                   videoState = "background";
                   container.classList.remove("is-playing");
-                  if (!hasPointer) gsap.to(cursor, { opacity: 1, duration: 0.3 });
+                  if (!hasPointer)
+                    gsap.to(cursor, { opacity: 1, duration: 0.3 });
                 } else {
                   player.seekTo(0);
                   player.playVideo();
