@@ -5,13 +5,14 @@ import Content from "../components/Content.astro";
 import { ICONS } from "../lib/icons";
 
 import BrandIcon from "./BrandIcon.astro";
+
+const YT_VIDEO_ID = "TTsSRewv9ag";
+const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=1&loop=1&playlist=${YT_VIDEO_ID}&rel=0&enablejsapi=1`;
+
+import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 ---
 
 <Container containerClass="container--hero">
-  <p class="event-host p--large">
-    An event organized by the <Fragment set:html={ICONS["OHFLogo"]} />
-  </p>
-
   <div class="brand-icons">
     <BrandIcon icon="building" />
     <BrandIcon icon="privacy" />
@@ -20,24 +21,33 @@ import BrandIcon from "./BrandIcon.astro";
   </div>
 
   <Content>
-    <h1 class="h1">STATE OF THE OPEN HOME</h1>
-
-    <div class="recap-container">
-      <p class="h2">2026 Event Highlights</p>
-      <div class="video-container embed-facade">
-        <div id="video-overlay"></div>
-        <iframe
-          width="1080"
-          height="608"
-          data-src="https://www.youtube.com/embed/TTsSRewv9ag?si=Ti547uieFuUM55tL&enablejsapi=1"
-          title="State of the Open Home 2026 Highlights"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen></iframe>
-      </div>
+    <div class="hero__content">
+      <p class="event-host p--large">
+        An event organized by the <Fragment set:html={ICONS["OHFLogo"]} />
+      </p>
+      <h1 class="h1">STATE OF THE OPEN HOME</h1>
+      <p class="hero__description p--large">
+        Our annual event championing privacy, choice, and sustainability in the
+        Open Home.
+      </p>
     </div>
   </Content>
 </Container>
+
+<div class="recap-container">
+  <div
+    class="video-container"
+    style={`--placeholder: url(${videoPlaceholderImg.src})`}
+  >
+    <iframe
+      data-src={YT_EMBED_SRC}
+      width="1080"
+      height="608"
+      title="State of the Open Home 2026 Highlights"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</div>
 
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
@@ -58,7 +68,6 @@ import BrandIcon from "./BrandIcon.astro";
     height: auto;
   }
 
-  // button anim up
   :global(.button) {
     position: relative;
     overflow: visible;
@@ -77,6 +86,10 @@ import BrandIcon from "./BrandIcon.astro";
     margin-bottom: 0;
     text-align: center;
 
+    @include bp(desktop) {
+      text-align: left;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
       animation-name: animate-up-fade;
@@ -93,10 +106,14 @@ import BrandIcon from "./BrandIcon.astro";
 
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: 0 0.6rem;
     flex-wrap: wrap;
+
+    @include bp(desktop) {
+      justify-content: flex-start;
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       opacity: 0;
@@ -114,62 +131,62 @@ import BrandIcon from "./BrandIcon.astro";
     }
   }
 
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .hero__description {
+    text-align: center;
+    text-wrap: auto;
+    margin-top: 0.5rem;
+
+    @include bp(desktop) {
+      text-align: left;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation-name: animate-up-fade;
+      animation-fill-mode: forwards;
+      animation-duration: 0.45s;
+      animation-timing-function: var(--entry-ease);
+      animation-delay: 0.65s;
+    }
+  }
+
   .recap-container {
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 1.25rem;
+    overflow: hidden;
 
     @include bp(desktop) {
       margin-top: 2.5rem;
     }
+  }
 
-    p {
-      text-align: center;
-      margin-bottom: 1rem;
+  .video-container {
+    position: relative;
+    width: 100%;
+    background-image: var(--placeholder);
+    background-size: cover;
+    background-position: center;
 
-      @include bp(desktop) {
-        margin-bottom: 2.5rem;
-      }
-    }
-
-    .video-container {
-      position: relative;
-      z-index: 1;
+    iframe {
+      display: block;
       width: 100%;
-      background-color: rgba(255, 255, 255, 0.25);
-
-      display: flex;
-
-      #video-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0);
-        z-index: 1;
-        pointer-events: none;
-        transition: background 0.5s ease;
-
-        @media (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
-
-        &.active {
-          background: rgba(0, 0, 0, 0.75);
-        }
-      }
-
-      iframe {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-      }
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
   }
 
   .brand-icons {
-    // 2x2 on mobile, 4x1 on desktop
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, auto);
@@ -181,81 +198,55 @@ import BrandIcon from "./BrandIcon.astro";
       animation-duration: 0.85s;
       animation-timing-function: var(--entry-ease);
     }
-
-    @include bp(desktop) {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto;
-    }
   }
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const overlay = document.getElementById("video-overlay")!;
+  const container = document.querySelector(".video-container");
+  const iframe = document.querySelector(".video-container iframe");
 
-    let player: any = null;
+  if (container && iframe) {
+    let player = null;
     let loaded = false;
 
-    const pauseVideo = () => player?.pauseVideo();
+    const loadVideo = () => {
+      if (loaded) return;
+      loaded = true;
+      iframe.src = iframe.dataset.src;
 
-    const initYTPlayer = (iframe: HTMLIFrameElement) => {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(tag);
 
-      const previousReady = (window as any).onYouTubeIframeAPIReady;
-      (window as any).onYouTubeIframeAPIReady = () => {
-        previousReady?.();
-        player = new (window as any).YT.Player(iframe, {
+      window.onYouTubeIframeAPIReady = () => {
+        player = new window.YT.Player(iframe, {
           events: {
-            onStateChange: (event: { data: number }) => {
-              const PLAYING = 1;
-              overlay.classList.toggle("active", event.data === PLAYING);
+            onStateChange: ({ data }) => {
+              // 0 = ended — loop back as background
+              if (data === 0) {
+                player.seekTo(0);
+                player.playVideo();
+              }
             },
           },
         });
       };
-
-      // Pause when the video container scrolls out of view
-      const container = iframe.closest(".video-container");
-      if (container) {
-        new IntersectionObserver(
-          ([entry]) => { if (!entry.isIntersecting) pauseVideo(); },
-          { threshold: 0 }
-        ).observe(container);
-      }
-
-      // Pause when the mobile menu opens
-      const menuToggle = document.querySelector<HTMLInputElement>(
-        "#site-header-burger-toggle"
-      );
-      menuToggle?.addEventListener("change", () => {
-        if (menuToggle.checked) pauseVideo();
-      });
-
-      // Pause when the tab loses focus
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) pauseVideo();
-      });
     };
 
-    const lazyLoadYouTube = () => {
-      if (loaded) return;
-      loaded = true;
-      const iframes = document.querySelectorAll<HTMLIFrameElement>(
-        ".embed-facade iframe[data-src]",
-      );
-      iframes.forEach((iframe) => {
-        iframe.src = iframe.getAttribute("data-src")!;
-        iframe.removeAttribute("data-src");
-        initYTPlayer(iframe);
-      });
-    };
+    // Load on first user intent
+    document.addEventListener("mousemove", loadVideo, { once: true });
+    document.addEventListener("touchstart", loadVideo, { once: true });
 
-    document.addEventListener("scroll", lazyLoadYouTube, { once: true });
-    document.addEventListener("click", lazyLoadYouTube, { once: true });
-    document.addEventListener("mousemove", lazyLoadYouTube, { once: true });
-    document.addEventListener("touchstart", lazyLoadYouTube, { once: true });
-    document.addEventListener("touchmove", lazyLoadYouTube, { once: true });
-  });
+    // Pause/play background loop when scrolled out of view
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          player?.playVideo();
+        } else {
+          player?.pauseVideo();
+        }
+      },
+      { threshold: 0 },
+    ).observe(container);
+  }
 </script>

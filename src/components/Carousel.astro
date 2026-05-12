@@ -20,7 +20,7 @@ import CarouselTrack from "./CarouselTrack.astro";
 
   if (carousel && inner) {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     if (!prefersReducedMotion) {
@@ -33,7 +33,7 @@ import CarouselTrack from "./CarouselTrack.astro";
           ease: "none",
           repeat: -1,
           paused: true,
-        }
+        },
       );
 
       ScrollTrigger.create({
@@ -62,7 +62,7 @@ import CarouselTrack from "./CarouselTrack.astro";
     width: fit-content;
     display: flex;
     flex-direction: row;
-    gap: calc(var(--unit) * 0.077);
+    gap: 0;
     will-change: transform;
   }
 </style>

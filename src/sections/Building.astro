@@ -1,22 +1,98 @@
 ---
 import Container from "../components/Container.astro";
 import Content from "../components/Content.astro";
+import { logos } from "../lib/logos";
+
+import { Image } from "astro:assets";
+import buildingImg from "../images/building-in-the-open.webp";
 ---
 
-<Container containerClass="container--column">
+<Container containerClass="container--row container--row-reverse">
   <Content>
-    <h2 class="h2">Building in the Open</h2>
-    <div class="content-container text-center">
-      <p class="p--large">
-        We're taking transparency to the next level – join us live to find out
-        how!
+    <div class="content-container building-content-container">
+      <h3 class="h2 animate--fade-up">Building in the open</h3>
+      <p class="animate--fade-up">
+        State of the Open Home 2026 showed us what’s possible when we gather in
+        person, with an audience in Utrecht, alongside our global livestream.
+        Beyond the discussions and demos on stage, it was all about connections:
+        catching up over food and drinks, meeting the people behind the
+        projects. The energy inspired us, and we’ll be building on this
+        foundation to make State of the Open Home an event you don’t just watch,
+        but actively participate in.
       </p>
     </div>
   </Content>
+
+  <Image
+    src={buildingImg}
+    alt="An image showing the stage at State of the Open Home 2026"
+  />
+</Container>
+<Container containerClass="container--column">
+  <div class="text-center">
+    <div class="logo-cards animate--fade-up">
+      <div class="logo-card">
+        <Fragment set:html={logos.openHomeFoundation} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.homeAssistant} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.esphome} />
+      </div>
+      <div class="logo-card">
+        <Fragment set:html={logos.musicAssistant} />
+      </div>
+    </div>
+  </div>
 </Container>
 
 <style lang="scss">
-  .tag {
-    margin-bottom: 2rem;
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .logo-cards {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.625rem 3.25rem;
+    justify-content: center;
+    margin-top: 3rem;
+
+    @include bp(tablet) {
+      margin-top: 6rem;
+    }
+  }
+
+  .building-content-container {
+    width: 100%;
+    margin-bottom: 0;
+
+    @include bp(tablet) {
+      max-width: 650px;
+    }
+
+    :global(p) {
+      text-align: center;
+
+      @include bp(tablet) {
+        text-align: left;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    max-width: 509px;
+    max-height: 590px;
+    flex-grow: 1;
+    object-fit: cover;
+    object-position: 15% center;
+    border-radius: 1.25rem;
+    margin: 0 auto;
+
+    @include bp(tablet) {
+      width: 45%;
+      margin: 0;
+    }
   }
 </style>

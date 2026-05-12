@@ -37,7 +37,9 @@ const { containerClass = "" } = Astro.props;
       align-items: center;
 
       @include bp(large-desktop) {
-        padding: 5rem 5rem 2rem;
+        padding: 5rem 0;
+        flex-direction: row;
+        gap: 5rem;
       }
     }
 
@@ -48,6 +50,23 @@ const { containerClass = "" } = Astro.props;
 
       @include bp(tablet) {
         flex-direction: column;
+      }
+    }
+
+    &--row {
+      flex-direction: column;
+
+      @include bp(tablet) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    &--row-reverse {
+      flex-direction: column;
+
+      @include bp(tablet) {
+        flex-direction: row-reverse;
       }
     }
   }
