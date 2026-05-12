@@ -28,8 +28,12 @@ import whatIsImg from "../images/what-is-state-of-the-open-home.webp";
   @use "../styles/mixins/breakpoint.scss" as *;
 
   .what-is-content-container {
-    max-width: 468px;
+    width: 100%;
     margin-bottom: 0;
+
+    @include bp(tablet) {
+      max-width: 468px;
+    }
 
     :global(p) {
       text-align: center;
@@ -48,9 +52,11 @@ import whatIsImg from "../images/what-is-state-of-the-open-home.webp";
     object-fit: cover;
     object-position: 90% center;
     border-radius: 1.25rem;
+    margin: 0 auto;
 
     @include bp(tablet) {
       width: 40%;
+      margin: 0;
     }
 
     @include bp(desktop) {

@@ -64,8 +64,12 @@ import buildingImg from "../images/building-in-the-open.webp";
   }
 
   .building-content-container {
-    max-width: 650px;
+    width: 100%;
     margin-bottom: 0;
+
+    @include bp(tablet) {
+      max-width: 650px;
+    }
 
     :global(p) {
       text-align: center;
@@ -84,9 +88,11 @@ import buildingImg from "../images/building-in-the-open.webp";
     object-fit: cover;
     object-position: 15% center;
     border-radius: 1.25rem;
+    margin: 0 auto;
 
     @include bp(tablet) {
       width: 45%;
+      margin: 0;
     }
   }
 </style>
