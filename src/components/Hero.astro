@@ -330,6 +330,7 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 
     let player = null;
     let loaded = false;
+    let pendingPlay = false;
     // 'background' = muted autoplay, 'playing' = unmuted, 'paused' = paused
     let videoState = "background";
 
@@ -350,6 +351,7 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
     };
 
     const loadVideo = () => {
+      if (loaded) return;
       loaded = true;
       iframe.src = iframe.dataset.src;
 
@@ -360,6 +362,16 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       window.onYouTubeIframeAPIReady = () => {
         player = new window.YT.Player(iframe, {
           events: {
+            onReady: () => {
+              if (pendingPlay) {
+                pendingPlay = false;
+                player.unMute();
+                player.setVolume(50);
+                player.seekTo(0);
+                player.playVideo();
+                setPlaying(true);
+              }
+            },
             onStateChange: ({ data }) => {
               // 0 = ended
               if (data === 0) {
@@ -383,8 +395,15 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       };
     };
 
+    // Preload on focus so keyboard users don't wait on click
+    link.addEventListener("focus", loadVideo, { once: true });
+
     link.addEventListener("click", () => {
-      if (!player) return;
+      if (!player) {
+        loadVideo();
+        pendingPlay = true;
+        return;
+      }
       if (videoState === "background") {
         player.unMute();
         player.setVolume(50);
