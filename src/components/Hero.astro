@@ -7,7 +7,7 @@ import { ICONS } from "../lib/icons";
 import BrandIcon from "./BrandIcon.astro";
 
 const YT_VIDEO_ID = "TTsSRewv9ag";
-const YT_EMBED_SRC = `https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&disablekb=1&rel=0&enablejsapi=1`;
+const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=1&loop=1&playlist=${YT_VIDEO_ID}&rel=0&enablejsapi=1`;
 
 import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 ---
@@ -46,34 +46,6 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       title="State of the Open Home 2026 Highlights"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <button
-      class="video-link"
-      aria-label="Play State of the Open Home 2026 highlights"
-    >
-      <div class="video-cursor" aria-hidden="true">
-        <svg
-          class="icon--play"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <polygon points="5,3 18,10 5,17"></polygon>
-        </svg>
-        <svg
-          class="icon--pause"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <rect x="4" y="3" width="4" height="14"></rect>
-          <rect x="12" y="3" width="4" height="14"></rect>
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 
@@ -209,54 +181,6 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       width: 100%;
       height: auto;
       aspect-ratio: 16 / 9;
-      pointer-events: none;
-    }
-
-    .video-link {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-
-      @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-        cursor: none;
-      }
-    }
-
-    .icon--pause {
-      display: none;
-    }
-
-    &.is-playing .icon--play {
-      display: none;
-    }
-
-    &.is-playing .icon--pause {
-      display: block;
-    }
-
-    .video-cursor {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ohf-dark-blue);
-      pointer-events: none;
-
-      @include bp(tablet) {
-        width: 80px;
-        height: 80px;
-      }
     }
   }
 
@@ -276,79 +200,12 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
 </style>
 
 <script>
-  import gsap from "gsap";
-
   const container = document.querySelector(".video-container");
-  const link = document.querySelector(".video-link");
-  const cursor = document.querySelector(".video-cursor");
   const iframe = document.querySelector(".video-container iframe");
 
-  if (container && link && cursor && iframe) {
-    const hasPointer = window.matchMedia(
-      "(hover: hover) and (pointer: fine)",
-    ).matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (hasPointer && !prefersReducedMotion) {
-      cursor.style.top = "0";
-      cursor.style.left = "0";
-
-      const rect = container.getBoundingClientRect();
-      gsap.set(cursor, {
-        xPercent: -50,
-        yPercent: -50,
-        x: rect.width / 2,
-        y: rect.height / 2,
-        opacity: 0,
-      });
-
-      const xTo = gsap.quickTo(cursor, "x", {
-        duration: 0.2,
-        ease: "power2.out",
-      });
-      const yTo = gsap.quickTo(cursor, "y", {
-        duration: 0.2,
-        ease: "power2.out",
-      });
-
-      link.addEventListener("mousemove", (e) => {
-        const r = container.getBoundingClientRect();
-        xTo(e.clientX - r.left);
-        yTo(e.clientY - r.top);
-      });
-
-      link.addEventListener("mouseleave", () => {
-        gsap.to(cursor, { opacity: 0, duration: 0.2 });
-      });
-
-      link.addEventListener("mouseenter", () => {
-        gsap.to(cursor, { opacity: 1, duration: 0.2 });
-      });
-    }
-
+  if (container && iframe) {
     let player = null;
     let loaded = false;
-    let pendingPlay = false;
-    // 'background' = muted autoplay, 'playing' = unmuted, 'paused' = paused
-    let videoState = "background";
-
-    const setPlaying = (playing) => {
-      videoState = playing ? "playing" : "paused";
-      container.classList.toggle("is-playing", playing);
-      link.setAttribute("aria-label", playing ? "Pause video" : "Play video");
-
-      if (!hasPointer) {
-        if (playing) {
-          // Swap to pause icon then fade out
-          gsap.to(cursor, { opacity: 0, duration: 0.3, delay: 0.4 });
-        } else {
-          // Fade play icon back in
-          gsap.to(cursor, { opacity: 1, duration: 0.3 });
-        }
-      }
-    };
 
     const loadVideo = () => {
       if (loaded) return;
@@ -362,62 +219,17 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
       window.onYouTubeIframeAPIReady = () => {
         player = new window.YT.Player(iframe, {
           events: {
-            onReady: () => {
-              if (pendingPlay) {
-                pendingPlay = false;
-                player.unMute();
-                player.setVolume(50);
+            onStateChange: ({ data }) => {
+              // 0 = ended — loop back as background
+              if (data === 0) {
                 player.seekTo(0);
                 player.playVideo();
-                setPlaying(true);
-              }
-            },
-            onStateChange: ({ data }) => {
-              // 0 = ended
-              if (data === 0) {
-                if (videoState === "playing") {
-                  // Return to muted background loop
-                  player.mute();
-                  player.seekTo(0);
-                  player.playVideo();
-                  videoState = "background";
-                  container.classList.remove("is-playing");
-                  if (!hasPointer)
-                    gsap.to(cursor, { opacity: 1, duration: 0.3 });
-                } else {
-                  player.seekTo(0);
-                  player.playVideo();
-                }
               }
             },
           },
         });
       };
     };
-
-    // Preload on focus so keyboard users don't wait on click
-    link.addEventListener("focus", loadVideo, { once: true });
-
-    link.addEventListener("click", () => {
-      if (!player) {
-        loadVideo();
-        pendingPlay = true;
-        return;
-      }
-      if (videoState === "background") {
-        player.unMute();
-        player.setVolume(50);
-        player.seekTo(0);
-        player.playVideo();
-        setPlaying(true);
-      } else if (videoState === "playing") {
-        player.pauseVideo();
-        setPlaying(false);
-      } else {
-        player.playVideo();
-        setPlaying(true);
-      }
-    });
 
     // Load on first user intent
     document.addEventListener("mousemove", loadVideo, { once: true });
@@ -427,9 +239,9 @@ import videoPlaceholderImg from "../images/sotoh-highlights-placeholder.webp";
     new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (videoState === "background") player?.playVideo();
+          player?.playVideo();
         } else {
-          if (videoState === "background") player?.pauseVideo();
+          player?.pauseVideo();
         }
       },
       { threshold: 0 },
