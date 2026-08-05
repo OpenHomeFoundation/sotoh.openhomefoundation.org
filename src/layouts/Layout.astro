@@ -162,10 +162,7 @@ const fullTitle =
     (context) => {
       const { reduceMotion } = context.conditions!;
 
-      // Skip ScrollSmoother in Playwright tests (breaks trace playback)
-      const isPlaywrightTest = (window as any).__PLAYWRIGHT_TEST__;
-
-      if (!reduceMotion && !isPlaywrightTest) {
+      if (!reduceMotion) {
         ScrollSmoother.create({
           smooth: 1,
           effects: true,

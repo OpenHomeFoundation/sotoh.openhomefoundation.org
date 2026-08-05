@@ -10,7 +10,6 @@ Live at: [sotoh.openhomefoundation.org](https://sotoh.openhomefoundation.org)
 - [Sass](https://sass-lang.com/) — styling
 - [GSAP](https://gsap.com/) — animations
 - [Matter.js](https://brm.io/matter-js/) — physics simulations
-- [Playwright](https://playwright.dev/) — end-to-end testing
 - [Netlify](https://www.netlify.com/) — hosting and deployment
 
 ## Prerequisites
@@ -34,7 +33,6 @@ The dev server starts at `localhost:4321`.
 | `npm run dev`       | Start local dev server                           |
 | `npm run build`     | Build the production site to `./dist/`           |
 | `npm run preview`   | Preview the production build locally             |
-| `npm run test`      | Run Playwright end-to-end tests                  |
 | `npm run astro ...` | Run Astro CLI commands (e.g. `astro add`)        |
 
 ## Project Structure
@@ -49,5 +47,4 @@ src/
   styles/       # Global styles, variables, and mixins
   images/       # Static images and carousel slides
 public/         # Favicons, manifest, and other static assets
-tests/          # Playwright test specs
 ```
