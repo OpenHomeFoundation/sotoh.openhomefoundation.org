@@ -24,6 +24,12 @@ import Footer from "../sections/Footer.astro";
   <Footer slot="footer" />
 </Layout>
 
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    plausible("404");
+  });
+</script>
+
 <style lang="scss">
   .not-found {
     min-height: 60vh;

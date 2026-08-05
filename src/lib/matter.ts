@@ -251,7 +251,7 @@ export class MatterScene {
       {
         isStatic: true,
         render: { visible: false },
-      }
+      },
     );
     this.walls.leftWall = Bodies.rectangle(
       -wallThickness / 2,
@@ -261,7 +261,7 @@ export class MatterScene {
       {
         isStatic: true,
         render: { visible: false },
-      }
+      },
     );
     this.walls.rightWall = Bodies.rectangle(
       width + wallThickness / 2,
@@ -271,7 +271,7 @@ export class MatterScene {
       {
         isStatic: true,
         render: { visible: false },
-      }
+      },
     );
 
     bodies.push(this.walls.ground, this.walls.leftWall, this.walls.rightWall);
@@ -281,7 +281,7 @@ export class MatterScene {
 
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     // Add mouse control for dragging (skip if reduced motion)
@@ -344,7 +344,7 @@ export class MatterScene {
         {
           isStatic: true,
           render: { visible: false },
-        }
+        },
       );
       Composite.add(this.engine.world, this.walls.ceiling);
     }, 1500);
@@ -455,6 +455,14 @@ export class MatterScene {
     this.gameMode = true;
     this.gameOver = false;
 
+    // Track easter egg activation in Plausible
+    if (
+      typeof window !== "undefined" &&
+      typeof window.plausible === "function"
+    ) {
+      window.plausible("Easter Egg");
+    }
+
     // Disable gyro control and reset gravity when game starts
     this.disableGyro();
     this.engine.gravity.x = 0;
@@ -529,7 +537,7 @@ export class MatterScene {
     Events.on(
       this.engine,
       "collisionStart",
-      this.handleGameCollision.bind(this)
+      this.handleGameCollision.bind(this),
     );
 
     // Set up mouse tracking for pending shape on the whole container
@@ -567,7 +575,7 @@ export class MatterScene {
         this.mouseX = touch.clientX - rect.left;
         this.updatePendingShapePosition();
       },
-      { passive: true }
+      { passive: true },
     );
 
     this.container.addEventListener(
@@ -579,7 +587,7 @@ export class MatterScene {
         this.mouseX = touch.clientX - rect.left;
         this.updatePendingShapePosition();
       },
-      { passive: true }
+      { passive: true },
     );
 
     this.container.addEventListener("touchend", (e: TouchEvent) => {
@@ -606,7 +614,8 @@ export class MatterScene {
 
     const shapeConfig = GAME_SHAPES[this.pendingShapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
+    const scale =
+      Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
     const x = this.mouseX || width / 2;
     const startY = slideIn ? -100 : 30;
     const targetY = 30;
@@ -727,7 +736,7 @@ export class MatterScene {
     const padding = 60;
     const clampedX = Math.max(
       padding,
-      Math.min(this.render.canvas.width - padding, this.mouseX)
+      Math.min(this.render.canvas.width - padding, this.mouseX),
     );
     // During slide-in animation, only update x position
     const y = this.isSliding ? this.pendingShape.position.y : 30;
@@ -765,13 +774,14 @@ export class MatterScene {
     shapeIndex: number,
     x: number,
     y: number,
-    angle: number = 0
+    angle: number = 0,
   ): void {
     if (!this.engine || !this.render) return;
 
     const shapeConfig = GAME_SHAPES[shapeIndex];
     const width = this.render.canvas.width;
-    const scale = Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
+    const scale =
+      Math.min(1, Math.max(0.7, width / 1200)) * shapeConfig.size * 1.5;
 
     const halfPipeVertices = getSvgVertices(shapes.halfPipe);
     const halfCircleVertices = getSvgVertices(shapes.halfCircle);
@@ -862,7 +872,7 @@ export class MatterScene {
   }
 
   private handleGameCollision(
-    event: Matter.IEventCollision<Matter.Engine>
+    event: Matter.IEventCollision<Matter.Engine>,
   ): void {
     if (!this.engine) return;
 
@@ -911,9 +921,13 @@ export class MatterScene {
     const maxWidth = 1200;
     const isMobile = window.innerWidth < 768;
     const gameArea = document.getElementById("game-area");
-    const width = Math.min(gameArea?.clientWidth || this.container.clientWidth, maxWidth);
+    const width = Math.min(
+      gameArea?.clientWidth || this.container.clientWidth,
+      maxWidth,
+    );
     // Use fixed 500px height only in game mode on mobile, otherwise container height
-    const height = this.gameMode && isMobile ? 500 : this.container.clientHeight;
+    const height =
+      this.gameMode && isMobile ? 500 : this.container.clientHeight;
     const wallThickness = 300;
 
     // Update canvas size
@@ -940,28 +954,28 @@ export class MatterScene {
       height + wallThickness / 2,
       width + wallThickness * 2,
       wallThickness,
-      { isStatic: true, render: { visible: false } }
+      { isStatic: true, render: { visible: false } },
     );
     this.walls.leftWall = Bodies.rectangle(
       -wallThickness / 2,
       height / 2,
       wallThickness,
       height + wallThickness * 2,
-      { isStatic: true, render: { visible: false } }
+      { isStatic: true, render: { visible: false } },
     );
     this.walls.rightWall = Bodies.rectangle(
       width + wallThickness / 2,
       height / 2,
       wallThickness,
       height + wallThickness * 2,
-      { isStatic: true, render: { visible: false } }
+      { isStatic: true, render: { visible: false } },
     );
     this.walls.ceiling = Bodies.rectangle(
       width / 2,
       -wallThickness / 2,
       width + wallThickness * 2,
       wallThickness,
-      { isStatic: true, render: { visible: false } }
+      { isStatic: true, render: { visible: false } },
     );
 
     Composite.add(this.engine.world, [

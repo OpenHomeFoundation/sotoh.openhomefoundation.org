@@ -19,51 +19,65 @@ import { ICONS } from "../lib/icons";
         <span>Copyright &copy; Open Home Foundation</span>
       </div>
     </div>
-    <div class="footer-nav">
-      <div class="footer-nav-column">
-        <div class="footer-nav-title">Home</div>
-        <div class="footer-nav-items">
-          <TextWipe
-            class="footer-nav-item"
-            href="/#what-is-state-of-the-open-home"
-            >What is State of the Open Home?</TextWipe
-          >
-          <TextWipe class="footer-nav-item" href="/#building-in-the-open"
-            >Why we're building in the open</TextWipe
-          >
-          <TextWipe class="footer-nav-item" href="/#the-conversation-continues"
-            >Be part of the conversation</TextWipe
-          >
+    <div class="footer-right">
+      <div class="footer-nav">
+        <div class="footer-nav-column">
+          <div class="footer-nav-title">Home</div>
+          <div class="footer-nav-items">
+            <TextWipe
+              class="footer-nav-item"
+              href="/#what-is-state-of-the-open-home"
+              >What is State of the Open Home?</TextWipe
+            >
+            <TextWipe class="footer-nav-item" href="/#building-in-the-open"
+              >Why we're building in the open</TextWipe
+            >
+            <TextWipe
+              class="footer-nav-item"
+              href="/#the-conversation-continues"
+              >Be part of the conversation</TextWipe
+            >
+          </div>
+        </div>
+        <div class="footer-nav-column">
+          <div class="footer-nav-title">Social</div>
+          <div class="footer-nav-items">
+            <TextWipe
+              class="footer-nav-item"
+              target="_blank"
+              href="https://fosstodon.org/@openhomefoundation"
+              >Mastodon</TextWipe
+            >
+            <TextWipe
+              class="footer-nav-item"
+              target="_blank"
+              href="https://bsky.app/profile/openhomefoundation.org"
+              >Bluesky</TextWipe
+            >
+            <TextWipe
+              class="footer-nav-item"
+              target="_blank"
+              href="https://www.instagram.com/openhomefoundation/"
+              >Instagram</TextWipe
+            >
+            <TextWipe
+              class="footer-nav-item"
+              target="_blank"
+              href="https://www.facebook.com/p/Open-Home-Foundation-61558575472603/"
+              >Facebook</TextWipe
+            >
+          </div>
         </div>
       </div>
-      <div class="footer-nav-column">
-        <div class="footer-nav-title">Social</div>
-        <div class="footer-nav-items">
-          <TextWipe
-            class="footer-nav-item"
-            target="_blank"
-            href="https://fosstodon.org/@openhomefoundation">Mastodon</TextWipe
-          >
-          <TextWipe
-            class="footer-nav-item"
-            target="_blank"
-            href="https://bsky.app/profile/openhomefoundation.org"
-            >Bluesky</TextWipe
-          >
-          <TextWipe
-            class="footer-nav-item"
-            target="_blank"
-            href="https://www.instagram.com/openhomefoundation/"
-            >Instagram</TextWipe
-          >
-          <TextWipe
-            class="footer-nav-item"
-            target="_blank"
-            href="https://www.facebook.com/p/Open-Home-Foundation-61558575472603/"
-            >Facebook</TextWipe
-          >
-        </div>
-      </div>
+      <p class="footer-analytics">
+        This website uses <a
+          href="https://www.openhomefoundation.org/blog/making-our-web-analytics-open-source-with-plausible/"
+          rel="noopener">privacy-first analytics</a
+        > to help us improve the site. You can view all data in our <a
+          href="https://plausible.openhomefoundation.org/sotoh.openhomefoundation.org"
+          rel="noopener">public dashboard</a
+        >.
+      </p>
     </div>
   </Container>
 </footer>
@@ -152,15 +166,24 @@ import { ICONS } from "../lib/icons";
       }
     }
 
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex-grow: 1;
+
+      @include bp(tablet) {
+        width: 60%;
+      }
+    }
+
     .footer-nav {
       display: flex;
       gap: 20px 32px;
-      flex-grow: 1;
       justify-content: flex-end;
       flex-direction: column;
 
       @include bp(tablet) {
-        width: 60%;
         flex-direction: row;
       }
 
@@ -190,6 +213,29 @@ import { ICONS } from "../lib/icons";
 
         :global(.text-wipe) {
           font-size: 12px;
+        }
+      }
+    }
+
+    .footer-analytics {
+      margin: 0;
+      max-width: 30rem;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #a2aab6;
+      text-wrap: balance;
+
+      @include bp(tablet) {
+        text-align: right;
+        margin-left: auto;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+
+        &:hover {
+          color: #fff;
         }
       }
     }
