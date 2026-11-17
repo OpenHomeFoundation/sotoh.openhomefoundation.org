@@ -20,8 +20,7 @@
 				"esbenp.prettier-vscode",
 				"yzhang.markdown-all-in-one",
 				"davidanson.vscode-markdownlint",
-				"jock.svg",
-				"Gruntfuggly.todo-tree"
+				"jock.svg"
 			],
 			"settings": {
 				"files.eol": "\n",
@@ -38,15 +37,5 @@
 				"files.trimTrailingWhitespace": true
 			}
 		}
-	},
-	"mounts": [
-		"source=claude-config,target=/home/node/.claude,type=volume"
-	],
-	"remoteEnv": {
-		"CLAUDE_CONFIG_DIR": "/home/node/.claude"
-	},
-	"postCreateCommand": "sudo chown -R node:node /home/node/.claude && npm install && curl -fsSL https://claude.ai/install.sh | bash",
-	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "node"
-	// moved settings under customizations.vscode.settings
+	}
 }
