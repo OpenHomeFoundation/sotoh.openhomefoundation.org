@@ -1,0 +1,86 @@
+---
+import ArrowCircle from "../assets/icons/arrow-circle.svg";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Leave null while a URL is still outstanding: the card renders disabled
+   * and the build logs a warning so it can't be forgotten. */
+  href: string | null;
+  class?: string;
+}
+
+const { title, description, href, class: className, ...attrs } = Astro.props;
+const isExternal = !!href && /^https?:/.test(href);
+
+if (!href) {
+  console.warn(`[LinkCard] TODO: "${title}" has no URL yet (${Astro.url.pathname})`);
+}
+---
+
+<a
+  class:list={["link-card", className, { "link-card--todo": !href }]}
+  href={href ?? undefined}
+  aria-disabled={href ? undefined : "true"}
+  target={isExternal ? "_blank" : undefined}
+  rel={isExternal ? "noopener noreferrer" : undefined}
+  data-todo={href ? undefined : "Missing URL"}
+  {...attrs}
+>
+  <span class="link-card__text">
+    <span class="link-card__title">{title}</span>
+    {description && <span class="link-card__description">{description}</span>}
+  </span>
+  <ArrowCircle class="link-card__arrow" aria-hidden="true" />
+</a>
+
+<style lang="scss">
+  @use "../styles/mixins/card" as *;
+
+  .link-card {
+    @include glass-card-interactive;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-decoration: none;
+
+    &--todo {
+      cursor: not-allowed;
+
+      // Only visible in `astro dev`, so the gap is obvious while building.
+      :global(html[data-dev]) & {
+        outline: 2px dashed var(--sotoh-yellow);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .link-card__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .link-card__title {
+    @include card-title;
+  }
+
+  .link-card__description {
+    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+    line-height: 1.35;
+  }
+
+  .link-card__arrow {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s var(--entry-ease);
+  }
+
+  .link-card:not(.link-card--todo):hover .link-card__arrow {
+    transform: translateX(4px);
+  }
+</style>

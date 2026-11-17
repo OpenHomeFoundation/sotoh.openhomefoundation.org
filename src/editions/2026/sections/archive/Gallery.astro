@@ -1,0 +1,72 @@
+---
+import { Image } from "astro:assets";
+import Container from "../../components/Container.astro";
+import Marquee from "../../components/Marquee.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { galleryRows } from "../../data/gallery";
+---
+
+<Container containerClass="container--column">
+  <SectionHeader
+    title="Where the magic happens"
+    intro="Turns out building in the open is a lot more fun when you do it together! From the action on stage to lively chat over food and drinks, the venue was alive with good vibes and passion for our projects."
+  />
+</Container>
+
+<div class="gallery">
+  {
+    galleryRows.map((row, i) => (
+      <Marquee
+        reverse={i % 2 === 0}
+        duration={70}
+        gap="var(--gallery-gap)"
+        label={i === 0 ? "Photos from State of the Open Home 2026" : undefined}
+      >
+        {row.map((photo) => (
+          <Image
+            class:list={["gallery__photo", `gallery__photo--${photo.orientation}`]}
+            src={photo.image}
+            alt={photo.alt}
+            widths={[300, 560, 1100]}
+            sizes="(min-width: 768px) 528px, 300px"
+          />
+        ))}
+      </Marquee>
+    ))
+  }
+</div>
+
+<style lang="scss">
+  @use "../../styles/mixins/breakpoint.scss" as *;
+
+  .gallery {
+    --gallery-gap: 0.75rem;
+    --gallery-row-height: 200px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gallery-gap);
+    margin-top: 2.5rem;
+
+    @include bp(tablet) {
+      --gallery-gap: 1.25rem;
+      --gallery-row-height: 320px;
+    }
+  }
+
+  .gallery__photo {
+    display: block;
+    height: var(--gallery-row-height);
+    width: auto;
+    object-fit: cover;
+    border-radius: var(--radius-s);
+
+    &--landscape {
+      aspect-ratio: 692 / 420;
+    }
+
+    &--portrait {
+      aspect-ratio: 509 / 590;
+    }
+  }
+</style>

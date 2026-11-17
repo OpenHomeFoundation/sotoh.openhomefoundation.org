@@ -1,0 +1,32 @@
+---
+import Container from "../../components/Container.astro";
+import LinkCard from "../../components/LinkCard.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { keepExploring } from "../../data/archive-links";
+---
+
+<Container containerClass="container--column">
+  <SectionHeader
+    title="Keep exploring"
+    intro="Everything mentioned on stage, and where to keep going."
+  />
+  <ul class="keep-exploring" role="list">
+    {
+      keepExploring.map((link) => (
+        <li>
+          <LinkCard {...link} />
+        </li>
+      ))
+    }
+  </ul>
+</Container>
+
+<style lang="scss">
+  .keep-exploring {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+</style>

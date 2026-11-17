@@ -1,0 +1,38 @@
+---
+import FullImage from "../../components/FullImage.astro";
+import heroImg from "../../assets/archive/hero.webp";
+---
+
+<FullImage
+  image={heroImg}
+  title="State of the<br />Open Home<br />2026"
+  headingLevel="h1"
+  alt="A packed auditorium raising their hands towards the stage at State of the Open Home 2026"
+  hasScrollEntry={false}
+  priority
+  compactTitle
+  overlayColor="#001744"
+  objectPosition="center"
+>
+  <p class="p--large">
+    There was a big change to State of the Open Home this year, as we welcomed
+    a live audience for the first time since 2019! And the buzz it created
+    showed why meeting in person is so important.
+  </p>
+  <p class="p--large">
+    This year’s theme was all about building in the open, with a program that
+    didn’t just show you how we work, but invited you to help build what’s
+    next…
+  </p>
+</FullImage>
+
+<style>
+  /* Figma: 24px / 1.3, with a blank line between paragraphs. */
+  p {
+    line-height: 1.3;
+  }
+
+  p:not(:last-child) {
+    margin-bottom: 1.3em;
+  }
+</style>

@@ -1,0 +1,230 @@
+---
+import Container from "../../components/Container.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import SpeakerCard from "../../components/SpeakerCard.astro";
+import GoTo from "../../assets/icons/go-to.svg";
+import { speakers } from "../../data/speakers";
+---
+
+<div
+  class="speakers"
+  data-speakers
+  aria-roledescription="carousel"
+  aria-labelledby="speakers-title"
+>
+  <Container containerClass="container--column">
+    <SectionHeader
+      id="speakers-title"
+      title="Meet our speakers"
+      intro="Some fresh faces joined familiar names from the foundation to share how we’re building in the open together."
+    >
+      <div class="speakers__controls">
+        <button
+          type="button"
+          class="speakers__button speakers__button--prev"
+          data-direction="-1"
+          aria-label="Previous speaker"
+          disabled
+        >
+          <GoTo aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          class="speakers__button"
+          data-direction="1"
+          aria-label="Next speaker"
+        >
+          <GoTo aria-hidden="true" />
+        </button>
+      </div>
+    </SectionHeader>
+  </Container>
+
+  <div class="speakers__track" tabindex="0" role="group" aria-label="Speakers">
+    {
+      speakers.map((speaker, i) => (
+        <div
+          class="speakers__slide"
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} of ${speakers.length}`}
+        >
+          <SpeakerCard {...speaker} />
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="visually-hidden" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  document.querySelectorAll<HTMLElement>("[data-speakers]").forEach((root) => {
+    const track = root.querySelector<HTMLElement>(".speakers__track")!;
+    const slides = Array.from(track.children) as HTMLElement[];
+    const status = root.querySelector<HTMLElement>('[role="status"]')!;
+    const [prev, next] = root.querySelectorAll<HTMLButtonElement>(
+      ".speakers__button",
+    );
+
+    let pending: number | null = null;
+    let settled = 0;
+
+    // scrollLeft at which each slide sits on the snap edge. The first slide is
+    // snapped at scrollLeft 0, so this is just its distance from that slide.
+    // (Don't read scroll-padding from getComputedStyle: it contains a
+    // percentage, so it comes back unresolved and parses to NaN.)
+    const positionOf = (slide: HTMLElement) =>
+      slide.offsetLeft - slides[0].offsetLeft;
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+
+    const nearest = () =>
+      slides.reduce(
+        (best, slide, i) =>
+          Math.abs(positionOf(slide) - track.scrollLeft) <
+          Math.abs(positionOf(slides[best]) - track.scrollLeft)
+            ? i
+            : best,
+        0,
+      );
+
+    // The last few slides can't reach the snap edge (the track runs out), so
+    // stop at the first slide whose position is at or past the end.
+    const lastReachable = () => {
+      const i = slides.findIndex((slide) => positionOf(slide) >= maxScroll());
+      return i === -1 ? slides.length - 1 : i;
+    };
+
+    const go = (direction: number) => {
+      const target = Math.min(
+        lastReachable(),
+        Math.max(0, (pending ?? nearest()) + direction),
+      );
+      pending = target;
+      track.scrollTo({
+        left: Math.min(positionOf(slides[target]), maxScroll()),
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+    };
+
+    const updateButtons = () => {
+      const atStart = track.scrollLeft <= 1;
+      const atEnd = track.scrollLeft >= maxScroll() - 1;
+      // Move focus off a button before disabling it.
+      if (atStart && document.activeElement === prev) next.focus();
+      if (atEnd && document.activeElement === next) prev.focus();
+      prev.disabled = atStart;
+      next.disabled = atEnd;
+    };
+
+    const onSettle = () => {
+      pending = null;
+      updateButtons();
+      const current = nearest();
+      if (current !== settled) {
+        settled = current;
+        const name = slides[current].querySelector(".speaker-card__name");
+        status.textContent = `Speaker ${current + 1} of ${slides.length}: ${name?.textContent?.trim().replace(/\s+/g, " ")}`;
+      }
+    };
+
+    prev.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+
+    if ("onscrollend" in window) {
+      track.addEventListener("scrollend", onSettle);
+    } else {
+      let timer: ReturnType<typeof setTimeout>;
+      track.addEventListener(
+        "scroll",
+        () => {
+          clearTimeout(timer);
+          timer = setTimeout(onSettle, 120);
+        },
+        { passive: true },
+      );
+    }
+
+    window.addEventListener("resize", updateButtons, { passive: true });
+    updateButtons();
+  });
+</script>
+
+<style lang="scss">
+  @use "../../styles/mixins/breakpoint.scss" as *;
+
+  .speakers__controls {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .speakers__button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    border: 0.4px solid var(--ohf-light-grey);
+    background: transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      opacity 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
+
+    &:hover:not(:disabled) {
+      background-color: var(--glass-bg-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &--prev :global(svg) {
+      rotate: 180deg;
+    }
+  }
+
+  .speakers__track {
+    // Align the first card with the 1200px content column, bleed off the right.
+    --gutter: max(1.5rem, calc((100% - 1200px) / 2));
+
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 4px;
+    }
+  }
+
+  .speakers__slide {
+    flex: 0 0 208px;
+    scroll-snap-align: start;
+
+    @include bp(tablet) {
+      flex-basis: 291px;
+    }
+  }
+</style>

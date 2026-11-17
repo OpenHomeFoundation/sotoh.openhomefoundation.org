@@ -1,6 +1,4 @@
 ---
-import Container from "./Container.astro";
-import Button from "./Button.astro";
 ---
 
 <div class="holo-group">
@@ -249,7 +247,7 @@ import Button from "./Button.astro";
 
 <script>
   import gsap from "gsap";
-  import { tickets } from "../lib/tickets";
+  import { tickets } from "../data/tickets";
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const prefersReducedMotion = window.matchMedia(

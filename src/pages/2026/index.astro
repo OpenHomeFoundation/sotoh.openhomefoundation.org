@@ -1,0 +1,80 @@
+---
+// State of the Open Home 2026 – archive.
+// Built entirely from src/editions/2026 so it keeps this design even when
+// the homepage moves on to a new edition.
+import Layout from "@2026/layouts/Layout.astro";
+import Header from "@2026/components/Header.astro";
+import Ticket from "@2026/components/Ticket.astro";
+import Footer from "@2026/sections/Footer.astro";
+import ConversationContinues from "@2026/sections/ConversationContinues.astro";
+import ArchiveHero from "@2026/sections/archive/ArchiveHero.astro";
+import Livestream from "@2026/sections/archive/Livestream.astro";
+import Speakers from "@2026/sections/archive/Speakers.astro";
+import Gallery from "@2026/sections/archive/Gallery.astro";
+import KeepExploring from "@2026/sections/archive/KeepExploring.astro";
+import PastEditions from "@2026/sections/archive/PastEditions.astro";
+---
+
+<Layout
+  title="State of the Open Home 2026"
+  description="Relive State of the Open Home 2026 in Utrecht: rewatch the full livestream chapter by chapter, meet the speakers, and see photos from our first in-person event since 2019."
+  theme="gradient"
+>
+  <Header slot="header" cta={{ label: "Rewatch the event", href: "#livestream" }} />
+
+  <section class="block block--hero">
+    <ArchiveHero />
+  </section>
+  <section class="block block--ticket" id="ticket" aria-label="Event ticket">
+    <Ticket />
+  </section>
+  <section class="block" id="livestream">
+    <Livestream />
+  </section>
+  <section class="block block--bleed" id="speakers">
+    <Speakers />
+  </section>
+  <section class="block block--bleed" id="gallery">
+    <Gallery />
+  </section>
+  <section class="block" id="keep-exploring">
+    <KeepExploring />
+  </section>
+  <section class="block" id="past-editions">
+    <PastEditions />
+  </section>
+  <section class="block block--hero" id="the-conversation-continues">
+    <ConversationContinues compactTitle linkToCurrent />
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style lang="scss">
+  @use "../../editions/2026/styles/mixins/breakpoint.scss" as *;
+
+  .block {
+    padding-block: 2.5rem;
+
+    @include bp(tablet) {
+      padding-block: 5rem;
+    }
+
+    &--hero {
+      padding-block: 0;
+    }
+
+    &--ticket {
+      padding-inline: 1rem;
+      padding-bottom: 0;
+
+      @include bp(tablet) {
+        padding-top: 5rem;
+      }
+    }
+
+    &--bleed {
+      overflow: hidden;
+    }
+  }
+</style>
