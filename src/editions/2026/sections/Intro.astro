@@ -1,6 +1,7 @@
 ---
 import Container from "../components/Container.astro";
 import Button from "../components/Button.astro";
+import { LIVESTREAM_URL } from "../data/navigation";
 ---
 
 <Container containerClass="container--column">
@@ -13,14 +14,14 @@ import Button from "../components/Button.astro";
     </div>
     <div class="buttons-container animate--fade-up">
       <Button
-        href="https://www.youtube.com/watch?v=XyAL1to3Lm4"
+        href={LIVESTREAM_URL}
         target="_blank"
         rel="noreferrer noopener"
         class="button button--primary"
         icon="youtube"
         starburst={true}
       >
-        Rewatch 2026
+        Watch 2026
       </Button>
     </div>
 </Container>
