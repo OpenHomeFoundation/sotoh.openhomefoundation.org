@@ -1,13 +1,11 @@
 ---
 import Container from "../components/Container.astro";
-import Content from "../components/Content.astro";
 
 import { Image } from "astro:assets";
 import whatIsImg from "../assets/images/what-is-state-of-the-open-home.webp";
 ---
 
 <Container containerClass="container--row">
-  <Content>
     <div class="content-container what-is-content-container">
       <h3 class="h2 animate--fade-up">What is State of the Open Home?</h3>
       <p class="animate--fade-up">
@@ -21,7 +19,6 @@ import whatIsImg from "../assets/images/what-is-state-of-the-open-home.webp";
       src={whatIsImg}
       alt="An image showing the stage at State of the Open Home 2026"
     />
-  </Content>
 </Container>
 
 <style lang="scss">

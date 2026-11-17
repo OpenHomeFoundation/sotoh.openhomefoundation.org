@@ -1,37 +1,45 @@
 ---
 import Container from "../components/Container.astro";
-import Content from "../components/Content.astro";
-
-import { ICONS } from "../lib/icons";
-
 import BrandIcon from "../components/BrandIcon.astro";
 
-const YT_VIDEO_ID = "TTsSRewv9ag";
-const YT_EMBED_SRC = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=1&loop=1&playlist=${YT_VIDEO_ID}&rel=0&enablejsapi=1`;
-
+import { ICONS } from "../lib/icons";
+import { youTubeEmbedUrl } from "../lib/youtube";
 import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.webp";
+
+const YT_VIDEO_ID = "TTsSRewv9ag";
+const YT_EMBED_SRC = youTubeEmbedUrl(YT_VIDEO_ID, {
+  autoplay: 1,
+  mute: 1,
+  controls: 1,
+  loop: 1,
+  playlist: YT_VIDEO_ID,
+});
+const BRAND_ICONS = ["building", "privacy", "choice", "sustainability"] as const;
 ---
 
 <Container containerClass="container--hero">
-  <div class="brand-icons">
-    <BrandIcon icon="building" />
-    <BrandIcon icon="privacy" />
-    <BrandIcon icon="choice" />
-    <BrandIcon icon="sustainability" />
+  <div class="brand-icons animate--entry" style="--entry-duration: 0.85s">
+    {BRAND_ICONS.map((icon) => <BrandIcon icon={icon} />)}
   </div>
 
-  <Content>
-    <div class="hero__content">
-      <p class="event-host p--large">
-        Organized by the <Fragment set:html={ICONS["OHFLogo"]} />
-      </p>
-      <h1 class="h1">STATE OF THE OPEN HOME</h1>
-      <p class="hero__description p--large">
-        Our annual event championing privacy, choice, and sustainability in the
-        Open Home.
-      </p>
-    </div>
-  </Content>
+  <div class="hero__content">
+    <p
+      class="event-host p--large animate--entry"
+      style="--entry-duration: 0.45s; --entry-delay: 0.55s"
+    >
+      Organized by the <Fragment set:html={ICONS["OHFLogo"]} />
+    </p>
+    <h1 class="h1 animate--entry" style="--entry-delay: 0.65s">
+      STATE OF THE OPEN HOME
+    </h1>
+    <p
+      class="hero__description p--large animate--entry"
+      style="--entry-duration: 0.45s; --entry-delay: 0.65s"
+    >
+      Our annual event championing privacy, choice, and sustainability in the
+      Open Home.
+    </p>
+  </div>
 </Container>
 
 <div class="recap-container">
@@ -52,36 +60,6 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
-  @keyframes animate-up-fade {
-    0% {
-      transform: translate3d(0, 50%, 0);
-      opacity: 0;
-    }
-    100% {
-      transform: none;
-      opacity: 1;
-    }
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  :global(.button) {
-    position: relative;
-    overflow: visible;
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.5s;
-      animation-timing-function: var(--entry-ease);
-      animation-delay: 0.75s;
-    }
-  }
-
   h1 {
     margin-bottom: 0;
     text-align: center;
@@ -89,21 +67,11 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
     @include bp(desktop) {
       text-align: left;
     }
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.5s;
-      animation-timing-function: var(--entry-ease);
-      animation-delay: 0.65s;
-    }
   }
 
   p.event-host {
     line-height: 1.4;
     margin-bottom: 0;
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -113,15 +81,6 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
 
     @include bp(desktop) {
       justify-content: flex-start;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.45s;
-      animation-timing-function: var(--entry-ease);
-      animation-delay: 0.55s;
     }
 
     :global(svg) {
@@ -145,25 +104,13 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
     @include bp(desktop) {
       text-align: left;
     }
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.45s;
-      animation-timing-function: var(--entry-ease);
-      animation-delay: 0.65s;
-    }
   }
 
   .recap-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 1.25rem;
+    border-radius: var(--radius-l);
     overflow: hidden;
 
     @include bp(desktop) {
@@ -172,7 +119,6 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
   }
 
   .video-container {
-    position: relative;
     width: 100%;
     background-image: var(--placeholder);
     background-size: cover;
@@ -190,47 +136,38 @@ import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.w
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, auto);
-
-    @media (prefers-reduced-motion: no-preference) {
-      opacity: 0;
-      animation-name: animate-up-fade;
-      animation-fill-mode: forwards;
-      animation-duration: 0.85s;
-      animation-timing-function: var(--entry-ease);
-    }
   }
 </style>
 
 <script>
+  import { loadYouTubeAPI, type YTPlayer } from "../lib/youtube";
+
   const container = document.querySelector(".video-container");
-  const iframe = document.querySelector(".video-container iframe");
+  const iframe = document.querySelector<HTMLIFrameElement>(
+    ".video-container iframe",
+  );
 
   if (container && iframe) {
-    let player = null;
+    let player: YTPlayer | null = null;
     let loaded = false;
 
-    const loadVideo = () => {
+    const loadVideo = async () => {
       if (loaded) return;
       loaded = true;
-      iframe.src = iframe.dataset.src;
+      iframe.src = iframe.dataset.src!;
 
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-
-      window.onYouTubeIframeAPIReady = () => {
-        player = new window.YT.Player(iframe, {
-          events: {
-            onStateChange: ({ data }) => {
-              // 0 = ended — loop back as background
-              if (data === 0) {
-                player.seekTo(0);
-                player.playVideo();
-              }
-            },
+      const YT = await loadYouTubeAPI();
+      player = new YT.Player(iframe, {
+        events: {
+          onStateChange: ({ data }) => {
+            // 0 = ended — loop back as background
+            if (data === 0) {
+              player?.seekTo(0, true);
+              player?.playVideo();
+            }
           },
-        });
-      };
+        },
+      });
     };
 
     // Load on first user intent

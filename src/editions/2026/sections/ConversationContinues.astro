@@ -1,47 +1,63 @@
 ---
 import FullImage from "../components/FullImage.astro";
+import Button from "../components/Button.astro";
 
 import bePartImg from "../assets/images/the-conversation-continues.webp";
+
+interface Props {
+  /** Archive layout: title at natural width over two lines (per the 2026 archive design). */
+  compactTitle?: boolean;
+  /** Show a button to the current edition. "/" is always the current edition,
+   * and the label has no year, so this never needs updating. Archive pages only. */
+  linkToCurrent?: boolean;
+}
+const { compactTitle = false, linkToCurrent = false } = Astro.props;
 ---
 
-<FullImage image={bePartImg}>
-  <h2 class="h2 be-part--title">The conversation continues</h2>
-  <div class="be-part--content-container content-container">
-    <p class="be-part--content animate--fade-up">
-      State of the Open Home will return in 2027, and we’re planning to make it
-      bigger and better than ever – and you can help by <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSeuqPALL5ilFLm_w1PTc3_m-fnMIG7TMI4DldpCtA2bQtCapA/viewform?usp=send_form"
-        target="_blank"
-        rel="noreferrer noopener">sharing your thoughts on 2026</a
-      > and what you’d like to see next year.
-    </p>
-    <p class="be-part--content animate--fade-up">
-      In the meantime, stay connected with the community: <a
-        href="https://luma.com/homeassistant"
-        target="_blank"
-        rel="noreferrer noopener">join meetups worldwide</a
-      >, participate in forums, and follow us for updates on <strong
-        >State of the Open Home 2027</strong
-      >.
-    </p>
-  </div>
+<FullImage
+  image={bePartImg}
+  title={compactTitle
+    ? "The conversation<br />continues"
+    : "The conversation continues"}
+  compactTitle={compactTitle}
+>
+  <p class="animate--fade-up">
+    State of the Open Home will return in 2027, and we’re planning to make it
+    bigger and better than ever – and you can help by <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSeuqPALL5ilFLm_w1PTc3_m-fnMIG7TMI4DldpCtA2bQtCapA/viewform?usp=send_form"
+      target="_blank"
+      rel="noreferrer noopener">sharing your thoughts on 2026</a
+    > and what you’d like to see next year.
+  </p>
+  <p class="animate--fade-up">
+    In the meantime, stay connected with the community: <a
+      href="https://luma.com/homeassistant"
+      target="_blank"
+      rel="noreferrer noopener">join meetups worldwide</a
+    >, participate in forums, and follow us for updates on <strong
+      >State of the Open Home 2027</strong
+    >.
+  </p>
+  {
+    linkToCurrent && (
+      <div class="buttons-container current-edition animate--fade-up">
+        <Button href="/" class="button button--primary" starburst>
+          Explore State of the Open Home
+        </Button>
+      </div>
+    )
+  }
 </FullImage>
 
 <style lang="scss">
   @use "../styles/mixins/breakpoint.scss" as *;
 
-  .be-part--content-container {
-    width: 100%;
-  }
+  .current-edition {
+    margin-top: 1.5rem;
+    justify-content: center;
 
-  .be-part--title {
     @include bp(tablet) {
-      width: 40%;
-      flex-shrink: 0;
+      justify-content: flex-start;
     }
-  }
-
-  .be-part--content {
-    text-wrap: auto;
   }
 </style>

@@ -1,10 +1,15 @@
 ---
-import Button from "../components/Button.astro";
 import Container from "../components/Container.astro";
 import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 
 import { ICONS } from "../lib/icons";
+import { siteNav, socialLinks, type NavLink } from "../data/navigation";
+
+const columns: { label: string; items: NavLink[]; external?: boolean }[] = [
+  ...siteNav,
+  { label: "Social", items: socialLinks, external: true },
+];
 ---
 
 <footer id="matter-container">
@@ -21,53 +26,28 @@ import { ICONS } from "../lib/icons";
     </div>
     <div class="footer-right">
       <div class="footer-nav">
-        <div class="footer-nav-column">
-          <div class="footer-nav-title">Home</div>
-          <div class="footer-nav-items">
-            <TextWipe
-              class="footer-nav-item"
-              href="/#what-is-state-of-the-open-home"
-              >What is State of the Open Home?</TextWipe
-            >
-            <TextWipe class="footer-nav-item" href="/#building-in-the-open"
-              >Why we're building in the open</TextWipe
-            >
-            <TextWipe
-              class="footer-nav-item"
-              href="/#the-conversation-continues"
-              >Be part of the conversation</TextWipe
-            >
-          </div>
-        </div>
-        <div class="footer-nav-column">
-          <div class="footer-nav-title">Social</div>
-          <div class="footer-nav-items">
-            <TextWipe
-              class="footer-nav-item"
-              target="_blank"
-              href="https://fosstodon.org/@openhomefoundation"
-              >Mastodon</TextWipe
-            >
-            <TextWipe
-              class="footer-nav-item"
-              target="_blank"
-              href="https://bsky.app/profile/openhomefoundation.org"
-              >Bluesky</TextWipe
-            >
-            <TextWipe
-              class="footer-nav-item"
-              target="_blank"
-              href="https://www.instagram.com/openhomefoundation/"
-              >Instagram</TextWipe
-            >
-            <TextWipe
-              class="footer-nav-item"
-              target="_blank"
-              href="https://www.facebook.com/p/Open-Home-Foundation-61558575472603/"
-              >Facebook</TextWipe
-            >
-          </div>
-        </div>
+        {
+          columns.map((column) => (
+            <div class="footer-nav-column">
+              <div class="footer-nav-title">{column.label}</div>
+              <div class="footer-nav-items">
+                {column.items.map((item) => (
+                  <TextWipe
+                    class="footer-nav-item"
+                    href={item.href ?? undefined}
+                    disabled={!item.href}
+                    {...(column.external && {
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    })}
+                  >
+                    {item.label}
+                  </TextWipe>
+                ))}
+              </div>
+            </div>
+          ))
+        }
       </div>
       <p class="footer-analytics">
         This website uses <a
@@ -213,6 +193,10 @@ import { ICONS } from "../lib/icons";
 
         :global(.text-wipe) {
           font-size: 12px;
+        }
+
+        :global(.text-wipe[aria-disabled="true"]) {
+          opacity: 0.5;
         }
       }
     }

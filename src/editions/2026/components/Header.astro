@@ -4,59 +4,48 @@ import CopyEmail from "../components/CopyEmail.astro";
 import TextWipe from "../components/TextWipe.astro";
 
 import { ICONS } from "../lib/icons";
+import { LIVESTREAM_URL, siteNav } from "../data/navigation";
 
 interface Props {
   lightMode?: boolean;
+  /** Header call to action. External URLs open in a new tab. */
+  cta?: { label: string; href: string };
 }
-const { lightMode = false } = Astro.props;
+const {
+  lightMode = false,
+  cta = { label: "Rewatch the event", href: LIVESTREAM_URL },
+} = Astro.props;
+
+const LOGO_ICONS = ["building", "privacy", "choice", "sustainability"] as const;
+const ctaIsExternal = /^https?:/.test(cta.href);
 ---
 
 <header class:list={["site-header", { "light-mode": lightMode }]}>
   <div class="site-header__row">
     <a href="/" rel="home" class="logo" aria-label="State of the Open Home">
-      <div class="icon-wrap">
-        <div class="icon-light">
-          <Fragment set:html={ICONS["building"]} />
-        </div>
-        <div class="icon-dark">
-          <Fragment set:html={ICONS["building"]} />
-        </div>
-      </div>
-      <div class="icon-wrap">
-        <div class="icon-light">
-          <Fragment set:html={ICONS["privacy"]} />
-        </div>
-        <div class="icon-dark">
-          <Fragment set:html={ICONS["privacy"]} />
-        </div>
-      </div>
-      <div class="icon-wrap">
-        <div class="icon-light">
-          <Fragment set:html={ICONS["choice"]} />
-        </div>
-        <div class="icon-dark">
-          <Fragment set:html={ICONS["choice"]} />
-        </div>
-      </div>
-      <div class="icon-wrap">
-        <div class="icon-light">
-          <Fragment set:html={ICONS["sustainability"]} />
-        </div>
-        <div class="icon-dark">
-          <Fragment set:html={ICONS["sustainability"]} />
-        </div>
-      </div>
+      {
+        LOGO_ICONS.map((icon) => (
+          <div class="icon-wrap">
+            <div class="icon-light">
+              <Fragment set:html={ICONS[icon]} />
+            </div>
+            <div class="icon-dark">
+              <Fragment set:html={ICONS[icon]} />
+            </div>
+          </div>
+        ))
+      }
     </a>
 
     <div class="site-header__ctas">
       <Button
-        href="https://www.youtube.com/watch?v=XyAL1to3Lm4"
+        href={cta.href}
         class="button button--primary button--header"
-        target="_blank"
-        rel="noopener noreferrer"
+        target={ctaIsExternal ? "_blank" : undefined}
+        rel={ctaIsExternal ? "noopener noreferrer" : undefined}
         icon="youtube"
       >
-        Rewatch the event
+        {cta.label}
       </Button>
     </div>
 
@@ -71,26 +60,29 @@ const { lightMode = false } = Astro.props;
   <div class="mobile-nav">
     <div class="mobile-nav__inner">
       <ul>
-        <li>
-          <TextWipe href="/">Home</TextWipe>
-          <ul>
+        {
+          siteNav.map((group) => (
             <li>
-              <TextWipe href="/#what-is-state-of-the-open-home"
-                >What is State of the Open Home?</TextWipe
-              >
+              {group.href ? (
+                <TextWipe href={group.href}>{group.label}</TextWipe>
+              ) : (
+                <span class="nav-heading">{group.label}</span>
+              )}
+              <ul>
+                {group.items.map((item) => (
+                  <li>
+                    <TextWipe
+                      href={item.href ?? undefined}
+                      disabled={!item.href}
+                    >
+                      {item.label}
+                    </TextWipe>
+                  </li>
+                ))}
+              </ul>
             </li>
-            <li>
-              <TextWipe href="/#building-in-the-open"
-                >Why we’re building in the open</TextWipe
-              >
-            </li>
-            <li>
-              <TextWipe href="/#the-conversation-continues"
-                >Be part of the conversation</TextWipe
-              >
-            </li>
-          </ul>
-        </li>
+          ))
+        }
       </ul>
 
       <div class="meta-links">
@@ -518,9 +510,21 @@ const { lightMode = false } = Astro.props;
             }
           }
 
-          a {
+          a,
+          .nav-heading {
             font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
             text-transform: uppercase;
+          }
+
+          .nav-heading {
+            display: inline-block;
+            padding: 2px 0;
+            color: var(--ohf-dark-blue);
+          }
+
+          // Not-yet-available destinations (e.g. past archives without a page)
+          :global(.text-wipe[aria-disabled="true"]) {
+            opacity: 0.5;
           }
 
           ul {

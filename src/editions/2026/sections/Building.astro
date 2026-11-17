@@ -1,6 +1,5 @@
 ---
 import Container from "../components/Container.astro";
-import Content from "../components/Content.astro";
 import { logos } from "../lib/logos";
 
 import { Image } from "astro:assets";
@@ -8,7 +7,6 @@ import buildingImg from "../assets/images/building-in-the-open.webp";
 ---
 
 <Container containerClass="container--row container--row-reverse">
-  <Content>
     <div class="content-container building-content-container">
       <h3 class="h2 animate--fade-up">Building in the open</h3>
       <p class="animate--fade-up">
@@ -21,7 +19,6 @@ import buildingImg from "../assets/images/building-in-the-open.webp";
         but actively participate in.
       </p>
     </div>
-  </Content>
 
   <Image
     src={buildingImg}

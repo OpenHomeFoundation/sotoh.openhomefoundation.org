@@ -12,15 +12,9 @@ interface Props {
 }
 
 const { title, pageTitle, description, noindex } = Astro.props;
-const canonical = `https://sotoh.openhomefoundation.org${Astro.url.pathname}`;
 ---
 
-<Layout
-  title={pageTitle || title}
-  description={description}
-  canonical={canonical}
-  noindex={noindex}
->
+<Layout title={pageTitle || title} description={description} noindex={noindex}>
   <Header slot="header" lightMode={true} />
   <div class="text-page">
     <Container containerClass="container--column">

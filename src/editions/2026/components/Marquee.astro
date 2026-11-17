@@ -1,0 +1,106 @@
+---
+/**
+ * Infinite horizontal marquee. The slotted content is rendered twice and the
+ * pair is translated by 50% so the loop is seamless. It only animates while
+ * on screen; with reduced motion it becomes a plain horizontal scroller.
+ */
+interface Props {
+  /** Scroll right-to-left instead of left-to-right. */
+  reverse?: boolean;
+  /** Seconds for one full loop. */
+  duration?: number;
+  /** Space between items (and between the two copies), any CSS length. */
+  gap?: string;
+  class?: string;
+  label?: string;
+}
+
+const {
+  reverse = false,
+  duration = 60,
+  gap = "0px",
+  class: className,
+  label,
+  ...attrs // forwards the parent's scoped-style attribute
+} = Astro.props;
+
+const content = await Astro.slots.render("default");
+---
+
+<div
+  class:list={["marquee", className]}
+  data-reverse={reverse}
+  data-duration={duration}
+  style={`--marquee-gap: ${gap}`}
+  role={label ? "region" : undefined}
+  aria-label={label}
+  {...attrs}
+>
+  <div class="marquee__inner">
+    <div class="marquee__track" set:html={content} />
+    <div class="marquee__track" aria-hidden="true" inert set:html={content} />
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll<HTMLElement>(".marquee").forEach((marquee) => {
+      const inner = marquee.querySelector(".marquee__inner");
+      if (!inner) return;
+
+      const reverse = marquee.dataset.reverse === "true";
+      const tween = gsap.fromTo(
+        inner,
+        { xPercent: reverse ? 0 : -50 },
+        {
+          xPercent: reverse ? -50 : 0,
+          duration: Number(marquee.dataset.duration),
+          ease: "none",
+          repeat: -1,
+          paused: true,
+        },
+      );
+
+      ScrollTrigger.create({
+        trigger: marquee,
+        start: "top bottom",
+        end: "bottom top",
+        onToggle: ({ isActive }) => (isActive ? tween.play() : tween.pause()),
+      });
+    });
+  }
+</script>
+
+<style lang="scss">
+  .marquee {
+    overflow: hidden;
+
+    @media (prefers-reduced-motion: reduce) {
+      overflow-x: auto;
+    }
+  }
+
+  .marquee__inner {
+    width: fit-content;
+    display: flex;
+    will-change: transform;
+  }
+
+  .marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--marquee-gap);
+    padding-inline-end: var(--marquee-gap);
+
+    @media (prefers-reduced-motion: reduce) {
+      &[aria-hidden="true"] {
+        display: none;
+      }
+    }
+  }
+</style>

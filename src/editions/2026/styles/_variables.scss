@@ -40,4 +40,15 @@
     --sotoh-purple: #8B26FF;
 
     --entry-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    // Page backgrounds
+    --page-bg-gradient: linear-gradient(207deg, var(--sotoh-light-blue) 1.29%, var(--sotoh-pink) 132.17%);
+    --page-bg-light: #CFE4FF;
+
+    // Surfaces
+    --glass-bg: rgba(247, 246, 242, 0.1);
+    --glass-bg-hover: rgba(247, 246, 242, 0.2);
+    --radius-s: 0.75rem;
+    --radius-m: 1rem;
+    --radius-l: 1.25rem;
 }

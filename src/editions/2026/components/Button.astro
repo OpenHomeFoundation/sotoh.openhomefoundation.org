@@ -19,6 +19,18 @@ const {
   starburst = false,
   rel = "",
 } = Astro.props;
+
+// Hover "starburst" particles: [icon, angle, size, delay, distance, start-x, colour]
+const BURSTS: [ICON, number, number, number, number, number, string][] = [
+  ["building", -50, 13, 0, 48, 5, "yellow"],
+  ["privacy", -25, 10, 80, 36, 28, "blue"],
+  ["sustainability", 5, 11, 40, 42, 47, "purple"],
+  ["choice", 30, 9, 140, 37, 68, "yellow"],
+  ["building", 55, 12, 200, 52, 88, "blue"],
+  ["privacy", 125, 10, 100, 50, 82, "purple"],
+  ["choice", 160, 8, 160, 40, 38, "yellow"],
+  ["sustainability", -135, 11, 60, 44, 12, "blue"],
+];
 ---
 
 <a
@@ -40,66 +52,16 @@ const {
     <span class="button-text__hover" aria-hidden="true"><slot /></span>
   </span>
   {
-    starburst && (
-      <>
+    starburst &&
+      BURSTS.map(([burstIcon, angle, size, delay, distance, startX, color]) => (
         <span
           class="burst"
-          style="--angle: -50deg; --size: 13px; --delay: 0ms; --distance: 48px; --start-x: 5%; --color: var(--sotoh-yellow);"
+          style={`--angle: ${angle}deg; --size: ${size}px; --delay: ${delay}ms; --distance: ${distance}px; --start-x: ${startX}%; --color: var(--sotoh-${color});`}
           aria-hidden="true"
         >
-          <Fragment set:html={ICONS["building"]} />
+          <Fragment set:html={ICONS[burstIcon]} />
         </span>
-        <span
-          class="burst"
-          style="--angle: -25deg; --size: 10px; --delay: 80ms; --distance: 36px; --start-x: 28%; --color: var(--sotoh-blue);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["privacy"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: 5deg; --size: 11px; --delay: 40ms; --distance: 42px; --start-x: 47%; --color: var(--sotoh-purple);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["sustainability"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: 30deg; --size: 9px; --delay: 140ms; --distance: 37px; --start-x: 68%; --color: var(--sotoh-yellow);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["choice"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: 55deg; --size: 12px; --delay: 200ms; --distance: 52px; --start-x: 88%; --color: var(--sotoh-blue);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["building"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: 125deg; --size: 10px; --delay: 100ms; --distance: 50px; --start-x: 82%; --color: var(--sotoh-purple);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["privacy"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: 160deg; --size: 8px; --delay: 160ms; --distance: 40px; --start-x: 38%; --color: var(--sotoh-yellow);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["choice"]} />
-        </span>
-        <span
-          class="burst"
-          style="--angle: -135deg; --size: 11px; --delay: 60ms; --distance: 44px; --start-x: 12%; --color: var(--sotoh-blue);"
-          aria-hidden="true"
-        >
-          <Fragment set:html={ICONS["sustainability"]} />
-        </span>
-      </>
-    )
+      ))
   }
 </a>
 

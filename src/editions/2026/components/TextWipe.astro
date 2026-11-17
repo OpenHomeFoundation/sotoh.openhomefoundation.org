@@ -17,7 +17,7 @@ const {
 
 <a
   class={`text-wipe ${className}`}
-  href={href}
+  href={disabled ? undefined : href}
   {...attrs}
   aria-disabled={disabled}
 >
