@@ -1,29 +1,26 @@
 ---
 import FullImage from "../../components/FullImage.astro";
-import heroImg from "../../assets/archive/hero.webp";
+import type { ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { hero, year } = edition;
 ---
 
 <FullImage
-  image={heroImg}
-  title="State of the<br />Open Home<br />2026"
+  image={hero.image}
+  title={`State of the<br />Open Home<br />${year}`}
   headingLevel="h1"
-  alt="A packed auditorium raising their hands towards the stage at State of the Open Home 2026"
+  alt={hero.alt}
   hasScrollEntry={false}
   priority
   compactTitle
   overlayColor="#001744"
-  objectPosition="center"
+  objectPosition={hero.objectPosition ?? "center"}
 >
-  <p class="p--large">
-    There was a big change to State of the Open Home this year, as we welcomed
-    a live audience for the first time since 2019! And the buzz it created
-    showed why meeting in person is so important.
-  </p>
-  <p class="p--large">
-    This year’s theme was all about building in the open, with a program that
-    didn’t just show you how we work, but invited you to help build what’s
-    next…
-  </p>
+  {hero.paragraphs.map((text) => <p class="p--large">{text}</p>)}
 </FullImage>
 
 <style>

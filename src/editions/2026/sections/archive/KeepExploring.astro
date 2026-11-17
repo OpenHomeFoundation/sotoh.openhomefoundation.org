@@ -2,7 +2,12 @@
 import Container from "../../components/Container.astro";
 import LinkCard from "../../components/LinkCard.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
-import { keepExploring } from "../../data/archive-links";
+import type { ArchiveLink } from "../../data/archive";
+
+interface Props {
+  links: ArchiveLink[];
+}
+const { links } = Astro.props;
 ---
 
 <Container containerClass="container--column">
@@ -12,7 +17,7 @@ import { keepExploring } from "../../data/archive-links";
   />
   <ul class="keep-exploring" role="list">
     {
-      keepExploring.map((link) => (
+      links.map((link) => (
         <li>
           <LinkCard {...link} />
         </li>

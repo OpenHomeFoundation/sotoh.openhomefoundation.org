@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  /** A pre-designed card image (name and role baked in). Omit for a placeholder. */
+  image?: ImageMetadata;
+  /** Accessible name, e.g. "Paulus Schoutsen, President, Open Home Foundation". */
+  name?: string;
+}
+
+const { image, name } = Astro.props;
+---
+
+{
+  image ? (
+    <Image
+      class="photo-speaker-card"
+      src={image}
+      alt={name ?? ""}
+      widths={[208, 291, 416, 582]}
+      sizes="(min-width: 768px) 291px, 208px"
+    />
+  ) : (
+    <div class="photo-speaker-card photo-speaker-card--placeholder" aria-hidden="true">
+      <span>Speaker card</span>
+    </div>
+  )
+}
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  // Same footprint as SpeakerCard so both work in the speakers carousel.
+  .photo-speaker-card {
+    display: block;
+    width: 100%;
+    max-width: 208px;
+    aspect-ratio: 291 / 560;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+
+    @include bp(tablet) {
+      max-width: 291px;
+    }
+
+    &--placeholder {
+      display: grid;
+      place-items: center;
+      border: 1px dashed var(--ohf-light-grey);
+      background-color: var(--glass-bg);
+      font-family: var(--typography-heading-font-family);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+</style>

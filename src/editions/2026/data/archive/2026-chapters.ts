@@ -1,21 +1,8 @@
 // Livestream chapters for State of the Open Home 2026.
 // Source: Figma "The program, chapter by chapter". Timestamps are positions
-// in the full livestream (see LIVESTREAM_VIDEO_ID).
+// in the full livestream.
 
-export const LIVESTREAM_VIDEO_ID = "XyAL1to3Lm4";
-
-export interface Session {
-  time: string;
-  title: string;
-  speakers?: string[];
-  summary?: string;
-}
-
-export interface Act {
-  title: string;
-  summary: string;
-  sessions: Session[];
-}
+import type { Act } from "./types";
 
 export const acts: Act[] = [
   {

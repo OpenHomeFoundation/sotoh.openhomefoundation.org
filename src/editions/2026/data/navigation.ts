@@ -1,5 +1,5 @@
-import { LIVESTREAM_VIDEO_ID } from "./chapters";
-import { pastEditions } from "./archive-links";
+import { edition2026 } from "./archive/2026";
+import { archiveEditions, archiveHref, watchHref } from "./archive";
 
 export interface NavLink {
   label: string;
@@ -14,7 +14,7 @@ export interface NavGroup {
   items: NavLink[];
 }
 
-export const LIVESTREAM_URL = `https://www.youtube.com/watch?v=${LIVESTREAM_VIDEO_ID}`;
+export const LIVESTREAM_URL = watchHref(edition2026);
 
 export const homeNav: NavGroup = {
   label: "Home",
@@ -28,13 +28,10 @@ export const homeNav: NavGroup = {
 
 export const archiveNav: NavGroup = {
   label: "Archive",
-  items: [
-    { label: "2026", href: "/2026/" },
-    ...pastEditions.map((edition) => ({
-      label: String(edition.year),
-      href: edition.archiveHref,
-    })),
-  ],
+  items: archiveEditions.map((edition) => ({
+    label: String(edition.year),
+    href: archiveHref(edition),
+  })),
 };
 
 export const siteNav: NavGroup[] = [homeNav, archiveNav];

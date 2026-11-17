@@ -4,7 +4,13 @@ import Container from "../../components/Container.astro";
 import LinkCard from "../../components/LinkCard.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import Divider from "../../assets/icons/divider.svg";
-import { pastEditions, pastEditionLinks } from "../../data/archive-links";
+import { editionLinks, type ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  /** The other editions to show (not the page's own year). */
+  editions: ArchiveEdition[];
+}
+const { editions } = Astro.props;
 ---
 
 <Container containerClass="container--column">
@@ -13,7 +19,7 @@ import { pastEditions, pastEditionLinks } from "../../data/archive-links";
 
 <div class="past-editions">
   {
-    pastEditions.map((edition, i) => (
+    editions.map((edition, i) => (
       <>
         {i > 0 && (
           <div class="past-editions__divider" aria-hidden="true">
@@ -30,13 +36,13 @@ import { pastEditions, pastEditionLinks } from "../../data/archive-links";
             </h3>
             <Image
               class="edition__image"
-              src={edition.image}
-              alt={edition.imageAlt}
+              src={edition.card.image}
+              alt={edition.card.alt}
               widths={[400, 560, 800, 1100]}
               sizes="(min-width: 1024px) 376px, 100vw"
             />
             <ul class="edition__links" role="list">
-              {pastEditionLinks(edition).map((link) => (
+              {editionLinks(edition).map((link) => (
                 <li>
                   <LinkCard {...link} class="edition__link" />
                 </li>

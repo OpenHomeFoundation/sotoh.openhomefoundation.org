@@ -3,24 +3,42 @@ import { Image } from "astro:assets";
 import Container from "../../components/Container.astro";
 import Marquee from "../../components/Marquee.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
-import { galleryRows } from "../../data/gallery";
+import type { ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { rows, intro } = edition.gallery;
+const isEmpty = rows.every((row) => row.length === 0);
+
+if (isEmpty) {
+  console.warn(`[Gallery] TODO: no photos for ${edition.year} yet (add them to assets/archive/${edition.year}/gallery/)`);
+}
 ---
 
 <Container containerClass="container--column">
-  <SectionHeader
-    title="Where the magic happens"
-    intro="Turns out building in the open is a lot more fun when you do it together! From the action on stage to lively chat over food and drinks, the venue was alive with good vibes and passion for our projects."
-  />
+  <SectionHeader title="Where the magic happens" intro={intro} />
 </Container>
 
 <div class="gallery">
   {
-    galleryRows.map((row, i) => (
+    isEmpty ? (
+      <div class="gallery__placeholder" data-todo="Gallery photos">
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            class:list={["gallery__tile", i % 2 ? "gallery__photo--portrait" : "gallery__photo--landscape"]}
+          />
+        ))}
+        <p class="gallery__placeholder-note">Photos coming soon</p>
+      </div>
+    ) : (
+    rows.map((row, i) => (
       <Marquee
         reverse={i % 2 === 0}
         duration={70}
         gap="var(--gallery-gap)"
-        label={i === 0 ? "Photos from State of the Open Home 2026" : undefined}
+        label={i === 0 ? `Photos from State of the Open Home ${edition.year}` : undefined}
       >
         {row.map((photo) => (
           <Image
@@ -33,6 +51,7 @@ import { galleryRows } from "../../data/gallery";
         ))}
       </Marquee>
     ))
+    )
   }
 </div>
 
@@ -54,6 +73,34 @@ import { galleryRows } from "../../data/gallery";
     }
   }
 
+  // Shown until a year's photos are added.
+  .gallery__placeholder {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: var(--gallery-gap);
+    overflow: hidden;
+  }
+
+  .gallery__tile {
+    flex-shrink: 0;
+    height: var(--gallery-row-height);
+    border: 1px dashed var(--ohf-light-grey);
+    border-radius: var(--radius-s);
+    background-color: var(--glass-bg);
+  }
+
+  .gallery__placeholder-note {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font-family: var(--typography-heading-font-family);
+    text-transform: uppercase;
+  }
+
+  .gallery__tile,
   .gallery__photo {
     display: block;
     height: var(--gallery-row-height);

@@ -1,24 +1,18 @@
+import type { Speaker } from "./types";
+
 const speakerImages = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/speakers/*.{webp,png,jpg,jpeg}",
+  "../../assets/speakers/*.{webp,png,jpg,jpeg}",
   { eager: true },
 );
 
 function getImage(filename: string): ImageMetadata {
-  const path = `../assets/speakers/${filename}`;
+  const path = `../../assets/speakers/${filename}`;
   const match = speakerImages[path];
   if (!match) throw new Error(`Speaker image not found: ${path}`);
   return match.default;
 }
 
-export const speakers: {
-  firstName: string;
-  lastName: string;
-  role: string;
-  company: string;
-  image: ImageMetadata;
-  variant: number;
-  theme: "light" | "dark";
-}[] = [
+export const speakers: Speaker[] = [
   {
     firstName: "Paulus",
     lastName: "Schoutsen",

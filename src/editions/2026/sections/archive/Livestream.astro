@@ -5,29 +5,39 @@ import SectionHeader from "../../components/SectionHeader.astro";
 import Play from "../../assets/icons/play.svg";
 import Chevron from "../../assets/icons/chevron-down.svg";
 import Dot from "../../assets/icons/dot.svg";
-import posterImg from "../../assets/images/sotoh-highlights-placeholder.webp";
-import { acts, LIVESTREAM_VIDEO_ID } from "../../data/chapters";
+import type { ArchiveEdition } from "../../data/archive";
 import { timestampToSeconds } from "../../lib/youtube";
 
-// Open the act the main presentation starts in, as in the design.
-const DEFAULT_OPEN = 1;
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { videoId, poster, acts = [], defaultOpenAct = 0 } = edition.livestream;
+const hasChapters = acts.length > 0;
 ---
 
 <Container containerClass="container--column">
   <SectionHeader
-    title="Watch the 2026 event"
-    intro="Press play to watch the full livestream, or pick a chapter and jump straight to the moment you’re interested in."
+    title={`Watch the ${edition.year} event`}
+    intro={hasChapters
+      ? "Press play to watch the full livestream, or pick a chapter and jump straight to the moment you’re interested in."
+      : "Press play to watch the full livestream."}
   />
 
-  <div class="livestream" data-livestream data-video-id={LIVESTREAM_VIDEO_ID}>
+  <div
+    class:list={["livestream", { "livestream--solo": !hasChapters }]}
+    data-livestream
+    data-video-id={videoId}
+    data-title={`State of the Open Home ${edition.year} livestream`}
+  >
     <div class="livestream__player">
       <button
         type="button"
         class="livestream__poster"
-        aria-label="Play the State of the Open Home 2026 livestream"
+        aria-label={`Play the State of the Open Home ${edition.year} livestream`}
       >
         <Image
-          src={posterImg}
+          src={poster}
           alt=""
           widths={[400, 780, 1200, 1560]}
           sizes="(min-width: 1024px) 780px, 100vw"
@@ -36,11 +46,12 @@ const DEFAULT_OPEN = 1;
       </button>
     </div>
 
+    {hasChapters && (
     <div class="livestream__chapters">
       <div class="livestream__scroller" aria-label="Livestream chapters" role="group">
         {
           acts.map((act, i) => (
-            <details class="act" open={i === DEFAULT_OPEN}>
+            <details class="act" open={i === defaultOpenAct}>
               <summary class="act__summary">
                 <span class="act__text">
                   <span class="act__title">{act.title}</span>
@@ -81,6 +92,7 @@ const DEFAULT_OPEN = 1;
         }
       </div>
     </div>
+    )}
   </div>
 </Container>
 
@@ -105,7 +117,7 @@ const DEFAULT_OPEN = 1;
       const mount = (start: number) => {
         const iframe = document.createElement("iframe");
         iframe.src = youTubeEmbedUrl(videoId, { autoplay: 1, start });
-        iframe.title = "State of the Open Home 2026 livestream";
+        iframe.title = root.dataset.title ?? "Livestream";
         iframe.allow =
           "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
         iframe.allowFullscreen = true;
@@ -164,6 +176,16 @@ const DEFAULT_OPEN = 1;
     @include bp(desktop) {
       grid-template-columns: minmax(0, 779fr) minmax(0, 389fr);
       gap: 2rem;
+    }
+
+    // No chapters: a single, centred video.
+    &--solo {
+      max-width: 1000px;
+      margin-inline: auto;
+
+      @include bp(desktop) {
+        grid-template-columns: 1fr;
+      }
     }
   }
 

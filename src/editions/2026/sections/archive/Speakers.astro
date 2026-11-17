@@ -2,8 +2,31 @@
 import Container from "../../components/Container.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import SpeakerCard from "../../components/SpeakerCard.astro";
+import PhotoSpeakerCard from "../../components/PhotoSpeakerCard.astro";
 import GoTo from "../../assets/icons/go-to.svg";
-import { speakers } from "../../data/speakers";
+import type { ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { intro, cards = [], photos = [] } = edition.speakers;
+
+// One list of slides: illustrated cards, picture-only cards, or placeholders.
+const PLACEHOLDER_COUNT = 6;
+type Slide =
+  | { kind: "card"; props: (typeof cards)[number] }
+  | { kind: "photo"; props: (typeof photos)[number] }
+  | { kind: "placeholder" };
+const slides: Slide[] = cards.length
+  ? cards.map((props) => ({ kind: "card", props }))
+  : photos.length
+    ? photos.map((props) => ({ kind: "photo", props }))
+    : Array.from({ length: PLACEHOLDER_COUNT }, () => ({ kind: "placeholder" }));
+
+if (!cards.length && !photos.length) {
+  console.warn(`[Speakers] TODO: no speaker cards for ${edition.year} yet (showing placeholders)`);
+}
 ---
 
 <div
@@ -16,7 +39,7 @@ import { speakers } from "../../data/speakers";
     <SectionHeader
       id="speakers-title"
       title="Meet our speakers"
-      intro="Some fresh faces joined familiar names from the foundation to share how we’re building in the open together."
+      intro={intro}
     >
       <div class="speakers__controls">
         <button
@@ -42,14 +65,20 @@ import { speakers } from "../../data/speakers";
 
   <div class="speakers__track" tabindex="0" role="group" aria-label="Speakers">
     {
-      speakers.map((speaker, i) => (
+      slides.map((slide, i) => (
         <div
           class="speakers__slide"
           role="group"
           aria-roledescription="slide"
-          aria-label={`${i + 1} of ${speakers.length}`}
+          aria-label={`${i + 1} of ${slides.length}`}
         >
-          <SpeakerCard {...speaker} />
+          {slide.kind === "card" ? (
+            <SpeakerCard {...slide.props} />
+          ) : slide.kind === "photo" ? (
+            <PhotoSpeakerCard {...slide.props} />
+          ) : (
+            <PhotoSpeakerCard />
+          )}
         </div>
       ))
     }
@@ -125,8 +154,14 @@ import { speakers } from "../../data/speakers";
       const current = nearest();
       if (current !== settled) {
         settled = current;
-        const name = slides[current].querySelector(".speaker-card__name");
-        status.textContent = `Speaker ${current + 1} of ${slides.length}: ${name?.textContent?.trim().replace(/\s+/g, " ")}`;
+        // Illustrated cards hold the name as text; picture-only cards in alt.
+        const slide = slides[current];
+        const name =
+          slide.querySelector(".speaker-card__name")?.textContent ??
+          slide.querySelector("img")?.alt ??
+          "";
+        const label = name.trim().replace(/\s+/g, " ");
+        status.textContent = `Speaker ${current + 1} of ${slides.length}${label ? `: ${label}` : ""}`;
       }
     };
 
