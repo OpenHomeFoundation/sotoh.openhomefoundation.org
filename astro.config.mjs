@@ -8,6 +8,10 @@ import { imageBreakpoints } from "./src/lib/breakpoints";
 export default defineConfig({
   site: "https://sotoh.openhomefoundation.org",
   output: "static",
+  // Astro 7 defaults to JSX whitespace rules ("jsx"), which drops the spaces
+  // that Prettier-wrapped text relies on (e.g. "visit <a>…</a>" → "visit<a>").
+  // `true` keeps the lossless compression behaviour from Astro 5.
+  compressHTML: true,
   adapter: netlify(),
   integrations: [sitemap()],
   image: {
