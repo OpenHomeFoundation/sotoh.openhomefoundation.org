@@ -42,7 +42,7 @@ export interface PastEdition {
   /** This edition's archive page. Also feeds the site nav's "Archive" menu.
    * null = page doesn't exist yet (rendered as a disabled link + build warning). */
   archiveHref: string | null;
-  rewatchHref: string;
+  watchHref: string;
   recapHref: string;
 }
 
@@ -53,7 +53,7 @@ export const pastEditions: PastEdition[] = [
     imageAlt:
       "The State of the Open Home 2025 presenters together on the studio set",
     archiveHref: null, // TODO: add when a 2025 archive page exists
-    rewatchHref: "https://www.youtube.com/watch?v=o4Vctz1_KYE",
+    watchHref: "https://www.youtube.com/watch?v=o4Vctz1_KYE",
     recapHref:
       "https://www.home-assistant.io/blog/2025/04/16/state-of-the-open-home-recap/",
   },
@@ -62,7 +62,7 @@ export const pastEditions: PastEdition[] = [
     image: edition2024,
     imageAlt: "The State of the Open Home 2024 studio set during the broadcast",
     archiveHref: null, // TODO: add when a 2024 archive page exists
-    rewatchHref: "https://www.youtube.com/watch?v=oa__fLArsFk",
+    watchHref: "https://www.youtube.com/watch?v=oa__fLArsFk",
     recapHref:
       "https://www.home-assistant.io/blog/2024/04/24/state-of-the-open-home-2024/",
   },
@@ -71,6 +71,6 @@ export const pastEditions: PastEdition[] = [
 /** The three link cards shown for a past edition. */
 export const pastEditionLinks = (edition: PastEdition): ArchiveLink[] => [
   { title: "Visit the archive", href: edition.archiveHref },
-  { title: "Rewatch the event", href: edition.rewatchHref },
+  { title: "Watch the event", href: edition.watchHref },
   { title: "Read the recap", href: edition.recapHref },
 ];

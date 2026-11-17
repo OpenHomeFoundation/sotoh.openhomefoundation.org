@@ -20,7 +20,7 @@ export interface Act {
 export const acts: Act[] = [
   {
     title: "Pre-show",
-    summary: "The stream opens before the main presentation begins.",
+    summary: "The stream opens before the main program begins.",
     sessions: [
       { time: "0:00", title: "Livestream start" },
       { time: "2:11", title: "Interview: Ed" },
@@ -33,7 +33,7 @@ export const acts: Act[] = [
     summary:
       "The opening act: the theme, and the people who will grow the community.",
     sessions: [
-      { time: "29:46", title: "Presentation start" },
+      { time: "29:46", title: "Program starts" },
       { time: "30:41", title: "Opening", speakers: ["Missy Quarry"] },
       {
         time: "33:20",
@@ -44,7 +44,7 @@ export const acts: Act[] = [
       },
       {
         time: "37:23",
-        title: "Presenting the Community department",
+        title: "Introducing the Community department",
         speakers: ["Melissa Thermidor", "Missy Quarry"],
         summary:
           "The first thing shared was not a product but people: a new Community department led by Melissa Thermidor, focused on growing the community, not just maintaining it.",

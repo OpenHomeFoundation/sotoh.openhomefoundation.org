@@ -10,8 +10,15 @@ interface Props {
   /** Show a button to the current edition. "/" is always the current edition,
    * and the label has no year, so this never needs updating. Archive pages only. */
   linkToCurrent?: boolean;
+  /** Ask for feedback via the 2026 post-event survey. Off on the archive,
+   * where the survey is stale. */
+  feedbackLink?: boolean;
 }
-const { compactTitle = false, linkToCurrent = false } = Astro.props;
+const {
+  compactTitle = false,
+  linkToCurrent = false,
+  feedbackLink = true,
+} = Astro.props;
 ---
 
 <FullImage
@@ -21,14 +28,27 @@ const { compactTitle = false, linkToCurrent = false } = Astro.props;
     : "The conversation continues"}
   compactTitle={compactTitle}
 >
-  <p class="animate--fade-up">
-    State of the Open Home will return in 2027, and we’re planning to make it
-    bigger and better than ever – and you can help by <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSeuqPALL5ilFLm_w1PTc3_m-fnMIG7TMI4DldpCtA2bQtCapA/viewform?usp=send_form"
-      target="_blank"
-      rel="noreferrer noopener">sharing your thoughts on 2026</a
-    > and what you’d like to see next year.
-  </p>
+  {
+    feedbackLink ? (
+      <p class="animate--fade-up">
+        State of the Open Home will return in 2027, and we’re planning to make
+        it bigger and better than ever – and you can help by{" "}
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSeuqPALL5ilFLm_w1PTc3_m-fnMIG7TMI4DldpCtA2bQtCapA/viewform?usp=send_form"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          sharing your thoughts on 2026
+        </a>{" "}
+        and what you’d like to see next year.
+      </p>
+    ) : (
+      <p class="animate--fade-up">
+        State of the Open Home will return in 2027, and we’re planning to make
+        it bigger and better than ever.
+      </p>
+    )
+  }
   <p class="animate--fade-up">
     In the meantime, stay connected with the community: <a
       href="https://luma.com/homeassistant"

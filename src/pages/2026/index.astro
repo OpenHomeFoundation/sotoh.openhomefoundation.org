@@ -17,10 +17,10 @@ import PastEditions from "@2026/sections/archive/PastEditions.astro";
 
 <Layout
   title="State of the Open Home 2026"
-  description="Relive State of the Open Home 2026 in Utrecht: rewatch the full livestream chapter by chapter, meet the speakers, and see photos from our first in-person event since 2019."
+  description="Relive State of the Open Home 2026 in Utrecht: watch the full livestream chapter by chapter, meet the speakers, and see photos from our first in-person event since 2019."
   theme="gradient"
 >
-  <Header slot="header" cta={{ label: "Rewatch the event", href: "#livestream" }} />
+  <Header slot="header" cta={{ label: "Watch the 2026 event", href: "#livestream" }} />
 
   <section class="block block--hero">
     <ArchiveHero />
@@ -44,7 +44,7 @@ import PastEditions from "@2026/sections/archive/PastEditions.astro";
     <PastEditions />
   </section>
   <section class="block block--hero" id="the-conversation-continues">
-    <ConversationContinues compactTitle linkToCurrent />
+    <ConversationContinues compactTitle linkToCurrent feedbackLink={false} />
   </section>
 
   <Footer slot="footer" />
