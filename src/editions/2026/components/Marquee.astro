@@ -3,6 +3,11 @@
  * Infinite horizontal marquee. The slotted content is rendered twice and the
  * pair is translated by 50% so the loop is seamless. It only animates while
  * on screen; with reduced motion it becomes a plain horizontal scroller.
+ *
+ * To let people stop the movement (WCAG 2.2.2), add a button with
+ * `data-marquee-toggle` and `aria-controls` set to the id of an element that
+ * contains the marquees, and render it `hidden`: it is shown only when the
+ * marquees actually animate, and pauses or resumes all of them.
  */
 interface Props {
   /** Scroll right-to-left instead of left-to-right. */
@@ -48,13 +53,29 @@ const content = await Astro.slots.render("default");
 
   gsap.registerPlugin(ScrollTrigger);
 
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.querySelectorAll<HTMLElement>(".marquee").forEach((marquee) => {
-      const inner = marquee.querySelector(".marquee__inner");
-      if (!inner) return;
+  type MarqueeState = { tween: gsap.core.Tween; visible: boolean; paused: boolean };
+  const states = new Map<Element, MarqueeState>();
+  const sync = (state: MarqueeState) =>
+    state.visible && !state.paused ? state.tween.play() : state.tween.pause();
 
-      const reverse = marquee.dataset.reverse === "true";
-      const tween = gsap.fromTo(
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  document.querySelectorAll<HTMLElement>(".marquee").forEach((marquee) => {
+    // A plain scroller: give it a tab stop so keyboard users can scroll it
+    // in browsers that don't focus scroll containers themselves (Safari).
+    if (reducedMotion) {
+      marquee.tabIndex = 0;
+      return;
+    }
+
+    const inner = marquee.querySelector(".marquee__inner");
+    if (!inner) return;
+
+    const reverse = marquee.dataset.reverse === "true";
+    const state: MarqueeState = {
+      tween: gsap.fromTo(
         inner,
         { xPercent: reverse ? 0 : -50 },
         {
@@ -64,16 +85,44 @@ const content = await Astro.slots.render("default");
           repeat: -1,
           paused: true,
         },
-      );
+      ),
+      visible: false,
+      paused: false,
+    };
+    states.set(marquee, state);
 
-      ScrollTrigger.create({
-        trigger: marquee,
-        start: "top bottom",
-        end: "bottom top",
-        onToggle: ({ isActive }) => (isActive ? tween.play() : tween.pause()),
+    ScrollTrigger.create({
+      trigger: marquee,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: ({ isActive }) => {
+        state.visible = isActive;
+        sync(state);
+      },
+    });
+  });
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-marquee-toggle]")
+    .forEach((button) => {
+      const group = document.getElementById(
+        button.getAttribute("aria-controls") ?? "",
+      );
+      const controlled = Array.from(group?.querySelectorAll(".marquee") ?? [])
+        .map((marquee) => states.get(marquee))
+        .filter((state): state is MarqueeState => !!state);
+      if (!controlled.length) return; // nothing moves, so no button
+
+      button.hidden = false;
+      button.addEventListener("click", () => {
+        const paused = button.getAttribute("aria-pressed") !== "true";
+        button.setAttribute("aria-pressed", String(paused));
+        controlled.forEach((state) => {
+          state.paused = paused;
+          sync(state);
+        });
       });
     });
-  }
 </script>
 
 <style lang="scss">
@@ -82,6 +131,11 @@ const content = await Astro.slots.render("default");
 
     @media (prefers-reduced-motion: reduce) {
       overflow-x: auto;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 4px;
     }
   }
 

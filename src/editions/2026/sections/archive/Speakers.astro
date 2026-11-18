@@ -1,6 +1,7 @@
 ---
 import Container from "../../components/Container.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
+import CircleButton from "../../components/CircleButton.astro";
 import SpeakerCard from "../../components/SpeakerCard.astro";
 import PhotoSpeakerCard from "../../components/PhotoSpeakerCard.astro";
 import GoTo from "../../assets/icons/go-to.svg";
@@ -42,23 +43,16 @@ if (!cards.length && !photos.length) {
       intro={intro}
     >
       <div class="speakers__controls">
-        <button
-          type="button"
+        <CircleButton
           class="speakers__button speakers__button--prev"
-          data-direction="-1"
           aria-label="Previous speaker"
           disabled
         >
           <GoTo aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          class="speakers__button"
-          data-direction="1"
-          aria-label="Next speaker"
-        >
+        </CircleButton>
+        <CircleButton class="speakers__button" aria-label="Next speaker">
           <GoTo aria-hidden="true" />
-        </button>
+        </CircleButton>
       </div>
     </SectionHeader>
   </Container>
@@ -108,12 +102,17 @@ if (!cards.length && !photos.length) {
     const positionOf = (slide: HTMLElement) =>
       slide.offsetLeft - slides[0].offsetLeft;
     const maxScroll = () => track.scrollWidth - track.clientWidth;
+    // Where the track actually stops for a slide: slides near the end can't
+    // reach the snap edge, so they all share the final scroll position.
+    const stopOf = (slide: HTMLElement) =>
+      Math.min(positionOf(slide), maxScroll());
 
+    // Ties go to the earliest slide, so at the end this is lastReachable().
     const nearest = () =>
       slides.reduce(
         (best, slide, i) =>
-          Math.abs(positionOf(slide) - track.scrollLeft) <
-          Math.abs(positionOf(slides[best]) - track.scrollLeft)
+          Math.abs(stopOf(slide) - track.scrollLeft) <
+          Math.abs(stopOf(slides[best]) - track.scrollLeft)
             ? i
             : best,
         0,
@@ -133,7 +132,7 @@ if (!cards.length && !photos.length) {
       );
       pending = target;
       track.scrollTo({
-        left: Math.min(positionOf(slides[target]), maxScroll()),
+        left: stopOf(slides[target]),
         behavior: reducedMotion.matches ? "auto" : "smooth",
       });
     };
@@ -195,38 +194,8 @@ if (!cards.length && !photos.length) {
     gap: 1rem;
   }
 
-  .speakers__button {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    border: 0.4px solid var(--ohf-light-grey);
-    background: transparent;
-    cursor: pointer;
-    touch-action: manipulation;
-    transition:
-      opacity 0.3s ease-in-out,
-      background-color 0.3s ease-in-out;
-
-    &:hover:not(:disabled) {
-      background-color: var(--glass-bg-hover);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--ohf-light-grey);
-      outline-offset: 2px;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
-
-    &--prev :global(svg) {
-      rotate: 180deg;
-    }
+  .speakers__button--prev :global(svg) {
+    rotate: 180deg;
   }
 
   .speakers__track {

@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import Container from "../../components/Container.astro";
 import Marquee from "../../components/Marquee.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
+import CircleButton from "../../components/CircleButton.astro";
 import type { ArchiveEdition } from "../../data/archive";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 const { edition } = Astro.props;
 const { rows, intro } = edition.gallery;
 const isEmpty = rows.every((row) => row.length === 0);
+const rowsId = `gallery-rows-${edition.year}`;
 
 if (isEmpty) {
   console.warn(`[Gallery] TODO: no photos for ${edition.year} yet (add them to assets/archive/${edition.year}/gallery/)`);
@@ -18,10 +20,31 @@ if (isEmpty) {
 ---
 
 <Container containerClass="container--column">
-  <SectionHeader title="Where the magic happens" intro={intro} />
+  <SectionHeader title="Where the magic happens" intro={intro}>
+    {
+      !isEmpty && (
+        <CircleButton
+          class="gallery__toggle"
+          data-marquee-toggle
+          aria-controls={rowsId}
+          aria-pressed="false"
+          aria-label="Pause photos"
+          hidden
+        >
+          <svg class="gallery__icon gallery__icon--pause" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="3" y="2" width="3.5" height="12" rx="1" />
+            <rect x="9.5" y="2" width="3.5" height="12" rx="1" />
+          </svg>
+          <svg class="gallery__icon gallery__icon--play" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5Z" />
+          </svg>
+        </CircleButton>
+      )
+    }
+  </SectionHeader>
 </Container>
 
-<div class="gallery">
+<div class="gallery" id={rowsId}>
   {
     isEmpty ? (
       <div class="gallery__placeholder" data-todo="Gallery photos">
@@ -70,6 +93,20 @@ if (isEmpty) {
     @include bp(tablet) {
       --gallery-gap: 1.25rem;
       --gallery-row-height: 320px;
+    }
+  }
+
+  // Pause/play: aria-pressed="true" means paused, so show the play icon.
+  .gallery__icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .gallery__toggle {
+    &[aria-pressed="true"] .gallery__icon--pause,
+    &:not([aria-pressed="true"]) .gallery__icon--play {
+      display: none;
     }
   }
 

@@ -1,0 +1,52 @@
+---
+/**
+ * Small round icon button (carousel arrows, pause/play). Put the icon in the
+ * slot and give the button an aria-label; other attributes are passed through.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button">;
+
+const { class: className, type = "button", ...attrs } = Astro.props;
+---
+
+<button class:list={["circle-button", className]} type={type} {...attrs}>
+  <slot />
+</button>
+
+<style lang="scss">
+  .circle-button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    border: 0.4px solid var(--ohf-light-grey);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      opacity 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
+
+    &:hover:not(:disabled) {
+      background-color: var(--glass-bg-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+</style>
