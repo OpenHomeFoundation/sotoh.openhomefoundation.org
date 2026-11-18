@@ -1,0 +1,160 @@
+---
+/**
+ * Infinite horizontal marquee. The slotted content is rendered twice and the
+ * pair is translated by 50% so the loop is seamless. It only animates while
+ * on screen; with reduced motion it becomes a plain horizontal scroller.
+ *
+ * To let people stop the movement (WCAG 2.2.2), add a button with
+ * `data-marquee-toggle` and `aria-controls` set to the id of an element that
+ * contains the marquees, and render it `hidden`: it is shown only when the
+ * marquees actually animate, and pauses or resumes all of them.
+ */
+interface Props {
+  /** Scroll right-to-left instead of left-to-right. */
+  reverse?: boolean;
+  /** Seconds for one full loop. */
+  duration?: number;
+  /** Space between items (and between the two copies), any CSS length. */
+  gap?: string;
+  class?: string;
+  label?: string;
+}
+
+const {
+  reverse = false,
+  duration = 60,
+  gap = "0px",
+  class: className,
+  label,
+  ...attrs // forwards the parent's scoped-style attribute
+} = Astro.props;
+
+const content = await Astro.slots.render("default");
+---
+
+<div
+  class:list={["marquee", className]}
+  data-reverse={reverse}
+  data-duration={duration}
+  style={`--marquee-gap: ${gap}`}
+  role={label ? "region" : undefined}
+  aria-label={label}
+  {...attrs}
+>
+  <div class="marquee__inner">
+    <div class="marquee__track" set:html={content} />
+    <div class="marquee__track" aria-hidden="true" inert set:html={content} />
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  type MarqueeState = { tween: gsap.core.Tween; visible: boolean; paused: boolean };
+  const states = new Map<Element, MarqueeState>();
+  const sync = (state: MarqueeState) =>
+    state.visible && !state.paused ? state.tween.play() : state.tween.pause();
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  document.querySelectorAll<HTMLElement>(".marquee").forEach((marquee) => {
+    // A plain scroller: give it a tab stop so keyboard users can scroll it
+    // in browsers that don't focus scroll containers themselves (Safari).
+    if (reducedMotion) {
+      marquee.tabIndex = 0;
+      return;
+    }
+
+    const inner = marquee.querySelector(".marquee__inner");
+    if (!inner) return;
+
+    const reverse = marquee.dataset.reverse === "true";
+    const state: MarqueeState = {
+      tween: gsap.fromTo(
+        inner,
+        { xPercent: reverse ? 0 : -50 },
+        {
+          xPercent: reverse ? -50 : 0,
+          duration: Number(marquee.dataset.duration),
+          ease: "none",
+          repeat: -1,
+          paused: true,
+        },
+      ),
+      visible: false,
+      paused: false,
+    };
+    states.set(marquee, state);
+
+    ScrollTrigger.create({
+      trigger: marquee,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: ({ isActive }) => {
+        state.visible = isActive;
+        sync(state);
+      },
+    });
+  });
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-marquee-toggle]")
+    .forEach((button) => {
+      const group = document.getElementById(
+        button.getAttribute("aria-controls") ?? "",
+      );
+      const controlled = Array.from(group?.querySelectorAll(".marquee") ?? [])
+        .map((marquee) => states.get(marquee))
+        .filter((state): state is MarqueeState => !!state);
+      if (!controlled.length) return; // nothing moves, so no button
+
+      button.hidden = false;
+      button.addEventListener("click", () => {
+        const paused = button.getAttribute("aria-pressed") !== "true";
+        button.setAttribute("aria-pressed", String(paused));
+        controlled.forEach((state) => {
+          state.paused = paused;
+          sync(state);
+        });
+      });
+    });
+</script>
+
+<style lang="scss">
+  .marquee {
+    overflow: hidden;
+
+    @media (prefers-reduced-motion: reduce) {
+      overflow-x: auto;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 4px;
+    }
+  }
+
+  .marquee__inner {
+    width: fit-content;
+    display: flex;
+    will-change: transform;
+  }
+
+  .marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--marquee-gap);
+    padding-inline-end: var(--marquee-gap);
+
+    @media (prefers-reduced-motion: reduce) {
+      &[aria-hidden="true"] {
+        display: none;
+      }
+    }
+  }
+</style>

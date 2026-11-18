@@ -1,0 +1,17 @@
+---
+import Marquee from "./Marquee.astro";
+import CarouselTrack from "./CarouselTrack.astro";
+---
+
+<Marquee class="image-carousel" duration={60}>
+  <CarouselTrack />
+</Marquee>
+
+<style lang="scss">
+  .image-carousel {
+    --unit: clamp(65px, calc(65px + 65 * (100vw - 375px) / 825), 130px);
+
+    max-width: 2800px;
+    margin-inline: auto;
+  }
+</style>

@@ -1,0 +1,247 @@
+---
+import { Image } from "astro:assets";
+import Container from "./Container.astro";
+
+interface Props {
+  image: ImageMetadata;
+  /** Section title, shown to the left of the slotted copy on tablet+. */
+  title: string;
+  headingLevel?: "h1" | "h2";
+  /** Alt text for the image. Leave empty when it's purely decorative. */
+  alt?: string;
+  /** Scale-up + corner-radius scroll effect on desktop. */
+  hasScrollEntry?: boolean;
+  /** Load eagerly with high fetch priority (use for above-the-fold heroes). */
+  priority?: boolean;
+  /** Colour the bottom of the image fades to behind the text (desktop). */
+  overlayColor?: string;
+  /** Title takes its natural width (use <br /> in `title`) instead of 40%. */
+  compactTitle?: boolean;
+  /** Focal point when the image is cropped to its 810px max height (desktop). */
+  objectPosition?: string;
+}
+
+const {
+  image,
+  title,
+  headingLevel: Heading = "h2",
+  alt = "",
+  hasScrollEntry = true,
+  priority = false,
+  overlayColor = "rgba(4, 87, 255, 0.8)",
+  compactTitle = false,
+  objectPosition = "center 85%",
+} = Astro.props;
+---
+
+<div
+  class="full-image"
+  data-has-scroll-entry={hasScrollEntry}
+  style={`--full-image-overlay: ${overlayColor}; --full-image-position: ${objectPosition}`}
+>
+  <div class="full-image-media">
+    <Image
+      widths={[500, 768, 1024, 1280, 1440, 1920, 2160, 2560]}
+      sizes="100vw"
+      src={image}
+      alt={alt}
+      loading={priority ? "eager" : "lazy"}
+      fetchpriority={priority ? "high" : "auto"}
+    />
+  </div>
+  <div class="full-image-content">
+    <Container>
+      <Heading
+        class:list={[
+          "h2 full-image-title",
+          { "full-image-title--compact": compactTitle },
+        ]}
+        set:html={title}
+      />
+      <div class="content-container full-image-copy">
+        <slot />
+      </div>
+    </Container>
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const desktop = window.matchMedia("(min-width: 768px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const init = () => {
+    if (reducedMotion.matches || !desktop.matches) return;
+
+    document
+      .querySelectorAll<HTMLElement>(
+        '.full-image[data-has-scroll-entry="true"] .full-image-media:not([data-initialized])',
+      )
+      .forEach((media) => {
+        media.dataset.initialized = "";
+        const scrollTrigger = {
+          trigger: media,
+          start: "top bottom",
+          end: "25% 50%",
+          scrub: 0.5,
+        };
+
+        gsap.fromTo(media, { scale: 0.85 }, { scale: 1, ease: "none", scrollTrigger });
+
+        const img = media.querySelector("img");
+        if (img) {
+          gsap.to(img, { borderRadius: 0, ease: "none", scrollTrigger });
+        }
+      });
+  };
+
+  init();
+  desktop.addEventListener("change", init);
+</script>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .full-image {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding-bottom: 3rem;
+
+    @include bp(desktop) {
+      display: grid;
+      padding-bottom: 0;
+      margin-bottom: -1px;
+
+      .full-image-media,
+      .full-image-content {
+        grid-area: 1/1;
+      }
+    }
+
+    &[data-has-scroll-entry="true"] .full-image-media img {
+      border-radius: 1.5rem;
+
+      @include bp(desktop) {
+        border-radius: 3rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        @include bp(desktop) {
+          border-radius: 0;
+        }
+      }
+    }
+
+    &[data-has-scroll-entry="false"] .full-image-media img {
+      border-radius: var(--radius-l);
+
+      @include bp(desktop) {
+        border-radius: 0;
+      }
+    }
+
+    &-media {
+      width: 100%;
+      max-width: 2800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+
+      @include bp(desktop) {
+        position: relative;
+        padding: 0;
+        will-change: transform;
+
+        &::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background: linear-gradient(
+            180deg,
+            rgba(4, 87, 255, 0) 0%,
+            var(--full-image-overlay) 100%
+          );
+          mix-blend-mode: multiply;
+          pointer-events: none;
+        }
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+
+        @include bp(desktop) {
+          max-height: 810px;
+          object-fit: cover;
+          object-position: var(--full-image-position);
+        }
+      }
+    }
+
+    &-content {
+      z-index: 1;
+
+      @include bp(desktop) {
+        align-items: flex-end;
+        display: flex;
+        padding: 1rem 0 5rem;
+      }
+
+      :global(.container) {
+        gap: 0;
+
+        @include bp(tablet) {
+          gap: 3rem;
+        }
+
+        // Archive design: 40px between a natural-width title and the copy.
+        &:has(.full-image-title--compact) {
+          @include bp(tablet) {
+            gap: 2.5rem;
+          }
+        }
+      }
+    }
+
+    &-title {
+      @include bp(tablet) {
+        width: 40%;
+        flex-shrink: 0;
+      }
+
+      &--compact {
+        @include bp(tablet) {
+          width: auto;
+        }
+
+        @include bp(desktop) {
+          white-space: nowrap;
+        }
+      }
+    }
+
+    &-copy {
+      width: 100%;
+      text-align: center;
+
+      @include bp(tablet) {
+        text-align: left;
+      }
+
+      :global(p) {
+        text-wrap: auto;
+      }
+
+      // Inline text links only, so buttons keep their own colours.
+      :global(p a) {
+        color: inherit;
+      }
+    }
+  }
+</style>

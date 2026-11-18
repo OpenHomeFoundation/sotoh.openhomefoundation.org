@@ -1,0 +1,63 @@
+---
+import Container from "../components/Container.astro";
+
+import { Image } from "astro:assets";
+import whatIsImg from "../assets/images/what-is-state-of-the-open-home.webp";
+---
+
+<Container containerClass="container--row">
+    <div class="content-container what-is-content-container">
+      <h3 class="h2 animate--fade-up">What is State of the Open Home?</h3>
+      <p class="animate--fade-up">
+        State of the Open Home is where we celebrate our successes, share what
+        we’re working on, and get excited about the future. Each year brings a
+        new theme, but our community is always at the heart of the event:
+        whether you’re in the room with us or watching around the world.
+      </p>
+    </div>
+    <Image
+      src={whatIsImg}
+      alt="An image showing the stage at State of the Open Home 2026"
+    />
+</Container>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .what-is-content-container {
+    width: 100%;
+    margin-bottom: 0;
+
+    @include bp(tablet) {
+      max-width: 468px;
+    }
+
+    :global(p) {
+      text-align: center;
+
+      @include bp(tablet) {
+        text-align: left;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    max-width: 692px;
+    max-height: 420px;
+    flex-grow: 1;
+    object-fit: cover;
+    object-position: 90% center;
+    border-radius: 1.25rem;
+    margin: 0 auto;
+
+    @include bp(tablet) {
+      width: 40%;
+      margin: 0;
+    }
+
+    @include bp(desktop) {
+      width: 60%;
+    }
+  }
+</style>

@@ -1,16 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Container from "../components/Container.astro";
-import Content from "../components/Content.astro";
-import Button from "../components/Button.astro";
-import Footer from "../sections/Footer.astro";
+import Layout from "@2026/layouts/Layout.astro";
+import Header from "@2026/components/Header.astro";
+import Container from "@2026/components/Container.astro";
+import Button from "@2026/components/Button.astro";
+import Footer from "@2026/sections/Footer.astro";
 ---
 
 <Layout title="Page not found" noindex>
   <Header slot="header" lightMode />
   <Container containerClass="container--column">
-    <Content>
       <div class="not-found">
         <h1 class="h1">Error 404</h1>
         <p>
@@ -19,7 +17,6 @@ import Footer from "../sections/Footer.astro";
         </p>
         <Button href="/" class="button button--primary">Back to home</Button>
       </div>
-    </Content>
   </Container>
   <Footer slot="footer" />
 </Layout>

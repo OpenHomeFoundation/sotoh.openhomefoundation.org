@@ -1,16 +1,16 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Intro from "../sections/Intro.astro";
-import WhatIs from "../sections/WhatIs.astro";
-import Carousel from "../components/Carousel.astro";
-import Building from "../sections/Building.astro";
-import ConversationContinues from "../sections/ConversationContinues.astro";
-import Footer from "../sections/Footer.astro";
-import Hero from "../components/Hero.astro";
+import Layout from "@2026/layouts/Layout.astro";
+import Header from "@2026/components/Header.astro";
+import Intro from "@2026/sections/Intro.astro";
+import WhatIs from "@2026/sections/WhatIs.astro";
+import Carousel from "@2026/components/Carousel.astro";
+import Building from "@2026/sections/Building.astro";
+import ConversationContinues from "@2026/sections/ConversationContinues.astro";
+import Footer from "@2026/sections/Footer.astro";
+import Hero from "@2026/sections/Hero.astro";
 ---
 
-<Layout bodyClass="page-home">
+<Layout theme="gradient">
   <Header slot="header" />
   <section class="block block-hero">
     <Hero />
@@ -37,7 +37,7 @@ import Hero from "../components/Hero.astro";
 </Layout>
 
 <style lang="scss">
-  @use "../styles/mixins/breakpoint.scss" as *;
+  @use "../editions/2026/styles/mixins/breakpoint.scss" as *;
 
   .block {
     &-sotoh,

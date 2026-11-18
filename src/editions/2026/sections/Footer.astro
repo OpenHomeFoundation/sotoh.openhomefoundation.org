@@ -1,0 +1,227 @@
+---
+import Container from "../components/Container.astro";
+import CopyEmail from "../components/CopyEmail.astro";
+import TextWipe from "../components/TextWipe.astro";
+
+import { ICONS } from "../lib/icons";
+import { siteNav, socialLinks, type NavLink } from "../data/navigation";
+
+const columns: { label: string; items: NavLink[]; external?: boolean }[] = [
+  ...siteNav,
+  { label: "Social", items: socialLinks, external: true },
+];
+---
+
+<footer id="matter-container">
+  <Container>
+    <div class="footer-content">
+      <div class="h2">State of the Open Home 2026</div>
+      <div class="footer-subtitle">
+        An event organized by the <Fragment set:html={ICONS["OHFLogo"]} />
+      </div>
+      <div class="footer-content-bottom">
+        <CopyEmail email="events@openhomefoundation.org" class="help-link" />
+        <span>Copyright &copy; Open Home Foundation</span>
+      </div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-nav">
+        {
+          columns.map((column) => (
+            <div class="footer-nav-column">
+              <div class="footer-nav-title">{column.label}</div>
+              <div class="footer-nav-items">
+                {column.items.map((item) => (
+                  <TextWipe
+                    class="footer-nav-item"
+                    href={item.href ?? undefined}
+                    disabled={!item.href}
+                    {...(column.external && {
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    })}
+                  >
+                    {item.label}
+                  </TextWipe>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="footer-analytics">
+        This website uses <a
+          href="https://www.openhomefoundation.org/blog/making-our-web-analytics-open-source-with-plausible/"
+          rel="noopener">privacy-first analytics</a
+        > to help us improve the site. You can view all data in our <a
+          href="https://plausible.openhomefoundation.org/sotoh.openhomefoundation.org"
+          rel="noopener">public dashboard</a
+        >.
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  footer {
+    background-color: var(--ohf-dark-blue);
+    //height: 580px;
+    position: relative;
+    display: flex;
+    isolation: isolate;
+    padding: 40px 0 120px 0;
+    transition: min-height 0.3s ease;
+    user-select: none;
+
+    @include bp(desktop) {
+      padding: 80px 0 260px 0;
+    }
+
+    // Mobile game mode - expand to fill viewport minus header
+    &:global(.game-mode) {
+      @media (max-width: 767px) {
+        min-height: calc(100vh - var(--header-height));
+        min-height: calc(100dvh - var(--header-height));
+        padding-bottom: 0;
+        flex-direction: column;
+      }
+    }
+
+    :global(canvas) {
+      z-index: -1;
+    }
+    :global(.container) {
+      gap: 40px 96px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      @include bp(tablet) {
+        width: 40%;
+      }
+
+      :global(.button) {
+        margin-top: 2rem;
+      }
+
+      .h2 {
+        text-align: left;
+      }
+
+      &-bottom {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+        gap: 8px;
+
+        :global(.text-wipe) {
+          font-weight: 500;
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .footer-subtitle {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-weight: 300;
+
+      :global(svg) {
+        max-width: 190px;
+        max-height: 18px;
+
+        transform: translateY(-1px);
+      }
+    }
+
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex-grow: 1;
+
+      @include bp(tablet) {
+        width: 60%;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 20px 32px;
+      justify-content: flex-end;
+      flex-direction: column;
+
+      @include bp(tablet) {
+        flex-direction: row;
+      }
+
+      &-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      &-title {
+        font-family: var(--typography-heading-font-family);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      &-items {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        :global(.footer-nav-item) {
+          color: #a2aab6;
+          text-decoration: none;
+          text-wrap: balance;
+          line-height: 1.2;
+        }
+
+        :global(.text-wipe) {
+          font-size: 12px;
+        }
+
+        :global(.text-wipe[aria-disabled="true"]) {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    .footer-analytics {
+      margin: 0;
+      max-width: 30rem;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #a2aab6;
+      text-wrap: balance;
+
+      @include bp(tablet) {
+        text-align: right;
+        margin-left: auto;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
+</style>

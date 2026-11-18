@@ -1,0 +1,27 @@
+---
+import Container from "../components/Container.astro";
+import Button from "../components/Button.astro";
+import { LIVESTREAM_URL } from "../data/navigation";
+---
+
+<Container containerClass="container--column">
+    <h2 class="h2 animate--fade-up">STATE OF THE OPEN HOME 2026</h2>
+    <div class="content-container text-center">
+      <p class="p--large animate--fade-up">
+        It was an event to remember! Relive it all (or catch what you missed)
+        with the full video below.
+      </p>
+    </div>
+    <div class="buttons-container animate--fade-up">
+      <Button
+        href={LIVESTREAM_URL}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="button button--primary"
+        icon="youtube"
+        starburst={true}
+      >
+        Watch 2026
+      </Button>
+    </div>
+</Container>

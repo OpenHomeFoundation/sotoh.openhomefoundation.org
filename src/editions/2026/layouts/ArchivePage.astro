@@ -1,0 +1,93 @@
+---
+// One archived State of the Open Home edition, in the 2026 archive design.
+// Rendered for every year in data/archive by src/pages/[year]/index.astro.
+import Layout from "./Layout.astro";
+import Header from "../components/Header.astro";
+import Ticket from "../components/Ticket.astro";
+import Footer from "../sections/Footer.astro";
+import ConversationContinues from "../sections/ConversationContinues.astro";
+import ArchiveHero from "../sections/archive/ArchiveHero.astro";
+import Livestream from "../sections/archive/Livestream.astro";
+import Speakers from "../sections/archive/Speakers.astro";
+import Gallery from "../sections/archive/Gallery.astro";
+import KeepExploring from "../sections/archive/KeepExploring.astro";
+import PastEditions from "../sections/archive/PastEditions.astro";
+import { archiveEditions, type ArchiveEdition } from "../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const otherEditions = archiveEditions.filter((e) => e.year !== edition.year);
+---
+
+<Layout
+  title={`State of the Open Home ${edition.year}`}
+  description={edition.description}
+  theme="gradient"
+>
+  <Header
+    slot="header"
+    cta={{ label: `Watch the ${edition.year} event`, href: "#livestream" }}
+  />
+
+  <section class="block block--hero">
+    <ArchiveHero edition={edition} />
+  </section>
+  {
+    edition.showTicket && (
+      <section class="block block--ticket" id="ticket" aria-label="Event ticket">
+        <Ticket />
+      </section>
+    )
+  }
+  <section class="block" id="livestream">
+    <Livestream edition={edition} />
+  </section>
+  <section class="block block--bleed" id="speakers">
+    <Speakers edition={edition} />
+  </section>
+  <section class="block block--bleed" id="gallery">
+    <Gallery edition={edition} />
+  </section>
+  <section class="block" id="keep-exploring">
+    <KeepExploring links={edition.keepExploring} />
+  </section>
+  <section class="block" id="past-editions">
+    <PastEditions editions={otherEditions} />
+  </section>
+  <section class="block block--hero" id="the-conversation-continues">
+    <ConversationContinues compactTitle linkToCurrent feedbackLink={!!edition.showFeedback} />
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  .block {
+    padding-block: 2.5rem;
+
+    @include bp(tablet) {
+      padding-block: 5rem;
+    }
+
+    &--hero {
+      padding-block: 0;
+    }
+
+    &--ticket {
+      padding-inline: 1rem;
+      padding-bottom: 0;
+
+      @include bp(tablet) {
+        padding-top: 5rem;
+      }
+    }
+
+    &--bleed {
+      overflow: hidden;
+    }
+  }
+</style>

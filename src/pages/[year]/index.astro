@@ -1,0 +1,18 @@
+---
+// Archive pages: /2026/, /2025/, /2024/ … one per edition in data/archive.
+// Built from src/editions/2026 so they keep this design when the homepage
+// moves on to a new edition.
+import ArchivePage from "@2026/layouts/ArchivePage.astro";
+import { archiveEditions } from "@2026/data/archive";
+
+export function getStaticPaths() {
+  return archiveEditions.map((edition) => ({
+    params: { year: String(edition.year) },
+    props: { edition },
+  }));
+}
+
+const { edition } = Astro.props;
+---
+
+<ArchivePage edition={edition} />

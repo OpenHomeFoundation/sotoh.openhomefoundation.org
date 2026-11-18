@@ -1,0 +1,189 @@
+---
+import Container from "../components/Container.astro";
+import BrandIcon from "../components/BrandIcon.astro";
+
+import { ICONS } from "../lib/icons";
+import { youTubeEmbedUrl } from "../lib/youtube";
+import videoPlaceholderImg from "../assets/images/sotoh-highlights-placeholder.webp";
+
+const YT_VIDEO_ID = "TTsSRewv9ag";
+const YT_EMBED_SRC = youTubeEmbedUrl(YT_VIDEO_ID, {
+  autoplay: 1,
+  mute: 1,
+  controls: 1,
+  loop: 1,
+  playlist: YT_VIDEO_ID,
+});
+const BRAND_ICONS = ["building", "privacy", "choice", "sustainability"] as const;
+---
+
+<Container containerClass="container--hero">
+  <div class="brand-icons animate--entry" style="--entry-duration: 0.85s">
+    {BRAND_ICONS.map((icon) => <BrandIcon icon={icon} />)}
+  </div>
+
+  <div class="hero__content">
+    <p
+      class="event-host p--large animate--entry"
+      style="--entry-duration: 0.45s; --entry-delay: 0.55s"
+    >
+      Organized by the <Fragment set:html={ICONS["OHFLogo"]} />
+    </p>
+    <h1 class="h1 animate--entry" style="--entry-delay: 0.65s">
+      STATE OF THE OPEN HOME
+    </h1>
+    <p
+      class="hero__description p--large animate--entry"
+      style="--entry-duration: 0.45s; --entry-delay: 0.65s"
+    >
+      Our annual event championing privacy, choice, and sustainability in the
+      Open Home.
+    </p>
+  </div>
+</Container>
+
+<div class="recap-container">
+  <div
+    class="video-container"
+    style={`--placeholder: url(${videoPlaceholderImg.src})`}
+  >
+    <iframe
+      data-src={YT_EMBED_SRC}
+      width="1080"
+      height="608"
+      title="State of the Open Home 2026 Highlights"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</div>
+
+<style lang="scss">
+  @use "../styles/mixins/breakpoint.scss" as *;
+
+  h1 {
+    margin-bottom: 0;
+    text-align: center;
+
+    @include bp(desktop) {
+      text-align: left;
+    }
+  }
+
+  p.event-host {
+    line-height: 1.4;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0 0.6rem;
+    flex-wrap: wrap;
+
+    @include bp(desktop) {
+      justify-content: flex-start;
+    }
+
+    :global(svg) {
+      width: 100%;
+      max-width: 350px;
+      max-height: 34px;
+    }
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .hero__description {
+    text-align: center;
+    text-wrap: auto;
+    margin-top: 0.5rem;
+
+    @include bp(desktop) {
+      text-align: left;
+    }
+  }
+
+  .recap-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: var(--radius-l);
+    overflow: hidden;
+
+    @include bp(desktop) {
+      margin-top: 2.5rem;
+    }
+  }
+
+  .video-container {
+    width: 100%;
+    background-image: var(--placeholder);
+    background-size: cover;
+    background-position: center;
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .brand-icons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
+</style>
+
+<script>
+  import { loadYouTubeAPI, type YTPlayer } from "../lib/youtube";
+
+  const container = document.querySelector(".video-container");
+  const iframe = document.querySelector<HTMLIFrameElement>(
+    ".video-container iframe",
+  );
+
+  if (container && iframe) {
+    let player: YTPlayer | null = null;
+    let loaded = false;
+
+    const loadVideo = async () => {
+      if (loaded) return;
+      loaded = true;
+      iframe.src = iframe.dataset.src!;
+
+      const YT = await loadYouTubeAPI();
+      player = new YT.Player(iframe, {
+        events: {
+          onStateChange: ({ data }) => {
+            // 0 = ended — loop back as background
+            if (data === 0) {
+              player?.seekTo(0, true);
+              player?.playVideo();
+            }
+          },
+        },
+      });
+    };
+
+    // Load on first user intent
+    document.addEventListener("mousemove", loadVideo, { once: true });
+    document.addEventListener("touchstart", loadVideo, { once: true });
+
+    // Pause/play background loop when scrolled out of view
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          player?.playVideo();
+        } else {
+          player?.pauseVideo();
+        }
+      },
+      { threshold: 0 },
+    ).observe(container);
+  }
+</script>

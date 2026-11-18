@@ -1,0 +1,54 @@
+:root {
+    // Header
+    --header-height: 86px; // 20px padding + 46px logo + 20px padding
+
+    @media (min-width: 768px) {
+        --header-height: 126px; // 40px padding + 46px logo + 40px padding
+    }
+
+    // Burger menu
+    --burger-bar-height: 2px;
+    --burger-bar-width: calc(var(--burger-bar-height) * 8);
+    --burger-border-radius: 0px;
+    --burger-bar-spacing: calc(var(--burger-bar-height) * 3);
+    --burger-bar-color: #ffffff;
+    --burger-transition-speed: 0.1s;
+
+    // Typography
+    --typography-heading-font-family: "Special Gothic Expanded One",
+    sans-serif;
+    --typography-heading-font-weight: 400;
+
+    --typography-body-font-family: "Space Grotesk",
+    sans-serif;
+    --typography-body-font-weight: 300;
+
+    // Colors
+    --text-on-light: #1a1a1a;
+    --text-on-dark: #F7F6F2;
+
+    --ohf-dark-blue: #09202E;
+    --ohf-dark-grey: #5A6675;
+    --ohf-grey: #A2AAB6;
+    --ohf-light-grey: #F7F6F2;
+
+    --sotoh-light-blue: #59B2FF;
+    --sotoh-pink: #D655EC;
+
+    --sotoh-yellow: #FFD351;
+    --sotoh-blue: #0457FF;
+    --sotoh-purple: #8B26FF;
+
+    --entry-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    // Page backgrounds
+    --page-bg-gradient: linear-gradient(207deg, var(--sotoh-light-blue) 1.29%, var(--sotoh-pink) 132.17%);
+    --page-bg-light: #CFE4FF;
+
+    // Surfaces
+    --glass-bg: rgba(247, 246, 242, 0.1);
+    --glass-bg-hover: rgba(247, 246, 242, 0.2);
+    --radius-s: 0.75rem;
+    --radius-m: 1rem;
+    --radius-l: 1.25rem;
+}

@@ -1,0 +1,156 @@
+---
+import { Image } from "astro:assets";
+import Container from "../../components/Container.astro";
+import Marquee from "../../components/Marquee.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import CircleButton from "../../components/CircleButton.astro";
+import type { ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { rows, intro } = edition.gallery;
+const isEmpty = rows.every((row) => row.length === 0);
+const rowsId = `gallery-rows-${edition.year}`;
+
+if (isEmpty) {
+  console.warn(`[Gallery] TODO: no photos for ${edition.year} yet (add them to assets/archive/${edition.year}/gallery/)`);
+}
+---
+
+<Container containerClass="container--column">
+  <SectionHeader title="Where the magic happens" intro={intro}>
+    {
+      !isEmpty && (
+        <CircleButton
+          class="gallery__toggle"
+          data-marquee-toggle
+          aria-controls={rowsId}
+          aria-pressed="false"
+          aria-label="Pause photos"
+          hidden
+        >
+          <svg class="gallery__icon gallery__icon--pause" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="3" y="2" width="3.5" height="12" rx="1" />
+            <rect x="9.5" y="2" width="3.5" height="12" rx="1" />
+          </svg>
+          <svg class="gallery__icon gallery__icon--play" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5Z" />
+          </svg>
+        </CircleButton>
+      )
+    }
+  </SectionHeader>
+</Container>
+
+<div class="gallery" id={rowsId}>
+  {
+    isEmpty ? (
+      <div class="gallery__placeholder" data-todo="Gallery photos">
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            class:list={["gallery__tile", i % 2 ? "gallery__photo--portrait" : "gallery__photo--landscape"]}
+          />
+        ))}
+        <p class="gallery__placeholder-note">Photos coming soon</p>
+      </div>
+    ) : (
+    rows.map((row, i) => (
+      <Marquee
+        reverse={i % 2 === 0}
+        duration={70}
+        gap="var(--gallery-gap)"
+        label={i === 0 ? `Photos from State of the Open Home ${edition.year}` : undefined}
+      >
+        {row.map((photo) => (
+          <Image
+            class:list={["gallery__photo", `gallery__photo--${photo.orientation}`]}
+            src={photo.image}
+            alt={photo.alt}
+            widths={[300, 560, 1100]}
+            sizes="(min-width: 768px) 528px, 300px"
+          />
+        ))}
+      </Marquee>
+    ))
+    )
+  }
+</div>
+
+<style lang="scss">
+  @use "../../styles/mixins/breakpoint.scss" as *;
+
+  .gallery {
+    --gallery-gap: 0.75rem;
+    --gallery-row-height: 200px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gallery-gap);
+    margin-top: 2.5rem;
+
+    @include bp(tablet) {
+      --gallery-gap: 1.25rem;
+      --gallery-row-height: 320px;
+    }
+  }
+
+  // Pause/play: aria-pressed="true" means paused, so show the play icon.
+  .gallery__icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .gallery__toggle {
+    &[aria-pressed="true"] .gallery__icon--pause,
+    &:not([aria-pressed="true"]) .gallery__icon--play {
+      display: none;
+    }
+  }
+
+  // Shown until a year's photos are added.
+  .gallery__placeholder {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: var(--gallery-gap);
+    overflow: hidden;
+  }
+
+  .gallery__tile {
+    flex-shrink: 0;
+    height: var(--gallery-row-height);
+    border: 1px dashed var(--ohf-light-grey);
+    border-radius: var(--radius-s);
+    background-color: var(--glass-bg);
+  }
+
+  .gallery__placeholder-note {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font-family: var(--typography-heading-font-family);
+    text-transform: uppercase;
+  }
+
+  .gallery__tile,
+  .gallery__photo {
+    display: block;
+    height: var(--gallery-row-height);
+    width: auto;
+    object-fit: cover;
+    border-radius: var(--radius-s);
+
+    &--landscape {
+      aspect-ratio: 692 / 420;
+    }
+
+    &--portrait {
+      aspect-ratio: 509 / 590;
+    }
+  }
+</style>

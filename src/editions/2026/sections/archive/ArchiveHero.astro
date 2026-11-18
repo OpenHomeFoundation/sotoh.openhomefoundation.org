@@ -1,0 +1,35 @@
+---
+import FullImage from "../../components/FullImage.astro";
+import type { ArchiveEdition } from "../../data/archive";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { hero, year } = edition;
+---
+
+<FullImage
+  image={hero.image}
+  title={`State of the<br />Open Home<br />${year}`}
+  headingLevel="h1"
+  alt={hero.alt}
+  hasScrollEntry={false}
+  priority
+  compactTitle
+  overlayColor="#001744"
+  objectPosition={hero.objectPosition ?? "center"}
+>
+  {hero.paragraphs.map((text) => <p class="p--large">{text}</p>)}
+</FullImage>
+
+<style>
+  /* Figma: 24px / 1.3, with a blank line between paragraphs. */
+  p {
+    line-height: 1.3;
+  }
+
+  p:not(:last-child) {
+    margin-bottom: 1.3em;
+  }
+</style>

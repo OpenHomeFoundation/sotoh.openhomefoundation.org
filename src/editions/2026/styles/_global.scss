@@ -1,0 +1,61 @@
+@use "./mixins/breakpoint" as *;
+
+body {
+  background-color: var(--page-bg-light);
+
+  &.theme-gradient {
+    background-color: var(--sotoh-light-blue);
+    background-image: var(--page-bg-gradient);
+  }
+}
+
+::selection {
+  background-color: var(--ohf-dark-blue);
+  color: #fff;
+}
+
+// Shared entry animation (used by hero content on load).
+@keyframes animate-up-fade {
+  0% {
+    transform: translate3d(0, 50%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.animate--entry {
+  @media (prefers-reduced-motion: no-preference) {
+    opacity: 0;
+    animation: animate-up-fade var(--entry-duration, 0.5s) var(--entry-ease)
+      var(--entry-delay, 0s) forwards;
+  }
+}
+
+// Previously injected by the (now removed) Content.astro wrapper.
+.content-container {
+  max-width: 800px;
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

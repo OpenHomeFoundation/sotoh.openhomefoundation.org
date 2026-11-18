@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  intro?: string;
+  id?: string;
+}
+
+const { title, intro, id } = Astro.props;
+---
+
+<header class="section-header">
+  <h2 class="h2 section-header__title" id={id}>{title}</h2>
+  {intro && <p class="p--large section-header__intro">{intro}</p>}
+  <slot />
+</header>
+
+<style lang="scss">
+  .section-header {
+    width: 100%;
+    max-width: 793px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+  }
+
+  .section-header__title {
+    margin: 0;
+    text-align: center;
+  }
+
+  .section-header__intro {
+    margin: 0;
+    line-height: 1.2;
+  }
+</style>

@@ -1,0 +1,412 @@
+---
+import { Image } from "astro:assets";
+import Container from "../../components/Container.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import Play from "../../assets/icons/play.svg";
+import Chevron from "../../assets/icons/chevron-down.svg";
+import Dot from "../../assets/icons/dot.svg";
+import type { ArchiveEdition } from "../../data/archive";
+import { timestampToSeconds } from "../../lib/youtube";
+
+interface Props {
+  edition: ArchiveEdition;
+}
+const { edition } = Astro.props;
+const { videoId, poster, acts = [], defaultOpenAct = 0 } = edition.livestream;
+const hasChapters = acts.length > 0;
+---
+
+<Container containerClass="container--column">
+  <SectionHeader
+    title={`Watch the ${edition.year} event`}
+    intro={hasChapters
+      ? "Press play to watch the full livestream, or pick a chapter and jump straight to the moment you’re interested in."
+      : "Press play to watch the full livestream."}
+  />
+
+  <div
+    class:list={["livestream", { "livestream--solo": !hasChapters }]}
+    data-livestream
+    data-video-id={videoId}
+    data-title={`State of the Open Home ${edition.year} livestream`}
+  >
+    <div class="livestream__player">
+      <button
+        type="button"
+        class="livestream__poster"
+        aria-label={`Play the State of the Open Home ${edition.year} livestream`}
+      >
+        <Image
+          src={poster}
+          alt=""
+          widths={[400, 780, 1200, 1560]}
+          sizes="(min-width: 1024px) 780px, 100vw"
+        />
+        <Play class="livestream__play" aria-hidden="true" />
+      </button>
+    </div>
+
+    {hasChapters && (
+    <div class="livestream__chapters">
+      <div class="livestream__scroller" aria-label="Livestream chapters" role="group">
+        {
+          acts.map((act, i) => (
+            <details class="act" open={i === defaultOpenAct}>
+              <summary class="act__summary">
+                <span class="act__text">
+                  <span class="act__title">{act.title}</span>
+                  <span class="act__intro">{act.summary}</span>
+                </span>
+                <Chevron class="act__chevron" aria-hidden="true" />
+              </summary>
+              <ol class="act__sessions" role="list">
+                {act.sessions.map((session) => (
+                  <li class="session">
+                    <button
+                      type="button"
+                      class="session__time"
+                      data-seek={timestampToSeconds(session.time)}
+                      aria-label={`Play from ${session.time}: ${session.title}`}
+                    >
+                      {session.time}
+                    </button>
+                    <p class="session__title">{session.title}</p>
+                    {session.speakers && (
+                      <p class="session__speakers">
+                        {session.speakers.map((name, j) => (
+                          <>
+                            {j > 0 && <Dot class="session__dot" aria-hidden="true" />}
+                            <span>{name}</span>
+                          </>
+                        ))}
+                      </p>
+                    )}
+                    {session.summary && (
+                      <p class="session__summary">{session.summary}</p>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+    )}
+  </div>
+</Container>
+
+<script>
+  import { ScrollSmoother } from "gsap/ScrollSmoother";
+  import {
+    loadYouTubeAPI,
+    youTubeEmbedUrl,
+    type YTPlayer,
+  } from "../../lib/youtube";
+
+  document
+    .querySelectorAll<HTMLElement>("[data-livestream]")
+    .forEach((root) => {
+      const videoId = root.dataset.videoId!;
+      const playerSlot = root.querySelector<HTMLElement>(".livestream__player")!;
+      const poster = root.querySelector<HTMLButtonElement>(".livestream__poster")!;
+      let player: Promise<YTPlayer> | null = null;
+
+      // Swap the poster for the real embed only on first interaction, so the
+      // page doesn't pay for YouTube's ~1MB of scripts up front.
+      const mount = (start: number) => {
+        const iframe = document.createElement("iframe");
+        iframe.src = youTubeEmbedUrl(videoId, { autoplay: 1, start });
+        iframe.title = root.dataset.title ?? "Livestream";
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        poster.replaceWith(iframe);
+        iframe.focus();
+
+        player = loadYouTubeAPI().then(
+          (YT) =>
+            new Promise<YTPlayer>((resolve) => {
+              const p = new YT.Player(iframe, {
+                events: { onReady: () => resolve(p) },
+              });
+            }),
+        );
+      };
+
+      const playFrom = async (seconds: number) => {
+        if (!player) return mount(seconds);
+        const p = await player;
+        p.seekTo(seconds, true);
+        p.playVideo();
+      };
+
+      const bringIntoView = () => {
+        const rect = playerSlot.getBoundingClientRect();
+        if (rect.top >= 0 && rect.bottom <= window.innerHeight) return;
+        const smoother = ScrollSmoother.get();
+        if (smoother) smoother.scrollTo(playerSlot, true, "top top+=120");
+        else playerSlot.scrollIntoView({ behavior: "smooth", block: "center" });
+      };
+
+      poster.addEventListener("click", () => playFrom(0));
+
+      root.addEventListener("click", (e) => {
+        const button = (e.target as Element).closest<HTMLButtonElement>(
+          "[data-seek]",
+        );
+        if (!button) return;
+        bringIntoView();
+        playFrom(Number(button.dataset.seek));
+      });
+    });
+</script>
+
+<style lang="scss">
+  @use "../../styles/mixins/breakpoint.scss" as *;
+  @use "../../styles/mixins/card" as *;
+
+  .livestream {
+    width: 100%;
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.5rem;
+
+    @include bp(desktop) {
+      grid-template-columns: minmax(0, 779fr) minmax(0, 389fr);
+      gap: 2rem;
+    }
+
+    // No chapters: a single, centred video.
+    &--solo {
+      max-width: 1000px;
+      margin-inline: auto;
+
+      @include bp(desktop) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  // ---- Player ----
+
+  .livestream__player {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background-color: var(--ohf-dark-blue);
+
+    :global(iframe) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .livestream__poster {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--sotoh-yellow);
+      outline-offset: -3px;
+    }
+  }
+
+  .livestream__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(56px, 8vw, 88px);
+    height: auto;
+    translate: -50% -50%;
+    transition: scale 0.3s var(--entry-ease);
+
+    .livestream__poster:hover & {
+      scale: 1.08;
+    }
+  }
+
+  // ---- Chapters ----
+
+  // On desktop the list is exactly as tall as the video and scrolls inside.
+  .livestream__chapters {
+    position: relative;
+  }
+
+  .livestream__scroller {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    @include bp(desktop) {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--ohf-light-grey) transparent;
+      padding-right: 0.25rem;
+    }
+  }
+
+  .act {
+    @include glass-card;
+    flex-shrink: 0;
+
+    &::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    &:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      &::details-content {
+        transition:
+          block-size 0.3s ease-in-out,
+          content-visibility 0.3s ease-in-out allow-discrete;
+      }
+    }
+  }
+
+  .act__summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 1rem + 1vw, 2.25rem) 1.5rem;
+    cursor: pointer;
+    border-radius: var(--radius-m);
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 2px;
+    }
+
+    .act[open] > & {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .act__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .act__title {
+    @include card-title;
+    line-height: 1;
+  }
+
+  .act__intro {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .act__chevron {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+
+    .act[open] & {
+      rotate: 180deg;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: rotate 0.2s;
+    }
+  }
+
+  .act__sessions {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .session {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 0;
+
+    & + & {
+      border-top: 1px solid rgba(247, 246, 242, 0.4);
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+      text-wrap: pretty;
+    }
+  }
+
+  .session__time {
+    padding: 7px 16px;
+    border: 1px solid var(--ohf-light-grey);
+    border-radius: 40px;
+    background: transparent;
+    color: var(--text-on-dark);
+    font-family: var(--typography-body-font-family);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      background-color 0.2s ease-in-out,
+      color 0.2s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--ohf-light-grey);
+      color: var(--ohf-dark-blue);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ohf-light-grey);
+      outline-offset: 2px;
+    }
+  }
+
+  .session .session__title {
+    font-weight: 500;
+    font-size: 1.125rem;
+  }
+
+  .session__speakers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .session__dot {
+    width: 6px;
+    height: 6px;
+  }
+</style>
