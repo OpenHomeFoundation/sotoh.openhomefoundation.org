@@ -59,6 +59,8 @@ export interface ArchiveEdition {
   };
   /** Show the holo ticket (2026 was the in-person edition with tickets). */
   showTicket?: boolean;
+  /** Link to that year's post-event feedback survey in the closing section. */
+  showFeedback?: boolean;
   livestream: {
     videoId: string;
     poster: ImageMetadata;

@@ -29,6 +29,7 @@ export const edition2026: ArchiveEdition = {
     ],
   },
   showTicket: true,
+  showFeedback: true,
   livestream: {
     videoId: "XyAL1to3Lm4",
     poster,

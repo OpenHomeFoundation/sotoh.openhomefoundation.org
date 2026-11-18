@@ -10,8 +10,8 @@ interface Props {
   /** Show a button to the current edition. "/" is always the current edition,
    * and the label has no year, so this never needs updating. Archive pages only. */
   linkToCurrent?: boolean;
-  /** Ask for feedback via the 2026 post-event survey. Off on the archive,
-   * where the survey is stale. */
+  /** Ask for feedback via the 2026 post-event survey (the homepage and the
+   * 2026 archive; set by `showFeedback` in the archive data). */
   feedbackLink?: boolean;
 }
 const {

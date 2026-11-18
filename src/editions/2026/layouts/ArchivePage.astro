@@ -57,7 +57,7 @@ const otherEditions = archiveEditions.filter((e) => e.year !== edition.year);
     <PastEditions editions={otherEditions} />
   </section>
   <section class="block block--hero" id="the-conversation-continues">
-    <ConversationContinues compactTitle linkToCurrent feedbackLink={false} />
+    <ConversationContinues compactTitle linkToCurrent feedbackLink={!!edition.showFeedback} />
   </section>
 
   <Footer slot="footer" />
