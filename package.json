@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@astrojs/netlify": "^8.2.14",
-    "@astrojs/sitemap": "^3.7.5",
+    "@astrojs/sitemap": "^3.7.6",
     "@types/matter-js": "^0.20.2",
     "astro": "^7.4.12",
     "gsap": "^3.15.1",
